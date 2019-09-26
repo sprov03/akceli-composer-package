@@ -1,0 +1,64 @@
+<?php
+
+namespace CrudGenerator\Modifiers\Builders\Relationships;
+
+use CrudGenerator\File;
+use CrudGenerator\Modifiers\Builders\Builder;
+use CrudGenerator\Modifiers\Builders\BuilderInterface;
+use CrudGenerator\Modifiers\ClassModifier;
+
+class MorphManyBuilder extends Builder implements BuilderInterface
+{
+    /**
+     * Build sections of files and place them in the files
+     *
+     * @param \SplFileInfo $fileInfo
+     * @param \SplFileInfo $interfaceFileInfo
+     * @param \SplFileInfo $traitFileInfo
+     * @param $interface
+     *
+     * @param $relationship
+     *
+     * @return void
+     */
+    public function updateFiles(
+        \SplFileInfo $fileInfo,
+        \SplFileInfo $interfaceFileInfo,
+        \SplFileInfo $traitFileInfo,
+        $interface,
+        $relationship
+    ) {
+        $interface = studly_case($interface);
+        $otherModel = str_singular(studly_case($this->schema->getTable()));
+
+        $this->addAbstractMethodToFile(
+            $interfaceFileInfo,
+            camel_case(str_plural($otherModel)),
+            $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
+        );
+        $this->addMethodToFile(
+            $traitFileInfo,
+            camel_case(str_plural($otherModel)),
+            $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
+        );
+
+        $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
+        $this->addUseStatementToFile($traitFileInfo, $fileInfo);
+
+        $docType = "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection";
+        $variable = str_plural(camel_case($otherModel));
+        $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
+        $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
+    }
+
+    public function analise($relationship, $interface = null)
+    {
+        $file = new File(app_path());
+
+        $fileInfo = $file->findByTableName($this->schema->getTable());
+        $interfaceFileInfo = $file->findByClassName($interface . 'Interface');
+        $traitFileInfo = $file->findByClassName($interface . 'Trait');
+
+        $this->updateFiles($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
+    }
+}

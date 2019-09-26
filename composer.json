@@ -1,0 +1,30 @@
+{
+    "name": "sprov03/laravel-code-generator",
+    "description": "Generator Temperated Code form database tables. This Package provides data to templates that you create to generate code to scaffold projects rapidly so you can spend most of your time doing the fun stuff.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shawn Pivonka",
+            "email": "sprov03@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0",
+        "league/plates": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "CrudGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master-dev"
+        },
+        "laravel": {
+            "providers": [
+                "CrudGenerator\\CrudGeneratorServiceProvider"
+            ]
+        }
+    }
+}
