@@ -368,7 +368,7 @@ EOF
 
     public function isInteger($column)
     {
-        return preg_match('/^int\((\d*)\)/', $column->Type);
+        return preg_match('/^(big)?int\((\d*)\)/', $column->Type);
     }
 
     public function isBoolean($column)

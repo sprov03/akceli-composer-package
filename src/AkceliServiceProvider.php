@@ -3,8 +3,8 @@
 namespace Akceli;
 
 use Akceli\Console\Commands\AkceliGenerateCommand;
-use Akceli\Console\Commands\RelationshipGeneratorCommand;
-use Akceli\Console\Commands\TemplateGeneratorCommand;
+use Akceli\Console\Commands\AkceliGenerateRelationshipsOnlyCommand;
+use Akceli\Console\Commands\AkceliGenerateTemplatesOnlyCommand;
 use Illuminate\Support\ServiceProvider;
 
 class AkceliServiceProvider extends ServiceProvider
@@ -12,8 +12,8 @@ class AkceliServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands([AkceliGenerateCommand::class]);
-        $this->commands([RelationshipGeneratorCommand::class]);
-        $this->commands([TemplateGeneratorCommand::class]);
+//        $this->commands([AkceliGenerateRelationshipsOnlyCommand::class]);
+//        $this->commands([AkceliGenerateTemplatesOnlyCommand::class]);
     }
 
     public function boot()
