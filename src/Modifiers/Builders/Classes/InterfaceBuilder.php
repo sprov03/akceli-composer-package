@@ -1,16 +1,16 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders\Classes;
+namespace Akceli\Modifiers\Builders\Classes;
 
-use CrudGenerator\File;
-use CrudGenerator\Modifiers\Builders\BuilderInterface;
-use CrudGenerator\Modifiers\ClassModifier;
+use Akceli\FileService;
+use Akceli\Modifiers\Builders\BuilderInterface;
+use Akceli\Modifiers\ClassModifier;
 
 class InterfaceBuilder extends ClassModifier implements BuilderInterface
 {
     public function analise($relationship, $interface = null)
     {
-        $file = new File(app_path());
+        $file = new FileService(app_path());
 
         $fileInfo = $file->findByTableName($this->schema->getTable());
 

@@ -1,5 +1,5 @@
 {
-    "name": "sprov03/laravel-code-generator",
+    "name": "akceli/laravel-code-generator",
     "description": "Generator Temperated Code form database tables. This Package provides data to templates that you create to generate code to scaffold projects rapidly so you can spend most of your time doing the fun stuff.",
     "license": "MIT",
     "authors": [
@@ -14,16 +14,16 @@
     },
     "autoload": {
         "psr-4": {
-            "CrudGenerator\\": "src/"
+            "Akceli\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "master-dev"
+            "dev-master": "master"
         },
         "laravel": {
             "providers": [
-                "CrudGenerator\\CrudGeneratorServiceProvider"
+                "Akceli\\AkceliServiceProvider"
             ]
         }
     }

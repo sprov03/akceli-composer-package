@@ -1,10 +1,11 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
-use CrudGenerator\Console\Commands\CrudGeneratorCommand;
-use CrudGenerator\Modifiers\Builders\Builder;
-use CrudGenerator\Modifiers\ClassModifier;
+use Akceli\Console\Commands\AkceliGenerateCommand;
+use Akceli\Modifiers\Builders\Builder;
+use Akceli\Modifiers\ClassModifier;
+use Illuminate\Console\Command;
 
 class GeneratorFlowController
 {
@@ -19,7 +20,7 @@ class GeneratorFlowController
     private $schema;
 
     /**
-     * @var CrudGeneratorCommand
+     * @var AkceliGenerateCommand
      */
     private $output;
 
@@ -29,16 +30,21 @@ class GeneratorFlowController
     private $force;
 
     /**
-     * @var File
+     * @var FileService
      */
     private $file;
+
+    /**
+     * @var ClassModifier
+     */
+    private $classModifier;
 
     /**
      * GeneratorFlowController constructor
      *
      * @param Parser $parser
      * @param Schema $schema
-     * @param CrudGeneratorCommand $output
+     * @param Command $output
      * @param bool $force
      */
     function __construct(Parser $parser, Schema $schema, $output, $force = false)
@@ -55,7 +61,7 @@ class GeneratorFlowController
             $force
         );
 
-        $this->file = new File(app_path());
+        $this->file = new FileService(app_path());
     }
 
     public function start()
@@ -79,7 +85,6 @@ class GeneratorFlowController
         foreach ($this->schema->getBelongsToRelationships() as $relationship) {
             $this->setBelongsToRelationship($relationship);
         }
-
     }
 
     private function setPolymorphicRelationships($relationship)

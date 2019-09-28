@@ -1,8 +1,8 @@
 <?php
 
-namespace CrudGenerator\Console\Commands;
+namespace Akceli\Console\Commands;
 
-use CrudGenerator\Service;
+use Akceli\GeneratorService;
 use Illuminate\Console\Command;
 
 class RelationshipGeneratorCommand extends Command
@@ -57,12 +57,10 @@ class RelationshipGeneratorCommand extends Command
             $model_name = studly_case(str_singular($table_name));
         }
 
-        $GLOBALS['options'] = $other_variables;
-        $GLOBALS['template_set'] = $templates;
+        $GLOBALS['akceli_options'] = $other_variables;
+        $GLOBALS['akceli_template_set'] = $templates;
 
-        $generator = new Service($table_name, $model_name, $other_variables, $output = $this);
-
-        $generator->Generate($templates, $this->option('force'), $this->option('dump'), false, true);
+        $generator = new GeneratorService($table_name, $model_name, $other_variables, $output = $this);
+        $generator->generate($this->option('force'), $this->option('dump'), false, true);
     }
-
 }

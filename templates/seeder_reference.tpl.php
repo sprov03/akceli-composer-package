@@ -1,0 +1,1 @@
+        $this->call([[ModelName]]Seeder::class);

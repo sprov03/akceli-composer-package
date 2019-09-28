@@ -1,12 +1,12 @@
 <?php
 
-namespace CrudGenerator\Console\Commands;
+namespace Akceli\Console\Commands;
 
-use CrudGenerator\Service;
+use Akceli\GeneratorService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class CrudGeneratorCommand extends Command
+class AkceliGenerateCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -56,11 +56,11 @@ class CrudGeneratorCommand extends Command
             $model_name = studly_case(str_singular($table_name));
         }
 
-        $GLOBALS['options'] = $other_variables;
-        $GLOBALS['template_set'] = $templates;
+        $GLOBALS['akceli_options'] = $other_variables;
+        $GLOBALS['akceli_template_set'] = $templates;
 
-        $generator = new Service($table_name, $model_name, $other_variables, $output = $this);
+        $generator = new GeneratorService($table_name, $model_name, $other_variables, $output = $this);
 
-        $generator->Generate($templates, $this->option('force'), $this->option('dump'), true, true);
+        $generator->generate($this->option('force'), $this->option('dump'), true, true);
     }
 }

@@ -1,9 +1,12 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
 class StringParser
 {
+    /** @var array $data */
+    private $data;
+
     function __construct($data)
     {
         $this->data = $data;

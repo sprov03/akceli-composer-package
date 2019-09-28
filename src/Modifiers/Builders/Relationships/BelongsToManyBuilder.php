@@ -1,11 +1,11 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders\Relationships;
+namespace Akceli\Modifiers\Builders\Relationships;
 
-use CrudGenerator\File;
-use CrudGenerator\Modifiers\Builders\Builder;
-use CrudGenerator\Modifiers\Builders\BuilderInterface;
-use CrudGenerator\Modifiers\ClassModifier;
+use Akceli\FileService;
+use Akceli\Modifiers\Builders\Builder;
+use Akceli\Modifiers\Builders\BuilderInterface;
+use Akceli\Modifiers\ClassModifier;
 
 class BelongsToManyBuilder extends Builder implements BuilderInterface
 {
@@ -63,7 +63,7 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
 
     public function analise($relationships, $interface = null)
     {
-        $file = new File(app_path());
+        $file = new FileService(app_path());
 
         $relationshipOne = $relationships[0];
         $relationshipTwo = $relationships[1];
@@ -72,11 +72,13 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
 
         if (is_null($fileInfoOne)) {
-            $this->newGenerator($relationshipOne->REFERENCED_TABLE_NAME);
+            $this->newGenerator($relationshipOne->REFERENCED_TABLE_NAME)
+                ->generate(false, false, true, true);
             $fileInfoOne = $file->findByTableName($relationshipOne->REFERENCED_TABLE_NAME, true);
         }
         if (is_null($fileInfoTwo)) {
-            $this->newGenerator($relationshipTwo->REFERENCED_TABLE_NAME);
+            $this->newGenerator($relationshipTwo->REFERENCED_TABLE_NAME)
+                ->generate(false, false, true, true);
             $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
         }
 

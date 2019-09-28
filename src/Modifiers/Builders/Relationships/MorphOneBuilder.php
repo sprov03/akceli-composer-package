@@ -1,11 +1,11 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders\Relationships;
+namespace Akceli\Modifiers\Builders\Relationships;
 
-use CrudGenerator\File;
-use CrudGenerator\Modifiers\Builders\Builder;
-use CrudGenerator\Modifiers\Builders\BuilderInterface;
-use CrudGenerator\Modifiers\ClassModifier;
+use Akceli\FileService;
+use Akceli\Modifiers\Builders\Builder;
+use Akceli\Modifiers\Builders\BuilderInterface;
+use Akceli\Modifiers\ClassModifier;
 
 class MorphOneBuilder extends Builder implements BuilderInterface
 {
@@ -52,7 +52,7 @@ class MorphOneBuilder extends Builder implements BuilderInterface
 
     public function analise($relationship, $interface = null)
     {
-        $file = new File(app_path());
+        $file = new FileService(app_path());
 
         $fileInfo = $file->findByTableName($this->schema->getTable());
         $interfaceFileInfo = $file->findByClassName($interface . 'Interface');

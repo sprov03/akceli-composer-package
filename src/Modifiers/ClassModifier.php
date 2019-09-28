@@ -1,18 +1,18 @@
 <?php
 
-namespace CrudGenerator\Modifiers;
+namespace Akceli\Modifiers;
 
-use CrudGenerator\Console\Commands\CrudGeneratorCommand;
-use CrudGenerator\File;
-use CrudGenerator\Parser;
-use CrudGenerator\Schema;
+use Akceli\Console\Commands\AkceliGenerateCommand;
+use Akceli\FileService;
+use Akceli\Parser;
+use Akceli\Schema;
 
 class ClassModifier
 {
     /** @var Parser  */
     protected $parser;
 
-    /** @var CrudGeneratorCommand  */
+    /** @var AkceliGenerateCommand  */
     protected $output;
 
     /** @var mixed|null|\SplFileInfo  */
@@ -24,7 +24,7 @@ class ClassModifier
     /** @var Schema  */
     protected $schema;
 
-    /** @var File  */
+    /** @var FileService  */
     protected $files;
 
     /**
@@ -32,12 +32,12 @@ class ClassModifier
      *
      * @param Parser $parser
      * @param Schema $schema
-     * @param CrudGeneratorCommand $output
+     * @param AkceliGenerateCommand $output
      * @param bool $force
      */
     public function __construct(Parser $parser, Schema $schema, $output, $force = false)
     {
-        $this->files = new File(app_path());
+        $this->files = new FileService(app_path());
         $this->fileInfo = $this->files->findByTableName($schema->getTable());
         $this->parser = $parser;
         $this->schema = $schema;

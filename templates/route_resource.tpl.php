@@ -1,0 +1,1 @@
+Route::resource('/[[model_names]]', '[[ModelName]]Controller');

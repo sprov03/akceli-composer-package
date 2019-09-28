@@ -1,23 +1,23 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders;
+namespace Akceli\Modifiers\Builders;
 
-use CrudGenerator\Modifiers\ClassModifier;
-use CrudGenerator\Service;
+use Akceli\Modifiers\ClassModifier;
+use Akceli\GeneratorService;
 
 class Builder extends ClassModifier
 {
     private static $builderFactory = [
-        'BelongsTo' => '\CrudGenerator\Modifiers\Builders\Relationships\BelongsToBuilder',
-        'BelongsToMany' => '\CrudGenerator\Modifiers\Builders\Relationships\BelongsToManyBuilder',
-        'HasOne' => '\CrudGenerator\Modifiers\Builders\Relationships\HasOneBuilder',
-        'HasMany' => '\CrudGenerator\Modifiers\Builders\Relationships\HasManyBuilder',
-        'MorphMany' => '\CrudGenerator\Modifiers\Builders\Relationships\MorphManyBuilder',
-        'MorphOne' => '\CrudGenerator\Modifiers\Builders\Relationships\MorphOneBuilder',
-        'MorphTo' => '\CrudGenerator\Modifiers\Builders\Relationships\MorphToBuilder',
-        'MorphToMany' => '\CrudGenerator\Modifiers\Builders\Relationships\MorphToManyBuilder',
-        'Trait' => '\CrudGenerator\Modifiers\Builders\Classes\TraitBuilder',
-        'Interface' => '\CrudGenerator\Modifiers\Builders\Classes\InterfaceBuilder'
+        'BelongsTo' => '\Akceli\Modifiers\Builders\Relationships\BelongsToBuilder',
+        'BelongsToMany' => '\Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder',
+        'HasOne' => '\Akceli\Modifiers\Builders\Relationships\HasOneBuilder',
+        'HasMany' => '\Akceli\Modifiers\Builders\Relationships\HasManyBuilder',
+        'MorphMany' => '\Akceli\Modifiers\Builders\Relationships\MorphManyBuilder',
+        'MorphOne' => '\Akceli\Modifiers\Builders\Relationships\MorphOneBuilder',
+        'MorphTo' => '\Akceli\Modifiers\Builders\Relationships\MorphToBuilder',
+        'MorphToMany' => '\Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder',
+        'Trait' => '\Akceli\Modifiers\Builders\Classes\TraitBuilder',
+        'Interface' => '\Akceli\Modifiers\Builders\Classes\InterfaceBuilder'
     ];
 
     /**
@@ -38,14 +38,12 @@ class Builder extends ClassModifier
         );
     }
 
-    public function newGenerator($table) {
-        $generator = new Service(
+    public function newGenerator($table): GeneratorService {
+        return new GeneratorService(
             $table,
             studly_case(str_singular($table)),
-            $GLOBALS['options'],
+            $GLOBALS['akceli_options'],
             $this->output
         );
-
-        $generator->Generate($GLOBALS['template_set'], false, false, true, true);
     }
 }

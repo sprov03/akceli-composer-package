@@ -1,6 +1,6 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders;
+namespace Akceli\Modifiers\Builders;
 
 interface BuilderInterface
 {

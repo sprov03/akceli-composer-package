@@ -1,6 +1,6 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -17,7 +17,7 @@ class Schema
     /** @var  Command  */
     private $log;
     /** @var  Collection */
-    private $primayKey;
+    private $primary;
 
     /**
      * Schema constructor
@@ -60,7 +60,7 @@ class Schema
             }
         }
 
-        $this->primayKey = $primaryKey;
+        $this->primary = $primaryKey;
 
         return $primaryKey;
     }

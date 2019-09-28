@@ -1,6 +1,6 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
 use League\Plates\Engine;
 

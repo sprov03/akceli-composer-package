@@ -1,16 +1,16 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders\Relationships;
+namespace Akceli\Modifiers\Builders\Relationships;
 
-use CrudGenerator\File;
-use CrudGenerator\Modifiers\Builders\Builder;
-use CrudGenerator\Modifiers\Builders\BuilderInterface;
+use Akceli\FileService;
+use Akceli\Modifiers\Builders\Builder;
+use Akceli\Modifiers\Builders\BuilderInterface;
 
 class MorphToManyBuilder extends Builder implements BuilderInterface
 {
     public function analise($relationship, $interface = null)
     {
-        $file = new File(app_path());
+        $file = new FileService(app_path());
 
         $fileInfo = $file->findByTableName($this->schema->getTable());
         $interfaceFileInfo = $file->findByClassName($interface . 'Interface');

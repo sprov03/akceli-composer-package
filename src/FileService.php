@@ -1,10 +1,13 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
-class File
+use RecursiveIteratorIterator;
+use SplFileInfo;
+
+class FileService
 {
-    /** @var  $appFiles \RecursiveIteratorIterator|\SplFileInfo[] */
+    /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[] */
     private $appFiles;
 
     private $files_path;
@@ -26,7 +29,7 @@ class File
      *
      * @param bool $reload
      *
-     * @return mixed|null|\SplFileInfo
+     * @return mixed|null|SplFileInfo
      */
     public function findByTableName($table_name, $reload = false)
     {
@@ -48,7 +51,7 @@ class File
     /**
      * @param string $className
      *
-     * @return mixed|null|\SplFileInfo
+     * @return mixed|null|SplFileInfo
      */
     public function findByClassName($className)
     {
@@ -68,7 +71,7 @@ class File
     /**
      * @param string $className
      *
-     * @return mixed|null|\SplFileInfo
+     * @return mixed|null|SplFileInfo
      */
     public function findFileByFullyQualifiedClassName($className)
     {
@@ -95,7 +98,7 @@ class File
      *
      * @param bool $reload
      *
-     * @return \RecursiveIteratorIterator|\SplFileInfo[]
+     * @return RecursiveIteratorIterator|SplFileInfo[]
      */
     public function getAppFiles($reload = false)
     {
@@ -111,13 +114,13 @@ class File
     /**
      * @param string $path
      *
-     * @return \RecursiveIteratorIterator|\SplFileInfo[]
+     * @return RecursiveIteratorIterator|SplFileInfo[]
      */
     private static function getDirectoryFiles($path)
     {
-        return new \RecursiveIteratorIterator(
+        return new RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
     }
 }

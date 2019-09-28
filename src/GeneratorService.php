@@ -1,11 +1,11 @@
 <?php
 
-namespace CrudGenerator;
+namespace Akceli;
 
+use Illuminate\Console\Command;
 use Illuminate\Container\Container;
-use League\Plates\Engine;
 
-class Service
+class GeneratorService
 {
     private $table_name;
     private $model_name;
@@ -13,6 +13,8 @@ class Service
      * @var array
      */
     private $options;
+
+    /** @var Command */
     private $output;
 
     /**
@@ -23,7 +25,7 @@ class Service
      * @param array $options
      * @param $output
      */
-    public function __construct($table_name, $model_name = null, $options = [], $output)
+    public function __construct($table_name, $model_name = null, $options = [], Command $output = null)
     {
         $this->table_name = $table_name;
         $this->model_name = $model_name;
@@ -31,15 +33,15 @@ class Service
         $this->output = $output;
     }
 
-    public function Generate($templateSet, $force = false, $dump = false, $generateTemplates = false, $generateRelationships = false)
+    public function generate($force = false, $dump = false, $generateTemplates = false, $generateRelationships = false)
     {
         $this->output->info('');
         $this->output->info("Creating Templates:");
         $this->output->info("Table Name: {$this->table_name}");
         $this->output->info("Model Name: {$this->model_name}");
 
-        $templates = $templateSet['templates'];
-        $inlineTemplates = $templateSet['inline_templates'];
+        $templates = $GLOBALS['akceli_template_set']['templates'];
+        $inlineTemplates = $GLOBALS['akceli_template_set']['inline_templates'];
         $schema = new Schema($this->table_name, $this->output);
         $template_variables = $this->getTemplateVariables();
         $template_variables['columns'] = $schema->getColumns();
@@ -53,10 +55,10 @@ class Service
             dd($template_variables);
         }
 
-        $templateParser = new Parser(base_path('resources/templates'), 'tpl.php');
+        $templateParser = new Parser(base_path('akceli/templates'), 'tpl.php');
         $templateParser->addData($template_variables);
 
-        
+
         if ($generateTemplates) {
             foreach ($templates as $template) {
                 $template_path = $templateParser->render($template['path']);
@@ -93,7 +95,7 @@ class Service
                 file_put_contents(base_path($inlineTemplate['path']), $file_contents);
             }
         }
-        
+
         $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'tpl.php');
         $classParser->addData($template_variables);
 

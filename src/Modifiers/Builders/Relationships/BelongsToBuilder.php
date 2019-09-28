@@ -1,12 +1,12 @@
 <?php
 
-namespace CrudGenerator\Modifiers\Builders\Relationships;
+namespace Akceli\Modifiers\Builders\Relationships;
 
-use CrudGenerator\File;
-use CrudGenerator\Modifiers\Builders\Builder;
-use CrudGenerator\Modifiers\Builders\BuilderInterface;
-use CrudGenerator\Modifiers\ClassModifier;
-use CrudGenerator\Service;
+use Akceli\FileService;
+use Akceli\Modifiers\Builders\Builder;
+use Akceli\Modifiers\Builders\BuilderInterface;
+use Akceli\Modifiers\ClassModifier;
+use Akceli\GeneratorService;
 
 class BelongsToBuilder extends Builder implements BuilderInterface
 {
@@ -38,13 +38,14 @@ class BelongsToBuilder extends Builder implements BuilderInterface
 
     public function analise($relationship, $interface = null)
     {
-        $file = new File(app_path());
+        $file = new FileService(app_path());
 
         $fileInfo = $file->findByTableName($this->schema->getTable());
         $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME);
 
         if (is_null($otherFileInfo)) {
-            $this->newGenerator($relationship->REFERENCED_TABLE_NAME);
+            $this->newGenerator($relationship->REFERENCED_TABLE_NAME)
+                ->generate(false, false, true, true);
             $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME, true);
         }
 
