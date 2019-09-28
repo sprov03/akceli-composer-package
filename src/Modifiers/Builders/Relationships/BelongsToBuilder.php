@@ -44,7 +44,7 @@ class BelongsToBuilder extends Builder implements BuilderInterface
         $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME);
 
         if (is_null($otherFileInfo)) {
-            $this->newGenerator($relationship->REFERENCED_TABLE_NAME)
+            $this->newGenerator($relationship->REFERENCED_TABLE_NAME, $otherFileInfo->getFilename())
                 ->generate(false, false, true, true);
             $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME, true);
         }

@@ -83,16 +83,11 @@ class AkceliGenerateCommand extends Command
             $model_name = studly_case(str_singular($table_name));
         }
 
-        /**
-         * TODO: this should be static on the Generator Service
-         */
-        $GLOBALS['akceli_options'] = $other_variables;
-        $GLOBALS['akceli_template_set'] = $templates;
+        GeneratorService::addExtraData($other_variables);
+        GeneratorService::setFileTemplates($templates['templates']);
+        GeneratorService::setInlineTemplates($templates['inline_templates']);
 
-        /**
-         * todo When getting the model name threw relationships need to make sure i get the Actual Model name instead of the expected one
-         */
-        $generator = new GeneratorService($table_name, $model_name, $other_variables, $output = $this);
+        $generator = new GeneratorService($table_name, $model_name, $output = $this);
 
         if ($this->option('only-relationships') && !$this->option('only-templates')) {
             $generator->generate($this->option('force'), $this->option('dump'), false, true);

@@ -5,7 +5,6 @@ namespace Akceli\Modifiers\Builders\Relationships;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
-use Akceli\Modifiers\ClassModifier;
 
 class BelongsToManyBuilder extends Builder implements BuilderInterface
 {
@@ -72,12 +71,12 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
 
         if (is_null($fileInfoOne)) {
-            $this->newGenerator($relationshipOne->REFERENCED_TABLE_NAME)
+            $this->newGenerator($relationshipOne->REFERENCED_TABLE_NAME, $fileInfoOne->getFilename())
                 ->generate(false, false, true, true);
             $fileInfoOne = $file->findByTableName($relationshipOne->REFERENCED_TABLE_NAME, true);
         }
         if (is_null($fileInfoTwo)) {
-            $this->newGenerator($relationshipTwo->REFERENCED_TABLE_NAME)
+            $this->newGenerator($relationshipTwo->REFERENCED_TABLE_NAME, $fileInfoTwo->getFilename())
                 ->generate(false, false, true, true);
             $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
         }

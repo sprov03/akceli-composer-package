@@ -7,12 +7,12 @@ use Illuminate\Container\Container;
 
 class GeneratorService
 {
+    private static $extra_data = [];
+    private static $file_templates = [];
+    private static $inline_templates = [];
+
     private $table_name;
     private $model_name;
-    /**
-     * @var array
-     */
-    private $options;
 
     /** @var Command */
     private $output;
@@ -22,15 +22,28 @@ class GeneratorService
      *
      * @param string $table_name
      * @param string $model_name
-     * @param array $options
      * @param $output
      */
-    public function __construct($table_name, $model_name = null, $options = [], Command $output = null)
+    public function __construct($table_name, $model_name = null, Command $output = null)
     {
         $this->table_name = $table_name;
         $this->model_name = $model_name;
-        $this->options = $options;
         $this->output = $output;
+    }
+
+    public static function addExtraData(array $extra_data)
+    {
+        self::$extra_data = $extra_data;
+    }
+
+    public static function setFileTemplates(array $file_templates)
+    {
+        self::$file_templates = $file_templates;
+    }
+
+    public static function setInlineTemplates(array $inline_templates)
+    {
+        self::$inline_templates = $inline_templates;
     }
 
     public function generate($force = false, $dump = false, $generateTemplates = false, $generateRelationships = false)
@@ -40,8 +53,6 @@ class GeneratorService
         $this->output->info("Table Name: {$this->table_name}");
         $this->output->info("Model Name: {$this->model_name}");
 
-        $templates = $GLOBALS['akceli_template_set']['templates'];
-        $inlineTemplates = $GLOBALS['akceli_template_set']['inline_templates'];
         $schema = new Schema($this->table_name, $this->output);
         $template_variables = $this->getTemplateVariables();
         $template_variables['columns'] = $schema->getColumns();
@@ -60,7 +71,7 @@ class GeneratorService
 
 
         if ($generateTemplates) {
-            foreach ($templates as $template) {
+            foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
                     $this->output->info("File {$template_path} already exists");
@@ -72,7 +83,7 @@ class GeneratorService
                 $this->output->info("File {$template_path} Created");
             }
 
-            foreach ($inlineTemplates as $inlineTemplate) {
+            foreach (self::$inline_templates as $inlineTemplate) {
                 $rendered_template = $templateParser->render($inlineTemplate['name']);
                 $file_contents = file_get_contents(base_path($inlineTemplate['path']));
                 if (! str_contains($file_contents, $inlineTemplate['identifier'])) {
@@ -122,7 +133,7 @@ class GeneratorService
             'app_namespace' => Container::getInstance()->getNamespace(),
         ];
 
-        foreach ($this->options as $key => $value) {
+        foreach (self::$extra_data as $key => $value) {
             $parser = new Parser();
             $parser->addData($template_variables);
 

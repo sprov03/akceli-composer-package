@@ -2,6 +2,7 @@
 
 namespace Akceli\Modifiers\Builders;
 
+use Akceli\FileService;
 use Akceli\Modifiers\ClassModifier;
 use Akceli\GeneratorService;
 
@@ -38,11 +39,10 @@ class Builder extends ClassModifier
         );
     }
 
-    public function newGenerator($table): GeneratorService {
+    public function newGenerator($table, $model_name): GeneratorService {
         return new GeneratorService(
             $table,
-            studly_case(str_singular($table)),
-            $GLOBALS['akceli_options'],
+            $model_name,
             $this->output
         );
     }
