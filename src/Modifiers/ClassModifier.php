@@ -5,7 +5,7 @@ namespace Akceli\Modifiers;
 use Akceli\FileService;
 use Akceli\Console;
 use Akceli\Parser;
-use Akceli\Schema;
+use Akceli\Schema\Schema;
 use SplFileInfo;
 
 class ClassModifier
@@ -21,9 +21,6 @@ class ClassModifier
 
     /** @var Schema  */
     protected $schema;
-
-    /** @var FileService  */
-//    protected $files;
 
     /**
      * ClassModifier constructor
@@ -42,6 +39,8 @@ class ClassModifier
 
     public function setPolymorphicRelationships($interface)
     {
+        Console::error("{$interface} was not set because ' .
+            'setBelongsToManyRelationships not yet implemented");
     }
 
     public function setBelongsToManyRelationship($relationship)

@@ -25,14 +25,13 @@ class Builder extends ClassModifier
      *
      * @return BuilderInterface
      */
-    public static function get($builder_type, ClassModifier $classModifier)
+    public static function get($builder_type, ClassModifier $classModifier): BuilderInterface
     {
         $builder = self::$builderFactory[$builder_type];
 
         return new $builder(
             $classModifier->parser,
             $classModifier->schema,
-            $classModifier->output,
             $classModifier->force
         );
     }

@@ -4,6 +4,7 @@ namespace Akceli;
 
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\ClassModifier;
+use Akceli\Schema\Schema;
 
 class GeneratorFlowController
 {
@@ -62,6 +63,7 @@ class GeneratorFlowController
         }
 
         foreach ($this->schema->getPolymorphicRelationships() as $relationship) {
+            dd($relationship);
             $this->setPolymorphicRelationships($relationship);
         }
 

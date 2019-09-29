@@ -2,6 +2,7 @@
 
 namespace Akceli;
 
+use Akceli\Schema\Schema;
 use Illuminate\Container\Container;
 
 class GeneratorService
@@ -60,11 +61,9 @@ class GeneratorService
             dd($template_variables);
         }
 
-        $templateParser = new Parser(base_path('akceli/templates'), 'tpl.php');
-        $templateParser->addData($template_variables);
-
-
         if ($generateTemplates) {
+            $templateParser = new Parser(base_path('akceli/templates'), 'tpl.php');
+            $templateParser->addData($template_variables);
             foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
@@ -101,10 +100,10 @@ class GeneratorService
             }
         }
 
-        $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'tpl.php');
-        $classParser->addData($template_variables);
 
         if ($generateRelationships) {
+            $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'tpl.php');
+            $classParser->addData($template_variables);
             (new GeneratorFlowController($classParser, $schema, $force))->start();
         }
     }

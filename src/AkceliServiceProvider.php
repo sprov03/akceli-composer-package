@@ -3,8 +3,6 @@
 namespace Akceli;
 
 use Akceli\Console\Commands\AkceliGenerateCommand;
-use Akceli\Console\Commands\AkceliGenerateRelationshipsOnlyCommand;
-use Akceli\Console\Commands\AkceliGenerateTemplatesOnlyCommand;
 use Illuminate\Support\ServiceProvider;
 
 class AkceliServiceProvider extends ServiceProvider

@@ -1,8 +1,7 @@
 <?php
 
-namespace Akceli;
+namespace Akceli\Schema;
 
-use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -12,16 +11,15 @@ class Schema
     private $table;
     /** @var  Collection */
     private $compositeKeys;
-    /** @var  Collection */
+    /** @var  Collection|Column[] */
     private $columns;
-    /** @var  Collection */
+    /** @var  Collection|Column[] */
     private $primary;
 
     /**
      * Schema constructor
      *
      * @param string $table
-     * @param Command $log
      */
     function __construct($table)
     {
@@ -38,6 +36,9 @@ class Schema
         return $this->table;
     }
 
+    /**
+     * @return Column[]|Collection
+     */
     public function getColumns()
     {
         if (isset($this->columns)) {
@@ -47,7 +48,10 @@ class Schema
         return $this->processColumns();
     }
 
-    public function getPrimaryKey()
+    /**
+     * @return Collection|Column[]
+     */
+    public function getPrimaryKey(): Collection
     {
         $primaryKey = new Collection();
 
@@ -62,15 +66,14 @@ class Schema
         return $primaryKey;
     }
 
+    /**
+     * @return Relationship[]|Collection
+     */
     public function getForeignKeys()
     {
         return $this->getTableForeignKeys();
     }
 
-    /**
-     *
-     * @return array
-     */
     public function getPolymorphicRelationships()
     {
         $non_primary_key_columns = $this->getColumns()->filter(function ($column) {
@@ -80,10 +83,6 @@ class Schema
         return $this->getInterfaces($non_primary_key_columns);
     }
 
-    /**
-     *
-     * @return Collection|\Countable
-     */
     public function getBelongsToManyRelationships()
     {
         $primaryKey = $this->getPrimaryKey();
@@ -132,6 +131,10 @@ class Schema
         return $this->getInterfaces($primaryKey);
     }
 
+    /**
+     * @param Collection|null|Column[] $columns
+     * @return array
+     */
     private function getInterfaces(Collection $columns = null)
     {
         $interface_types = [];
@@ -148,7 +151,10 @@ class Schema
         return array_intersect($interface_types, $interface_ids);
     }
 
-    private function processColumns()
+    /**
+     * @return Collection|Column[]
+     */
+    private function processColumns(): Collection
     {
         $columns = $this->getTableColumns($this->table);
         $columns = $this->addClassDocs($columns);
@@ -161,7 +167,7 @@ class Schema
     /**
      * @param string $table
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      *
      * @example
      * {
@@ -195,7 +201,7 @@ EOF
     /**
      * List of foreign keys for the table
      *
-     * @return Collection
+     * @return Collection|Relationship[]
      *
      * @example
      *  {
@@ -203,7 +209,7 @@ EOF
      *      "references": "users.id"
      *  }
      */
-    public function getTableForeignKeys()
+    public function getTableForeignKeys(): Collection
     {
         $database_name = DB::getDatabaseName();
 
@@ -229,10 +235,10 @@ EOF
     public function addRules(Collection $columns)
     {
         $ignore_patterns = [
-            '^id$',
-            '^created_at$',
-            '^updated_at$',
-            '^deleted_at$'
+//            '^id$',
+//            '^created_at$',
+//            '^updated_at$',
+//            '^deleted_at$'
         ];
 
         foreach ($columns as $column) {
