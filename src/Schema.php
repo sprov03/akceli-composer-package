@@ -14,8 +14,6 @@ class Schema
     private $compositeKeys;
     /** @var  Collection */
     private $columns;
-    /** @var  Command  */
-    private $log;
     /** @var  Collection */
     private $primary;
 
@@ -25,10 +23,9 @@ class Schema
      * @param string $table
      * @param Command $log
      */
-    function __construct($table, Command $log)
+    function __construct($table)
     {
         $this->table = $table;
-        $this->log = $log;
     }
 
     /**
@@ -211,7 +208,7 @@ EOF
         $database_name = DB::getDatabaseName();
 
         if (empty($database_name)) {
-            $this->log->info('Cant configure foreign keys till you set your database name in the config file');
+            Log::info('Cant configure foreign keys till you set your database name in the config file');
         }
 
         return collect(DB::select(<<<EOF
@@ -314,7 +311,7 @@ EOF
                 continue;
             }
 
-            $this->log->info(
+            Log::info(
                 "Field Doc not yet implemented for this type: {$column->Type}\n" .
                 json_encode($column, JSON_PRETTY_PRINT)
             );
@@ -356,7 +353,7 @@ EOF
                 continue;
             }
 
-            $this->log->info(
+            Log::info(
                 "Field Cast not yet implemented for this type: {$column->Type} " .
                 json_encode($column, JSON_PRETTY_PRINT)
             );

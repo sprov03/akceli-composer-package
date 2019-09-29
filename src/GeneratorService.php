@@ -2,7 +2,6 @@
 
 namespace Akceli;
 
-use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 
 class GeneratorService
@@ -14,21 +13,16 @@ class GeneratorService
     private $table_name;
     private $model_name;
 
-    /** @var Command */
-    private $output;
-
     /**
      * Service constructor
      *
      * @param string $table_name
      * @param string $model_name
-     * @param $output
      */
-    public function __construct($table_name, $model_name = null, Command $output = null)
+    public function __construct($table_name, $model_name = null)
     {
         $this->table_name = $table_name;
         $this->model_name = $model_name;
-        $this->output = $output;
     }
 
     public static function addExtraData(array $extra_data)
@@ -48,12 +42,12 @@ class GeneratorService
 
     public function generate($force = false, $dump = false, $generateTemplates = false, $generateRelationships = false)
     {
-        $this->output->info('');
-        $this->output->info("Creating Templates:");
-        $this->output->info("Table Name: {$this->table_name}");
-        $this->output->info("Model Name: {$this->model_name}");
+        Log::info('');
+        Log::info("Creating Templates:");
+        Log::info("Table Name: {$this->table_name}");
+        Log::info("Model Name: {$this->model_name}");
 
-        $schema = new Schema($this->table_name, $this->output);
+        $schema = new Schema($this->table_name);
         $template_variables = $this->getTemplateVariables();
         $template_variables['columns'] = $schema->getColumns();
         $template_variables['primary_key'] = $schema->getColumns()
@@ -74,20 +68,20 @@ class GeneratorService
             foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
-                    $this->output->info("File {$template_path} already exists");
+                    Log::info("File {$template_path} already exists");
 
                     continue;
                 }
 
                 $this->putFile($templateParser->render($template['name']), $template_path);
-                $this->output->info("File {$template_path} Created");
+                Log::info("File {$template_path} Created");
             }
 
             foreach (self::$inline_templates as $inlineTemplate) {
                 $rendered_template = $templateParser->render($inlineTemplate['name']);
                 $file_contents = file_get_contents(base_path($inlineTemplate['path']));
                 if (! str_contains($file_contents, $inlineTemplate['identifier'])) {
-                    $this->output->error("File {$inlineTemplate['path']} is missing the identifier: " .
+                    Log::error("File {$inlineTemplate['path']} is missing the identifier: " .
                         "{$inlineTemplate['identifier']}");
 
                     continue;
@@ -111,7 +105,7 @@ class GeneratorService
         $classParser->addData($template_variables);
 
         if ($generateRelationships) {
-            (new GeneratorFlowController($classParser, $schema, $this->output, $force))->start();
+            (new GeneratorFlowController($classParser, $schema, $force))->start();
         }
     }
 
@@ -162,5 +156,4 @@ class GeneratorService
 
         file_put_contents($path, $content);
     }
-
 }

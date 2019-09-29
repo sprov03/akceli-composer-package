@@ -4,6 +4,7 @@ namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
 use Akceli\GeneratorService;
+use Akceli\Log;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -83,11 +84,12 @@ class AkceliGenerateCommand extends Command
             $model_name = studly_case(str_singular($table_name));
         }
 
+        Log::setLogger($this);
         GeneratorService::addExtraData($other_variables);
         GeneratorService::setFileTemplates($templates['templates']);
         GeneratorService::setInlineTemplates($templates['inline_templates']);
 
-        $generator = new GeneratorService($table_name, $model_name, $output = $this);
+        $generator = new GeneratorService($table_name, $model_name);
 
         if ($this->option('only-relationships') && !$this->option('only-templates')) {
             $generator->generate($this->option('force'), $this->option('dump'), false, true);

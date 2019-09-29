@@ -2,9 +2,7 @@
 
 namespace Akceli\Modifiers\Builders;
 
-use Akceli\FileService;
 use Akceli\Modifiers\ClassModifier;
-use Akceli\GeneratorService;
 
 class Builder extends ClassModifier
 {
@@ -36,14 +34,6 @@ class Builder extends ClassModifier
             $classModifier->schema,
             $classModifier->output,
             $classModifier->force
-        );
-    }
-
-    public function newGenerator($table, $model_name): GeneratorService {
-        return new GeneratorService(
-            $table,
-            $model_name,
-            $this->output
         );
     }
 }

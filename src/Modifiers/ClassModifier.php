@@ -4,6 +4,7 @@ namespace Akceli\Modifiers;
 
 use Akceli\Console\Commands\AkceliGenerateCommand;
 use Akceli\FileService;
+use Akceli\Log;
 use Akceli\Parser;
 use Akceli\Schema;
 
@@ -11,9 +12,6 @@ class ClassModifier
 {
     /** @var Parser  */
     protected $parser;
-
-    /** @var AkceliGenerateCommand  */
-    protected $output;
 
     /** @var mixed|null|\SplFileInfo  */
     protected $fileInfo;
@@ -32,16 +30,14 @@ class ClassModifier
      *
      * @param Parser $parser
      * @param Schema $schema
-     * @param AkceliGenerateCommand $output
      * @param bool $force
      */
-    public function __construct(Parser $parser, Schema $schema, $output, $force = false)
+    public function __construct(Parser $parser, Schema $schema, $force = false)
     {
         $this->files = new FileService(app_path());
         $this->fileInfo = $this->files->findByTableName($schema->getTable());
         $this->parser = $parser;
         $this->schema = $schema;
-        $this->output = $output;
         $this->force = $force;
     }
 
@@ -51,7 +47,7 @@ class ClassModifier
 
     public function setBelongsToManyRelationship($relationship)
     {
-        $this->output->error("{$relationship->foreign_key} was not set because ' .
+        Log::error("{$relationship->foreign_key} was not set because ' .
             'setBelongsToManyRelationships not yet implemented");
     }
 
@@ -86,7 +82,7 @@ class ClassModifier
     public function addMethodToFile(\SplFileInfo $fileInfo, $method, $content)
     {
         if ($this->classHasMethod($fileInfo, $method)) {
-            $this->output->warn("The {$method} method exists on {$fileInfo->getRealPath()}");
+            Log::warn("The {$method} method exists on {$fileInfo->getRealPath()}");
 
             return;
         }
@@ -125,7 +121,7 @@ class ClassModifier
     public function addClassPropertyDocToFile(\SplFileInfo $fileInfo, $doc_type, $variable)
     {
         if ($this->classHasClassDoc($fileInfo, $variable)) {
-            $this->output->warn("The {$variable} variable exists on {$fileInfo->getRealPath()}");
+            Log::warn("The {$variable} variable exists on {$fileInfo->getRealPath()}");
 
             return;
         }
