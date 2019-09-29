@@ -2,24 +2,23 @@
 
 namespace Akceli;
 
+use Akceli\Modifiers\ClassModifier;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
 class FileService
 {
-    /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[] */
-    private $appFiles;
-
-    private $files_path;
-
     /**
-     * File constructor
-     *
-     * @param $files_path
+     * @var string
      */
-    function __construct($files_path)
+    private static $root_path;
+
+    /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[] */
+    private static $appFiles;
+
+    public static function setRootDirectory(string $root_path)
     {
-        $this->files_path = $files_path;
+        self::$root_path = $root_path;
     }
 
     /**
@@ -31,9 +30,9 @@ class FileService
      *
      * @return mixed|null|SplFileInfo
      */
-    public function findByTableName($table_name, $reload = false)
+    public static function findByTableName($table_name, $reload = false)
     {
-        $files = $this->getAppFiles($reload);
+        $files = self::getAppFiles($reload);
 
         foreach ($files as $file) {
             if ($file->isDir()) {
@@ -45,17 +44,18 @@ class FileService
             }
         }
 
-        return $this->findByClassName(studly_case(str_singular($table_name)));
+        return self::findByClassName(studly_case(str_singular($table_name)));
     }
 
     /**
      * @param string $className
      *
+     * @param bool $reload
      * @return mixed|null|SplFileInfo
      */
-    public function findByClassName($className)
+    public static function findByClassName($className, $reload = false)
     {
-        foreach ($this->getAppFiles() as $file) {
+        foreach (self::getAppFiles($reload) as $file) {
             if ($file->isDir()) {
                 continue;
             }
@@ -71,11 +71,12 @@ class FileService
     /**
      * @param string $className
      *
+     * @param bool $reload
      * @return mixed|null|SplFileInfo
      */
-    public function findFileByFullyQualifiedClassName($className)
+    public static function findFileByFullyQualifiedClassName($className, $reload = false)
     {
-        foreach ($this->getAppFiles() as $file) {
+        foreach (self::getAppFiles($reload) as $file) {
             if ($file->isDir()) {
                 continue;
             }
@@ -100,15 +101,15 @@ class FileService
      *
      * @return RecursiveIteratorIterator|SplFileInfo[]
      */
-    public function getAppFiles($reload = false)
+    public static function getAppFiles($reload = false)
     {
-        if (isset($this->appFiles) && ! $reload) {
-            return $this->appFiles;
+        if (isset(self::$appFiles) && ! $reload) {
+            return self::$appFiles;
         }
 
-        $this->appFiles = self::getDirectoryFiles($this->files_path);
+        self::$appFiles = self::getDirectoryFiles(self::$root_path);
 
-        return $this->appFiles;
+        return self::$appFiles;
     }
 
     /**

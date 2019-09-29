@@ -3,8 +3,9 @@
 namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
+use Akceli\FileService;
 use Akceli\GeneratorService;
-use Akceli\Log;
+use Akceli\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -84,7 +85,11 @@ class AkceliGenerateCommand extends Command
             $model_name = studly_case(str_singular($table_name));
         }
 
-        Log::setLogger($this);
+        /**
+         * Setup Global Classes
+         */
+        Console::setLogger($this);
+        FileService::setRootDirectory(base_path(config('akceli.root_model_path')));
         GeneratorService::addExtraData($other_variables);
         GeneratorService::setFileTemplates($templates['templates']);
         GeneratorService::setInlineTemplates($templates['inline_templates']);

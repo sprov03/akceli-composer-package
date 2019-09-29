@@ -17,6 +17,13 @@ return [
     ],
 
     /**
+     * Make sure that this is set to include all models, but if they are in a Models directory
+     * Then set this to that directory, there will be a performance boost by limiting the files that need to be
+     * Scanned during file lookups.
+     */
+    'root_model_path' => 'app',
+
+    /**
      * This is the default template set that is used
      */
     'default' => [

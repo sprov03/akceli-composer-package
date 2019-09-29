@@ -12,14 +12,11 @@ class AkceliServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands([AkceliGenerateCommand::class]);
-//        $this->commands([AkceliGenerateRelationshipsOnlyCommand::class]);
-//        $this->commands([AkceliGenerateTemplatesOnlyCommand::class]);
     }
 
     public function boot()
     {
         $this->publishes([
-	        __DIR__ . '/Templates' => base_path('akceli/templates'),
             __DIR__ . '/Config' => base_path('config')
 	    ]);
     }

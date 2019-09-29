@@ -42,10 +42,10 @@ class GeneratorService
 
     public function generate($force = false, $dump = false, $generateTemplates = false, $generateRelationships = false)
     {
-        Log::info('');
-        Log::info("Creating Templates:");
-        Log::info("Table Name: {$this->table_name}");
-        Log::info("Model Name: {$this->model_name}");
+        Console::info('');
+        Console::info("Creating Templates:");
+        Console::info("Table Name: {$this->table_name}");
+        Console::info("Model Name: {$this->model_name}");
 
         $schema = new Schema($this->table_name);
         $template_variables = $this->getTemplateVariables();
@@ -68,20 +68,20 @@ class GeneratorService
             foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
-                    Log::info("File {$template_path} already exists");
+                    Console::info("File {$template_path} already exists");
 
                     continue;
                 }
 
                 $this->putFile($templateParser->render($template['name']), $template_path);
-                Log::info("File {$template_path} Created");
+                Console::info("File {$template_path} Created");
             }
 
             foreach (self::$inline_templates as $inlineTemplate) {
                 $rendered_template = $templateParser->render($inlineTemplate['name']);
                 $file_contents = file_get_contents(base_path($inlineTemplate['path']));
                 if (! str_contains($file_contents, $inlineTemplate['identifier'])) {
-                    Log::error("File {$inlineTemplate['path']} is missing the identifier: " .
+                    Console::error("File {$inlineTemplate['path']} is missing the identifier: " .
                         "{$inlineTemplate['identifier']}");
 
                     continue;

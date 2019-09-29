@@ -2,18 +2,18 @@
 
 namespace Akceli\Modifiers;
 
-use Akceli\Console\Commands\AkceliGenerateCommand;
 use Akceli\FileService;
-use Akceli\Log;
+use Akceli\Console;
 use Akceli\Parser;
 use Akceli\Schema;
+use SplFileInfo;
 
 class ClassModifier
 {
     /** @var Parser  */
     protected $parser;
 
-    /** @var mixed|null|\SplFileInfo  */
+    /** @var mixed|null|SplFileInfo  */
     protected $fileInfo;
 
     /** @var bool */
@@ -23,7 +23,7 @@ class ClassModifier
     protected $schema;
 
     /** @var FileService  */
-    protected $files;
+//    protected $files;
 
     /**
      * ClassModifier constructor
@@ -34,8 +34,7 @@ class ClassModifier
      */
     public function __construct(Parser $parser, Schema $schema, $force = false)
     {
-        $this->files = new FileService(app_path());
-        $this->fileInfo = $this->files->findByTableName($schema->getTable());
+        $this->fileInfo = FileService::findByTableName($schema->getTable());
         $this->parser = $parser;
         $this->schema = $schema;
         $this->force = $force;
@@ -47,18 +46,18 @@ class ClassModifier
 
     public function setBelongsToManyRelationship($relationship)
     {
-        Log::error("{$relationship->foreign_key} was not set because ' .
+        Console::error("{$relationship->foreign_key} was not set because ' .
             'setBelongsToManyRelationships not yet implemented");
     }
 
-    public static function getNamespaceOfFile(\SplFileInfo $fileInfo)
+    public static function getNamespaceOfFile(SplFileInfo $fileInfo)
     {
         preg_match('/namespace (.[^;]*);/', file_get_contents($fileInfo->getRealPath()), $matches);
 
         return $matches[1];
     }
 
-    protected function addAbstractMethodToFile(\SplFileInfo $fileInfo, $method_name, $method_content)
+    protected function addAbstractMethodToFile(SplFileInfo $fileInfo, $method_name, $method_content)
     {
         $method_content = rtrim(explode('{', $method_content)[0]) . ";\n";
 
@@ -69,20 +68,20 @@ class ClassModifier
     {
         file_put_contents($path, $content);
 
-        return new \SplFileInfo($path);
+        return new SplFileInfo($path);
     }
 
     /**
      * Add Content to a class file
      *
-     * @param \SplFileInfo $fileInfo
+     * @param SplFileInfo $fileInfo
      * @param $method
      * @param string $content
      */
-    public function addMethodToFile(\SplFileInfo $fileInfo, $method, $content)
+    public function addMethodToFile(SplFileInfo $fileInfo, $method, $content)
     {
         if ($this->classHasMethod($fileInfo, $method)) {
-            Log::warn("The {$method} method exists on {$fileInfo->getRealPath()}");
+            Console::warn("The {$method} method exists on {$fileInfo->getRealPath()}");
 
             return;
         }
@@ -99,10 +98,10 @@ class ClassModifier
     /**
      * Add use statement to class file
      *
-     * @param \SplFileInfo $from
-     * @param \SplFileInfo $to
+     * @param SplFileInfo $from
+     * @param SplFileInfo $to
      */
-    public function addUseStatementToFile(\SplFileInfo $to, \SplFileInfo $from)
+    public function addUseStatementToFile(SplFileInfo $to, SplFileInfo $from)
     {
         $namespace = self::getNamespaceOfFile($from);
         $fullNamespace = $namespace . '\\' . str_replace('.php', '', $from->getFilename());
@@ -118,10 +117,10 @@ class ClassModifier
         }
     }
 
-    public function addClassPropertyDocToFile(\SplFileInfo $fileInfo, $doc_type, $variable)
+    public function addClassPropertyDocToFile(SplFileInfo $fileInfo, $doc_type, $variable)
     {
         if ($this->classHasClassDoc($fileInfo, $variable)) {
-            Log::warn("The {$variable} variable exists on {$fileInfo->getRealPath()}");
+            Console::warn("The {$variable} variable exists on {$fileInfo->getRealPath()}");
 
             return;
         }
@@ -138,7 +137,7 @@ class ClassModifier
         file_put_contents($fileInfo->getRealPath(), $file_contents);
     }
 
-    public function classHasClassDoc(\SplFileInfo $fileInfo, $variable)
+    public function classHasClassDoc(SplFileInfo $fileInfo, $variable)
     {
         $file_contents = file_get_contents($fileInfo->getRealPath());
 
@@ -150,7 +149,7 @@ class ClassModifier
         return (bool) preg_match('/\* @property (.*) \$' . $variable . '\n/', $class_string);
     }
 
-    public function classHasMethod(\SplFileInfo $fileInfo, $method)
+    public function classHasMethod(SplFileInfo $fileInfo, $method)
     {
         $file_contents = file_get_contents($fileInfo->getRealPath());
 
@@ -162,7 +161,7 @@ class ClassModifier
         return (bool) preg_match('/function ' . $method . '( |\()/', $class_string);
     }
 
-    public function classHasUseStatement(\SplFileInfo $fileInfo, $namespace)
+    public function classHasUseStatement(SplFileInfo $fileInfo, $namespace)
     {
         $file_contents = file_get_contents($fileInfo->getRealPath());
 

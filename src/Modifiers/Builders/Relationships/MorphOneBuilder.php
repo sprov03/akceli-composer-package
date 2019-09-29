@@ -5,7 +5,6 @@ namespace Akceli\Modifiers\Builders\Relationships;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
-use Akceli\Modifiers\ClassModifier;
 
 class MorphOneBuilder extends Builder implements BuilderInterface
 {
@@ -52,11 +51,9 @@ class MorphOneBuilder extends Builder implements BuilderInterface
 
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
-
-        $fileInfo = $file->findByTableName($this->schema->getTable());
-        $interfaceFileInfo = $file->findByClassName($interface . 'Interface');
-        $traitFileInfo = $file->findByClassName($interface . 'Trait');
+        $fileInfo = FileService::findByTableName($this->schema->getTable());
+        $interfaceFileInfo = FileService::findByClassName($interface . 'Interface');
+        $traitFileInfo = FileService::findByClassName($interface . 'Trait');
 
         $this->updateFiles($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
     }

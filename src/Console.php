@@ -12,8 +12,10 @@ use Illuminate\Console\Command;
  * @method static info(string $message, $verbosity = null)
  * @method static error(string $message, $verbosity = null)
  * @method static warn(string $message, $verbosity = null)
+ * @method static ask($question, $default = null)
+ * @method static choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
  */
-class Log
+class Console
 {
     /**
      * @var Command

@@ -3,6 +3,7 @@
 namespace Akceli\Modifiers\Builders\Classes;
 
 use Akceli\FileService;
+use Akceli\Console;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Modifiers\ClassModifier;
 
@@ -10,14 +11,11 @@ class TraitBuilder extends ClassModifier implements BuilderInterface
 {
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
-
-        $fileInfo = $file->findByTableName($this->schema->getTable());
-
-        $traitFileInfo = $file->findByClassName("{$interface}Trait");
+        $fileInfo = FileService::findByTableName($this->schema->getTable());
+        $traitFileInfo = FileService::findByClassName("{$interface}Trait");
 
         if (isset($traitFileInfo)) {
-            $this->output->warn("{$interface}Trait.php already exists.");
+           Console::warn("{$interface}Trait.php already exists.");
 
             return;
         }

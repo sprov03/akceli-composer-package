@@ -37,10 +37,8 @@ class HasOneBuilder extends Builder implements BuilderInterface
 
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
-
-        $fileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME);
-        $otherFileInfo = $file->findByTableName($this->schema->getTable());
+        $fileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+        $otherFileInfo = FileService::findByTableName($this->schema->getTable());
 
         $this->updateFiles($fileInfo, $otherFileInfo, $relationship);
     }

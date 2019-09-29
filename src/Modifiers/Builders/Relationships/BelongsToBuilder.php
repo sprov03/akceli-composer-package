@@ -37,15 +37,13 @@ class BelongsToBuilder extends Builder implements BuilderInterface
 
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
-
-        $fileInfo = $file->findByTableName($this->schema->getTable());
-        $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME);
+        $fileInfo = FileService::findByTableName($this->schema->getTable());
+        $otherFileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
 
         if (is_null($otherFileInfo)) {
             (new GeneratorService($relationship->REFERENCED_TABLE_NAME, $otherFileInfo->getFilename()))
                 ->generate(false, false, true, true);
-            $otherFileInfo = $file->findByTableName($relationship->REFERENCED_TABLE_NAME, true);
+            $otherFileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME, true);
         }
 
         $this->updateFiles($fileInfo, $otherFileInfo, $relationship);

@@ -2,10 +2,8 @@
 
 namespace Akceli;
 
-use Akceli\Console\Commands\AkceliGenerateCommand;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\ClassModifier;
-use Illuminate\Console\Command;
 
 class GeneratorFlowController
 {
@@ -23,11 +21,6 @@ class GeneratorFlowController
      * @var bool
      */
     private $force;
-
-    /**
-     * @var FileService
-     */
-    private $file;
 
     /**
      * @var ClassModifier
@@ -52,8 +45,6 @@ class GeneratorFlowController
             $this->schema,
             $force
         );
-
-        $this->file = new FileService(app_path());
     }
 
     public function start()
@@ -84,7 +75,7 @@ class GeneratorFlowController
         $relationship = studly_case($relationship);
         $otherModel = str_singular(studly_case($this->schema->getTable()));
 
-        $relationshipChoice = Log::choice(
+        $relationshipChoice = Console::choice(
             "Dose a {$relationship} have one or many " . str_plural($otherModel) . "?",
             [
                 "0: Don't Set Up the other relationship",
@@ -101,11 +92,11 @@ class GeneratorFlowController
             return;
         }
 
-        if ($this->classModifier->classHasMethod($this->file->findByTableName($this->schema->getTable()), $method)) {
+        if ($this->classModifier->classHasMethod(FileService::findByTableName($this->schema->getTable()), $method)) {
             return;
         }
 
-        $interface = Log::ask(
+        $interface = Console::ask(
             "What is the name of the Interface that " . str_plural($relationship) . " will implement"
         );
         $interface = str_replace('Interface', '', $interface);
@@ -127,7 +118,7 @@ class GeneratorFlowController
         $otherModel = str_singular(studly_case($relationship->REFERENCED_TABLE_NAME));
         $thisModel = str_singular(studly_case($relationship->TABLE_NAME));
 
-        $choice = Log::choice(
+        $choice = Console::choice(
             "Dose a {$otherModel} have one or many " . str_plural($thisModel) . "?",
             [
                 "0: Don't Set Up the other relationship",
@@ -153,10 +144,10 @@ class GeneratorFlowController
 
     private function setPolymorphicManyToManyRelationships($interface)
     {
-        Log::error("Morphed by many not yet implemented");
+        Console::error("Morphed by many not yet implemented");
         return;
         $this->getBuilder('MorphOne')->analise(null, $interface);
-        $interface = Log::ask("What is the name of the interface for {$interface}_type");
+        $interface = Console::ask("What is the name of the interface for {$interface}_type");
 
         $this->getBuilder('Interface')->analise(null, $interface);
         $this->getBuilder('Trait')->analise(null, $interface);

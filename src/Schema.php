@@ -208,7 +208,7 @@ EOF
         $database_name = DB::getDatabaseName();
 
         if (empty($database_name)) {
-            Log::info('Cant configure foreign keys till you set your database name in the config file');
+            Console::info('Cant configure foreign keys till you set your database name in the config file');
         }
 
         return collect(DB::select(<<<EOF
@@ -311,7 +311,7 @@ EOF
                 continue;
             }
 
-            Log::info(
+            Console::info(
                 "Field Doc not yet implemented for this type: {$column->Type}\n" .
                 json_encode($column, JSON_PRETTY_PRINT)
             );
@@ -353,7 +353,7 @@ EOF
                 continue;
             }
 
-            Log::info(
+            Console::info(
                 "Field Cast not yet implemented for this type: {$column->Type} " .
                 json_encode($column, JSON_PRETTY_PRINT)
             );

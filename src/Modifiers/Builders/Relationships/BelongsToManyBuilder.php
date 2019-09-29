@@ -63,23 +63,21 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
 
     public function analise($relationships, $interface = null)
     {
-        $file = new FileService(app_path());
-
         $relationshipOne = $relationships[0];
         $relationshipTwo = $relationships[1];
 
-        $fileInfoOne = $file->findByTableName($relationshipOne->REFERENCED_TABLE_NAME);
-        $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
+        $fileInfoOne = FileService::findByTableName($relationshipOne->REFERENCED_TABLE_NAME);
+        $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
 
         if (is_null($fileInfoOne)) {
             (new GeneratorService($relationshipOne->REFERENCED_TABLE_NAME, $fileInfoOne->getFilename()))
                 ->generate(false, false, true, true);
-            $fileInfoOne = $file->findByTableName($relationshipOne->REFERENCED_TABLE_NAME, true);
+            $fileInfoOne = FileService::findByTableName($relationshipOne->REFERENCED_TABLE_NAME, true);
         }
         if (is_null($fileInfoTwo)) {
             (new GeneratorService($relationshipTwo->REFERENCED_TABLE_NAME, $fileInfoTwo->getFilename()))
                 ->generate(false, false, true, true);
-            $fileInfoTwo = $file->findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
+            $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
         }
 
         $this->updateFiles($fileInfoOne, $relationshipOne, $fileInfoTwo, $relationshipTwo);

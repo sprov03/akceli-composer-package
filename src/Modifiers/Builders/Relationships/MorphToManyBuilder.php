@@ -2,6 +2,7 @@
 
 namespace Akceli\Modifiers\Builders\Relationships;
 
+use Akceli\Console;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
@@ -10,15 +11,13 @@ class MorphToManyBuilder extends Builder implements BuilderInterface
 {
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
+        $fileInfo = FileService::findByTableName($this->schema->getTable());
+        $interfaceFileInfo = FileService::findByClassName($interface . 'Interface');
 
-        $fileInfo = $file->findByTableName($this->schema->getTable());
-        $interfaceFileInfo = $file->findByClassName($interface . 'Interface');
-
-        $tables = $this->output->ask("List tables that this references as a scv \n example users,sites,dogs");
+        $tables = Console::ask("List tables that this references as a scv \n example users,sites,dogs");
 
         foreach (explode(',', $tables) as $table) {
-            $otherModel = str_replace('.php', '', $this->files->findByTableName($table)->getFilename());
+            $otherModel = str_replace('.php', '', FileService::findByTableName($table)->getFilename());
 
             $this->addMethodToFile(
                 $fileInfo,

@@ -3,6 +3,7 @@
 namespace Akceli\Modifiers\Builders\Classes;
 
 use Akceli\FileService;
+use Akceli\Console;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Modifiers\ClassModifier;
 
@@ -10,14 +11,11 @@ class InterfaceBuilder extends ClassModifier implements BuilderInterface
 {
     public function analise($relationship, $interface = null)
     {
-        $file = new FileService(app_path());
-
-        $fileInfo = $file->findByTableName($this->schema->getTable());
-
-        $interfaceFileInfo = $file->findByClassName("{$interface}Interface");
+        $fileInfo = FileService::findByTableName($this->schema->getTable());
+        $interfaceFileInfo = FileService::findByClassName("{$interface}Interface");
 
         if (isset($interfaceFileInfo)) {
-            $this->output->warn("{$interface}Interface.php already exists.");
+            Console::warn("{$interface}Interface.php already exists.");
 
             return;
         }
