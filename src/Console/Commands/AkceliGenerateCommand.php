@@ -34,6 +34,11 @@ class AkceliGenerateCommand extends Command
      */
     public function handle()
     {
+        $this->info('    ****************************************');
+        $this->info('    *                                      *');
+        $this->info('    *                Akceli                *');
+        $this->info('    *                                      *');
+        $this->info('    ****************************************');
         $table_name = $this->argument('table-name');
         $model_name = $this->option('model-name');
         $template_set = $this->option('template-set') ? $this->option('template-set') : 'default';
@@ -48,8 +53,10 @@ class AkceliGenerateCommand extends Command
             ]);
 
             if ($exitCode) {
+                $this->error('');
                 $this->error('There was an error publishing the config file: Try running the following command for more details:');
                 $this->error('php artisan vendor:publish --provider=' . AkceliServiceProvider::class);
+                $this->error('');
                 return;
             } else {
                 $this->info('The akceli.php config file we published to /config/akceli.php');
@@ -60,7 +67,9 @@ class AkceliGenerateCommand extends Command
          * Validate the the Template is a valid option
          */
         if (!isset($config[$template_set])) {
+            $this->error('');
             $this->error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
+            $this->error('');
             return;
         }
 
