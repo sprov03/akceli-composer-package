@@ -1,1 +1,1 @@
-Route::resource('/[[model_names]]', '<?=$table->ModelName?>Controller');
+Route::resource('/<?=$table->model_names?>', '<?=$table->ModelName?>Controller');

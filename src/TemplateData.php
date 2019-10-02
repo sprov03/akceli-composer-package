@@ -10,68 +10,42 @@ use Illuminate\Support\Str;
  * Class TemplateData
  * @package Akceli
  *
+ * @property string $open_php_tag
+ * @property string $modelName
+ * @property string $modelNames
+ * @property string $ModelName
+ * @property string $ModelNames
+ * @property string $model_name
+ * @property string $model_names
+ * @property string $modelNameKabob
+ * @property string $modelNamesKabob
+ *
+ * @property string $app_namespace
+ * @property string $table_name
+ * @property string $primaryKey
+ * @property array $extraData
+ * @property Collection|Column[] $columns
+ *
  * @mixin \AkceliExtraDataMixin
  */
 class TemplateData
 {
-    /**
-     * @var string
-     */
     public $open_php_tag = "<?php";
-    /**
-     * @var string
-     */
-    public $ModelName;
-    /**
-     * @var string
-     */
-    public $ModelNames;
-    /**
-     * @var string
-     */
-    public $modelName;
-    /**
-     * @var string
-     */
-    public $modelNames;
-    /**
-     * @var string
-     */
-    public $model_name;
-    /**
-     * @var string
-     */
-    public $model_names;
-    /**
-     * @var string
-     */
     public $app_namespace;
-
-    /**
-     * @var string
-     */
     public $table_name;
-    /**
-     * @var string
-     */
-    public $modelNamesKabob;
-    /**
-     * @var string
-     */
-    public $modelNameKabob;
-    /**
-     * @var Column[]|Collection
-     */
+    public $primaryKey;
+    private $extraData;
     public $columns;
 
-    /**
-     * @var string
-     */
-    public $primaryKey;
-    /**
-     * @var array
-     */
-    private $extraData;
+    public $ModelName;
+    public $ModelNames;
+    public $modelName;
+    public $modelNames;
+    public $model_name;
+    public $model_names;
+    public $modelNamesKabob;
+    public $modelNameKabob;
+
 
     /**
      * TemplateData constructor.
@@ -90,8 +64,8 @@ class TemplateData
         $this->modelNames = Str::plural(Str::camel($model_name));
         $this->model_name = Str::singular(Str::snake($model_name));
         $this->model_names = Str::plural(Str::snake($model_name));
-        $this->modelNameKabob = str_replace('_', '-', Str::singular(Str::snake($model_name)));
-        $this->modelNamesKabob = str_replace('_', '-', Str::plural(Str::snake($model_name)));
+        $this->modelNameKabob = str_replace('_', '-', $this->model_name);
+        $this->modelNamesKabob = str_replace('_', '-', $this->model_names);
 
         $this->columns = $columns;
         $this->primaryKey = $this->columns->firstWhere('Key', '==', 'PRI')->Field;

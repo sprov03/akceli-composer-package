@@ -1,4 +1,6 @@
-[[open_php_tag]]
+<?php echo '<php?';
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 
 namespace App\Http\Controllers;
 
@@ -10,9 +12,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class <?=$table->ModelName?>Controller extends Controller
 {
     /**
-     * Get all [[ModelNames]]
+     * Get all <?=$table->ModelNames . PHP_EOL?>
      *
-     * GET /[[model_names]]
+     * GET /<?=$table->model_names . PHP_EOL?>
      *
      * @param Request $request
      *
@@ -20,7 +22,7 @@ class <?=$table->ModelName?>Controller extends Controller
      */
     public function index(Request $request)
     {
-        return View::make('models.[[model_names]].index', ['[[model_names]]' => <?=$table->ModelName?>::all()]);
+        return View::make('models.<?=$table->model_names?>.index', ['<?=$table->model_names?>' => <?=$table->ModelName?>::all()]);
     }
 
     /**
@@ -30,74 +32,73 @@ class <?=$table->ModelName?>Controller extends Controller
      */
     public function create()
     {
-        return View::make('models.[[model_names]].create');
+        return View::make('models.<?=$table->model_names?>.create');
     }
 
     /**
      * Get <?=$table->ModelName?> Edit Page
      *
-     * @param $[[model_name]]_id
+     * @param $<?=$table->model_name?>_id
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit($[[model_name]]_id)
+    public function edit($<?=$table->model_name?>_id)
     {
-        return View::make('models.[[model_names]].edit', ['[[model_name]]' => <?=$table->ModelName?>::findOrFail($[[model_name]]_id)]);
+        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->model_name?>' => <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id)]);
     }
 
     /**
-     * Create Single [[model_name_studly_case_singular]]
+     * Create Single <?=$table->ModelName . PHP_EOL?>
      *
-     * POST /[[model_names]]
+     * POST /<?=$table->model_names . PHP_EOL?>
      *
      * @param Request $request
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
     public function store(Request $request)
     {
         $this->validate($request, <?=$table->ModelName?>::rules());
         $<?=$table->ModelName?> = <?=$table->ModelName?>::create($request->all());
 
-        return View::make('models.[[model_names]].edit', ['<?=$table->ModelName?>' => $<?=$table->ModelName?>]);
+        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->ModelName?>' => $<?=$table->ModelName?>]);
     }
 
     /**
-     * Update Site [[model_name_studly_case_singular]]
+     * Update Site <?=$table->ModelName . PHP_EOL?>
      *
-     * PUT /[[model_names]]/{<?=$table->ModelName?>_id}/update
+     * PUT /<?=$table->model_names?>/{<?=$table->ModelName?>_id}/update
      *
-     * @param $[[model_name]]_id <?=$table->ModelName?> id
+     * @param $<?=$table->model_name?>_id <?=$table->ModelName?> id
      * @param Request $request
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
-    public function update($[[model_name]]_id, Request $request)
+    public function update($<?=$table->model_name?>_id, Request $request)
     {
         $this->validate($request, <?=$table->ModelName?>::rules());
 
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($[[model_name]]_id);
+        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
         $<?=$table->ModelName?>->update($request->all());
 
-        return View::make('models.[[model_names]].edit', ['[[model_name]]' => $<?=$table->ModelName?>]);
+        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->model_name?>' => $<?=$table->ModelName?>]);
     }
 
-
     /**
-     * Delete <?=$table->ModelName?>
+     * Delete <?=$table->ModelName . PHP_EOL?>
      * Not best practice but simple delete with link instead of a form
      *
-     * Get /[[model_names]]/{<?=$table->ModelName?>_id}/delete
+     * Get /<?=$table->model_names?>/{<?=$table->ModelName?>_id}/delete
      *
-     * @param $[[model_name]]_id
+     * @param $<?=$table->model_name?>_id
      *
      * @return View
      */
-    public function destroy($[[model_name]]_id)
+    public function destroy($<?=$table->model_name?>_id)
     {
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($[[model_name]]_id);
+        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
         $<?=$table->ModelName?>->delete();
 
-        return View::make('models.[[model_names]].index', ['[[model_names]]' => <?=$table->ModelName?>::all()]);
+        return View::make('models.<?=$table->model_names?>.index', ['<?=$table->model_names?>' => <?=$table->ModelName?>::all()]);
     }
 }

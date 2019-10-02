@@ -1,4 +1,6 @@
-[[open_php_tag]]
+<?php echo '<php?';
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 
 namespace Tests\App\Http\Controllers;
 
@@ -12,7 +14,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function index()
     {
-        $this->get("/[[model_names]]");
+        $this->get("/<?=$table->model_names?>");
 
         $this->assertResponseOk();
 
@@ -35,9 +37,9 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function show()
     {
-        $[[model_name]] = <?=$table->ModelName?>::first();
+        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
 
-        $this->get("/[[model_names]]/{$[[model_name]]->id}");
+        $this->get("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}");
 
         $this->assertResponseOk();
         $this->seeJsonStructure([
@@ -58,7 +60,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
 <?php endforeach; ?>
         ];
 
-        $this->post("/[[model_names]]", $request);
+        $this->post("/<?=$table->model_names?>", $request);
         $this->assertResponseOk();
 
         $this->seeJsonStructure([
@@ -66,7 +68,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
             '<?=$column->getField()?>',
 <?php endforeach; ?>
         ]);
-        $this->seeInDatabase('[[table_name]]', [
+        $this->seeInDatabase('<?=$table->table_name?>', [
 <?php foreach ($table->columns as $column): ?>
             // '<?=$column->getField()?>' => 99999,
 <?php endforeach; ?>
@@ -78,7 +80,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function update()
     {
-        $[[model_name]] = <?=$table->ModelName?>::first();
+        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
 
         $request = [
 <?php foreach ($table->columns as $column): ?>
@@ -86,7 +88,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
 <?php endforeach; ?>
         ];
 
-        $this->put("/[[model_names]]/{$[[model_name]]->id}", $request);
+        $this->put("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}", $request);
         $this->assertResponseOk();
 
         $this->seeJsonStructure([
@@ -94,7 +96,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
             '<?=$column->getField()?>',
 <?php endforeach; ?>
         ]);
-        $this->seeInDatabase('[[table_name]]', [
+        $this->seeInDatabase('<?=$table->table_name?>', [
 <?php foreach ($table->columns as $column): ?>
             // '<?=$column->getField()?>' => 99999,
 <?php endforeach; ?>
@@ -106,12 +108,12 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function destroy()
     {
-        $[[model_name]] = <?=$table->ModelName?>::first();
+        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
 
-        $this->delete("/[[model_names]]/{$[[model_name]]->id}");
+        $this->delete("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}");
         $this->assertResponseOk();
 
-        $this->assertInstanceSoftDeleted($[[model_name]]);
+        $this->assertInstanceSoftDeleted($<?=$table->model_name?>);
         $this->seeJsonStructure([
 <?php foreach ($table->columns as $column): ?>
             '<?=$column->getField()?>',

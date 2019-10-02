@@ -11,15 +11,15 @@
 </head>
 
     <body class="container">
-        <h1>[[ModelNames]] Edit Page</h1>
+        <h1><?=$table->ModelNames?> Edit Page</h1>
         <br>
-        <form action="/[[model_names]]/{{$[[model_name]]->id}}" method="POST" class="form-horizontal">
+        <form action="/<?=$table->model_names?>/{{$<?=$table->model_name?>->id}}" method="POST" class="form-horizontal">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <?php foreach ($table->columns as $column): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=studly_case($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" value="{{$[[model_name]]-><?=$column->getField()?>}}" class="form-control">
+                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" class="form-control">
             </div>
 <?php endforeach; ?>
 
@@ -28,7 +28,7 @@
             </div>
         </form>
 
-        <form action="/[[model_names]]/{{$[[model_name]]->id}}" method="POST" class="form-horizontal margin-top-minus-50px">
+        <form action="/<?=$table->model_names?>/{{$<?=$table->model_name?>->id}}" method="POST" class="form-horizontal margin-top-minus-50px">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">

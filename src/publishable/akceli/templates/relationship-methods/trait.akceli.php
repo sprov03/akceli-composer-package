@@ -1,4 +1,6 @@
-[[open_php_tag]]
+<?php echo '<php?';
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 
 namespace <?=$table->namespace?>;
 

@@ -1,4 +1,6 @@
-[[open_php_tag]]
+<?php echo '<php?';
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 
 namespace App\Http\Controllers;
 
@@ -17,10 +19,10 @@ class <?=$table->ModelName?>Controller extends Controller
     public function indexPage()
     {
         $state = json_encode([
-            '[[model_names]]' => <?=$table->ModelName?>::paginate(50)
+            '<?=$table->model_names?>' => <?=$table->ModelName?>::paginate(50)
         ]);
 
-        return View::make('models.[[model_names]].index', compact('state'));
+        return View::make('models.<?=$table->model_names?>.index', compact('state'));
     }
 
     /**
@@ -31,32 +33,32 @@ class <?=$table->ModelName?>Controller extends Controller
     public function create()
     {
         $state = json_encode([
-            '[[model_name]]' => <?=$table->ModelName?>::baseTemplate()
+            '<?=$table->model_name?>' => <?=$table->ModelName?>::baseTemplate()
         ]);
 
-        return View::make('models.[[model_names]].create', compact('state'));
+        return View::make('models.<?=$table->model_names?>.create', compact('state'));
     }
 
     /**
      * Get <?=$table->ModelName?> Edit Page
      *
-     * @param $[[model_name]]_id
+     * @param $<?=$table->model_name?>_id
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit($[[model_name]]_id)
+    public function edit($<?=$table->model_name?>_id)
     {
         $state = json_encode([
-            '[[model_name]]' => <?=$table->ModelName?>::findOrFail($[[model_name]]_id)
+            '<?=$table->model_name?>' => <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id)
         ]);
 
-        return View::make('models.[[model_names]].edit', compact('state'));
+        return View::make('models.<?=$table->model_names?>.edit', compact('state'));
     }
 
     /**
-     * Get all [[ModelNames]]
+     * Get all <?=$table->ModelNames . PHP_EOL?>
      *
-     * GET /[[model_names]]
+     * GET /<?=$table->model_names . PHP_EOL?>
      *
      * @param Request $request
      *
@@ -68,27 +70,27 @@ class <?=$table->ModelName?>Controller extends Controller
     }
 
     /**
-     * Get Single [[model_name_studly_case_singular]]
+     * Get Single <?=$table->ModelName . PHP_EOL?>
      *
-     * GET /[[model_names]]/{<?=$table->ModelName?>_id}
+     * GET /<?=$table->model_names?>/{<?=$table->ModelName?>_id}
      *
-     * @param $[[model_name]]_id
+     * @param $<?=$table->model_name?>_id
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
-    public function show($[[model_name]]_id)
+    public function show($<?=$table->model_name?>_id)
     {
-        return <?=$table->ModelName?>::findOrFail($[[model_name]]_id);
+        return <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
     }
 
     /**
-     * Create Single [[model_name_studly_case_singular]]
+     * Create Single <?=$table->ModelName . PHP_EOL?>
      *
-     * POST /[[model_names]]
+     * POST /<?=$table->model_names . PHP_EOL?>
      *
      * @param Request $request
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
     public function store(Request $request)
     {
@@ -98,37 +100,37 @@ class <?=$table->ModelName?>Controller extends Controller
     }
 
     /**
-     * Update Site [[model_name_studly_case_singular]]
+     * Update Site <?=$table->ModelName . PHP_EOL?>
      *
-     * PUT /[[model_names]]/{<?=$table->ModelName?>_id}
+     * PUT /<?=$table->model_names?>/{<?=$table->ModelName?>_id}
      *
-     * @param $[[model_name]]_id <?=$table->ModelName?> id
+     * @param $<?=$table->model_name?>_id <?=$table->ModelName?> id
      * @param Request $request
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
-    public function update($[[model_name]]_id, Request $request)
+    public function update($<?=$table->model_name?>_id, Request $request)
     {
         $this->validate($request, <?=$table->ModelName?>::rules());
 
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($[[model_name]]_id);
+        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
         $<?=$table->ModelName?>->update($request->all());
 
         return $<?=$table->ModelName?>;
     }
 
     /**
-     * Destroy <?=$table->ModelName?>
+     * Destroy <?=$table->ModelName . PHP_EOL?>
      *
-     * DELETE /[[model_names]]/{<?=$table->ModelName?>_id}
+     * DELETE /<?=$table->model_names?>/{<?=$table->ModelName?>_id}
      *
-     * @param $[[model_name]]_id
+     * @param $<?=$table->model_name?>_id
      *
-     * @return <?=$table->ModelName?>
+     * @return <?=$table->ModelName . PHP_EOL?>
      */
-    public function destroy($[[model_name]]_id)
+    public function destroy($<?=$table->model_name?>_id)
     {
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($[[model_name]]_id);
+        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
         $<?=$table->ModelName?>->delete();
 
         return $<?=$table->ModelName?>;

@@ -1,4 +1,6 @@
-
+<?php
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
     /**
      * Relationship to this <?=studly_case($interface)?> items
      *

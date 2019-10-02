@@ -1,4 +1,6 @@
-[[open_php_tag]]
+<?php echo '<php?';
+/** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(<?=$table->namespace?>\<?=$table->ModelName?>::class, function (Faker\Generator $faker) use ($factory) {
