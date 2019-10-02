@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * Relationships
  *
- * @package <?=$table->namespace?>
+ * @package <?=$table->namespace . PHP_EOL?>
  */
 class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
 {
