@@ -34,7 +34,7 @@ class TemplateData
     public $app_namespace;
     public $table_name;
     public $primaryKey;
-    private $extraData;
+    private $extraData = [];
     public $columns;
 
     public $ModelName;
@@ -54,7 +54,7 @@ class TemplateData
      * @param Collection $columns
      * @param array $extra_data
      */
-    public function __construct(string $table_name, string $model_name, Collection $columns, array $extra_data)
+    public function __construct(string $table_name, string $model_name, Collection $columns, array $extra_data = [])
     {
         $this->table_name = $table_name;
         $this->app_namespace = Container::getInstance()->getNamespace();

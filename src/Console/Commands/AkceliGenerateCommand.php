@@ -16,7 +16,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'gen:full {table-name} {template-set=default} {--dump} {--force} ' .
+    protected $signature = 'akceli {table-name} {template-set?} {--dump} {--force} ' .
                                     '{--only-relationships} {--only-templates} ' .
                                     '{--model-name=} {--extra-data=}';
 
@@ -66,6 +66,11 @@ class AkceliGenerateCommand extends Command
             }
         }
 
+        if (is_null($this->argument('template-set'))) {
+            $templateSets = array_diff(array_keys($config), ['options', 'root_model_path']);
+            $template_set = $this->anticipate('What template set do you want to use?', $templateSets);
+        }
+
         /**
          * Validate the the Template is a valid option
          */
@@ -78,15 +83,15 @@ class AkceliGenerateCommand extends Command
 
         $templates = $config[$template_set];
 
-        $other_variables = [];
+        $extraData = [];
         if ($this->option('extra-data')) {
             foreach (explode('|', str_replace('/', '\\', $this->option('extra-data'))) as $set) {
                 $parts = explode(':', $set);
-                $other_variables[$parts[0]] = $parts[1];
+                $extraData[$parts[0]] = $parts[1];
             }
         }
 
-        $other_variables = array_merge($config['options'], $templates['options'], $other_variables);
+        $extraData = array_merge($config['options'], $templates['options'], $extraData);
 
         if (is_null($model_name)) {
             $model_name = studly_case(str_singular($table_name));
@@ -97,7 +102,7 @@ class AkceliGenerateCommand extends Command
          */
         Console::setLogger($this);
         FileService::setRootDirectory(base_path(config('akceli.root_model_path')));
-        GeneratorService::addExtraData($other_variables);
+        GeneratorService::addExtraData($extraData);
         GeneratorService::setFileTemplates($templates['templates']);
         GeneratorService::setInlineTemplates($templates['inline_templates']);
 
