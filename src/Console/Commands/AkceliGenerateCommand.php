@@ -16,8 +16,9 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'gen:full {table-name} {--dump} {--force} {--only-relationships} {--only-templates} {--model-name=} {--namespace=}' .
-                                      '{--template-set=} {--other-variables=}';
+    protected $signature = 'gen:full {table-name} {template-set=default} {--dump} {--force} ' .
+                                    '{--only-relationships} {--only-templates} ' .
+                                    '{--model-name=} {--extra-data=}';
 
     /**
      * The console command description.
@@ -41,7 +42,7 @@ class AkceliGenerateCommand extends Command
         $this->info('    ****************************************');
         $table_name = $this->argument('table-name');
         $model_name = $this->option('model-name');
-        $template_set = $this->option('template-set') ? $this->option('template-set') : 'default';
+        $template_set = $this->argument('template-set');
         $config = config('akceli');
 
         /**
@@ -60,6 +61,8 @@ class AkceliGenerateCommand extends Command
                 return;
             } else {
                 $this->info('The akceli.php config file we published to /config/akceli.php');
+                $this->info('Run the command again, and it will work.');
+                return;
             }
         }
 
@@ -76,18 +79,13 @@ class AkceliGenerateCommand extends Command
         $templates = $config[$template_set];
 
         $other_variables = [];
-        if ($this->option('other-variables')) {
-            foreach (explode('|', str_replace('/', '\\', $this->option('other-variables'))) as $set) {
+        if ($this->option('extra-data')) {
+            foreach (explode('|', str_replace('/', '\\', $this->option('extra-data'))) as $set) {
                 $parts = explode(':', $set);
                 $other_variables[$parts[0]] = $parts[1];
             }
         }
 
-        // TODO: Is this necessary? or even helpful?
-        if ($this->option('namespace')) {
-            $other_variables['namespace'] = $this->option('namespace');
-            $other_variables['namespace_path'] = str_replace('\\', '/', $this->option('namespace'));
-        }
         $other_variables = array_merge($config['options'], $templates['options'], $other_variables);
 
         if (is_null($model_name)) {

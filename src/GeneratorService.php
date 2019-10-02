@@ -3,7 +3,6 @@
 namespace Akceli;
 
 use Akceli\Schema\Schema;
-use Illuminate\Container\Container;
 
 class GeneratorService
 {
@@ -49,21 +48,26 @@ class GeneratorService
         Console::info("Model Name: {$this->model_name}");
 
         $schema = new Schema($this->table_name);
-        $template_variables = $this->getTemplateVariables();
-        $template_variables['columns'] = $schema->getColumns();
-        $template_variables['primary_key'] = $schema->getColumns()
-            ->firstWhere('Key', '==', 'PRI')->Field;
+        $templateData = new TemplateData(
+            $this->table_name,
+            $this->model_name,
+            $schema->getColumns(),
+            self::$extra_data
+        );
 
         /**
          * To dump options to see what you can have available in your templates
          */
         if ($dump) {
-            dd($template_variables);
+            dd($templateData->toArray());
         }
 
         if ($generateTemplates) {
-            $templateParser = new Parser(base_path('akceli/templates'), 'tpl.php');
-            $templateParser->addData($template_variables);
+            $templateParser = new Parser(base_path('resources/akceli/templates'), 'akceli.php');
+            // Used for [[Data]] syntax
+            $templateParser->addData($templateData->toArray());
+            // Used for <?= > syntax
+            $templateParser->addData(['table' => $templateData]);
             foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
@@ -102,38 +106,10 @@ class GeneratorService
 
 
         if ($generateRelationships) {
-            $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'tpl.php');
-            $classParser->addData($template_variables);
+            $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'akceli.php');
+            $classParser->addData($templateData->toArray());
             (new GeneratorFlowController($classParser, $schema, $force))->start();
         }
-    }
-
-    protected function getTemplateVariables()
-    {
-        $template_variables = [
-            'open_php_tag' => "<?php",
-            'table_name' => $this->table_name,
-
-            'ModelName' => $this->model_name,
-            'ModelNames' => str_plural(studly_case($this->model_name)),
-            'modelName' => camel_case($this->model_name),
-            'modelNames' => str_plural(camel_case($this->model_name)),
-            'model_name' => snake_case($this->model_name),
-            'model_names' => str_plural(snake_case($this->model_name)),
-            'model-name' => str_replace('_', '-', snake_case($this->model_name)),
-            'model-names' => str_replace('_', '-', str_plural(snake_case($this->model_name))),
-
-            'app_namespace' => Container::getInstance()->getNamespace(),
-        ];
-
-        foreach (self::$extra_data as $key => $value) {
-            $parser = new Parser();
-            $parser->addData($template_variables);
-
-            $template_variables[$key] = $parser->render($value);
-        }
-
-        return $template_variables;
     }
 
     protected function putFile($content, $path)

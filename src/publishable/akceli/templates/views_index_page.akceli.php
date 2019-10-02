@@ -12,12 +12,12 @@
 
     <body class="container">
         <h1>[[ModelNames]] Index Page</h1>
-        <a href="/[[model_names]]/create" class="btn btn-primary">Create New [[ModelName]]</a>
+        <a href="/[[model_names]]/create" class="btn btn-primary">Create New <?=$table->ModelName?></a>
         <table class="table table-striped">
             <thead>
                 <tr>
-<?php foreach ($columns as $column): ?>
-                    <th><?=$column->Field?></th>
+<?php foreach ($table->columns as $column): ?>
+                    <th><?=$column->getField()?></th>
 <?php endforeach; ?>
                     <th>actions</th>
                 </tr>
@@ -25,8 +25,8 @@
             <tbody>
                 @foreach($[[model_names]] as $[[model_name]])
                     <tr>
-<?php foreach ($columns as $column): ?>
-                        <td>{{$[[model_name]]-><?=$column->Field?>}}</td>
+<?php foreach ($table->columns as $column): ?>
+                        <td>{{$[[model_name]]-><?=$column->getField()?>}}</td>
 <?php endforeach; ?>
                         <td><a href="/[[model_names]]/{{$[[model_name]]->id}}/edit" class="btn btn-primary">Edit</a></td>
                     </tr>

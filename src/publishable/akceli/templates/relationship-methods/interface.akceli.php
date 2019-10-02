@@ -1,6 +1,6 @@
 [[open_php_tag]]
 
-namespace [[namespace]];
+namespace <?=$table->namespace?>;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Relationships
  *
- * @package [[namespace]]
+ * @package <?=$table->namespace?>
  */
 interface [[interface]]Interface
 {
