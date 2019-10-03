@@ -1,8 +1,12 @@
-<?php echo '<php?';
+<?php echo '<?php';
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/**
+ *  Documentation: https://laravel.com/docs/5.8/database-testing#writing-factories
+ *
+ *  @var \Illuminate\Database\Eloquent\Factory $factory
+ */
 $factory->define(<?=$table->namespace?>\<?=$table->ModelName?>::class, function (Faker\Generator $faker) use ($factory) {
 
     return [

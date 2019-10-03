@@ -168,7 +168,7 @@ class MysqlSchema implements SchemaInterface
     /**
      * @param string $table
      *
-     * @return Collection
+     * @return Collection|MysqlColumn[]
      *
      * @example
      * {
@@ -180,9 +180,11 @@ class MysqlSchema implements SchemaInterface
      *    "Extra": "auto_increment"
      * }
      */
-    public function getTableColumns($table)
+    public function getTableColumns($table): Collection
     {
-        return collect(DB::select("show columns from " . $table));
+        return collect(DB::select("show columns from " . $table))->map(function ($column) {
+            return new MysqlColumn($column);
+        });
     }
 
     public function getTableCompositeKeys()

@@ -18,6 +18,16 @@ class MysqlColumn implements ColumnInterface
     public $rules;
     public $casts;
 
+    public function __construct($column)
+    {
+        $this->Field = $column->Field;
+        $this->Type = $column->Type;
+        $this->Null = $column->Null;
+        $this->Key = $column->Key;
+        $this->Default = $column->Default;
+        $this->Extra = $column->Extra;
+    }
+
     /**
      * @return string
      */

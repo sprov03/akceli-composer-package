@@ -1,4 +1,4 @@
-<?php echo '<php?';
+<?php echo '<?php';
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 

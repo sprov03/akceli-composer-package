@@ -1,10 +1,11 @@
-<?php echo '<php?';
+<?php echo '<?php';
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
 namespace Tests\<?=$table->namespace?>;
 
 use Tests\TestCase;
+use Factories\<?=$table->ModelName?>Factory;
 use <?=$table->namespace?>\<?=$table->ModelName?>;
 
 class <?=$table->ModelName?>Test extends TestCase
@@ -14,7 +15,9 @@ class <?=$table->ModelName?>Test extends TestCase
      */
     public function relationships()
     {
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::first();
+        $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
+
+        $this->assertInstanceOf(<?=$table->ModelName?>::class, $<?=$table->modelName?>);
 <?php foreach ($table->columns as $column): ?>
 <?php if (str_contains($column->getField(), '_id')): ?>
 <?php $relationship = str_replace('_id', '', $column->getField()); ?>

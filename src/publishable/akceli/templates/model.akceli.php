@@ -1,4 +1,4 @@
-<?php echo '<php?';
+<?php echo '<?php';
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
@@ -28,7 +28,7 @@ class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
 <?php endif; ?>
 
     protected $table = '<?=$table->table_name?>';
-<?php if (! $table->hasField('updated_at') && ! $table->hasField('created_at')): ?>
+<?php if ($table->missingField('updated_at') && ! $table->hasField('created_at')): ?>
     public $timestamps = false;
 <?php endif; ?>
 <?php if ($table->primaryKey !== 'id'): ?>
@@ -49,20 +49,4 @@ class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
         //'<?=$column->getField()?>',
 <?php endforeach; ?>
     ];
-
-    /**
-     * Returns Dynamic Model Rules If necessary
-     *
-     * @return array
-     */
-    public static function rules()
-    {
-        return [
-<?php foreach ($table->columns as $column): ?>
-<?php if ($column->hasValidationRules()): ?>
-            '<?=$column->getField()?>' => '<?=$column->getValidationRulesAsString()?>',
-<?php endif; ?>
-<?php endforeach; ?>
-        ];
-    }
 }
