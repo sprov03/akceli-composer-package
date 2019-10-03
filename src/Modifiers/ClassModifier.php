@@ -5,7 +5,7 @@ namespace Akceli\Modifiers;
 use Akceli\FileService;
 use Akceli\Console;
 use Akceli\Parser;
-use Akceli\Schema\Schema;
+use Akceli\Schema\SchemaInterface;
 use SplFileInfo;
 
 class ClassModifier
@@ -19,17 +19,17 @@ class ClassModifier
     /** @var bool */
     protected $force;
 
-    /** @var Schema  */
+    /** @var SchemaInterface  */
     protected $schema;
 
     /**
      * ClassModifier constructor
      *
      * @param Parser $parser
-     * @param Schema $schema
+     * @param SchemaInterface $schema
      * @param bool $force
      */
-    public function __construct(Parser $parser, Schema $schema, $force = false)
+    public function __construct(Parser $parser, SchemaInterface $schema, $force = false)
     {
         $this->fileInfo = FileService::findByTableName($schema->getTable());
         $this->parser = $parser;

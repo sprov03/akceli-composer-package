@@ -2,7 +2,7 @@
 
 namespace Akceli\Schema;
 
-class Relationship
+class MysqlRelationship
 {
     public $CONSTRAINT_CATALOG;
     public $CONSTRAINT_SCHEMA;
@@ -18,5 +18,4 @@ class Relationship
     public $REFERENCED_COLUMN_NAME;
     public $foreign_key;
     public $references;
-
 }

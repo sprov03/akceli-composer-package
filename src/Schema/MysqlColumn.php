@@ -2,20 +2,21 @@
 
 namespace Akceli\Schema;
 
-class Column
+class MysqlColumn implements ColumnInterface
 {
-    private $Field;
-    private $Type;
-    private $Null;
-    private $Key;
-    private $Default;
-    private $Extra;
-    private $name;
-    private $display;
-    private $document_type;
-    private $type;
-    private $rules;
-    private $casts;
+    public $Field;
+    public $Type;
+    public $Null;
+    public $Key;
+    public $Default;
+    public $Extra;
+    public $name;
+    public $display;
+
+    public $document_type;
+    public $type;
+    public $rules;
+    public $casts;
 
     /**
      * @return string

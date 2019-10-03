@@ -2,18 +2,19 @@
 
 namespace Akceli\Schema;
 
+use Akceli\Console;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class Schema
+class MysqlSchema implements SchemaInterface
 {
     /** @var  string */
     private $table;
     /** @var  Collection */
     private $compositeKeys;
-    /** @var  Collection|Column[] */
+    /** @var  Collection|MysqlColumn[] */
     private $columns;
-    /** @var  Collection|Column[] */
+    /** @var  Collection|MysqlColumn[] */
     private $primary;
 
     /**
@@ -21,7 +22,7 @@ class Schema
      *
      * @param string $table
      */
-    function __construct($table)
+    function __construct(string $table)
     {
         $this->table = $table;
     }
@@ -37,9 +38,9 @@ class Schema
     }
 
     /**
-     * @return Column[]|Collection
+     * @return MysqlColumn[]|Collection
      */
-    public function getColumns()
+    public function getColumns(): Collection
     {
         if (isset($this->columns)) {
             return $this->columns;
@@ -49,7 +50,7 @@ class Schema
     }
 
     /**
-     * @return Collection|Column[]
+     * @return Collection|MysqlColumn[]
      */
     public function getPrimaryKey(): Collection
     {
@@ -67,7 +68,7 @@ class Schema
     }
 
     /**
-     * @return Relationship[]|Collection
+     * @return MysqlRelationship[]|Collection
      */
     public function getForeignKeys()
     {
@@ -76,7 +77,7 @@ class Schema
 
     public function getPolymorphicRelationships()
     {
-        $non_primary_key_columns = $this->getColumns()->filter(function ($column) {
+        $non_primary_key_columns = $this->getColumns()->filter(function (MysqlColumn $column) {
             return $column->Key !== 'PRI';
         });
 
@@ -132,7 +133,7 @@ class Schema
     }
 
     /**
-     * @param Collection|null|Column[] $columns
+     * @param Collection|null|MysqlColumn[] $columns
      * @return array
      */
     private function getInterfaces(Collection $columns = null)
@@ -140,11 +141,11 @@ class Schema
         $interface_types = [];
         $interface_ids = [];
         foreach ($columns as $column) {
-            if (preg_match('/_type$/', $column->Field)) {
-                $interface_types[] = str_replace('_type', '', $column->Field);
+            if (preg_match('/_type$/', $column->getField())) {
+                $interface_types[] = str_replace('_type', '', $column->getField());
             }
-            if (preg_match('/_id$/', $column->Field)) {
-                $interface_ids[] = str_replace('_id', '', $column->Field);
+            if (preg_match('/_id$/', $column->getField())) {
+                $interface_ids[] = str_replace('_id', '', $column->getField());
             }
         }
 
@@ -152,7 +153,7 @@ class Schema
     }
 
     /**
-     * @return Collection|Column[]
+     * @return Collection|MysqlColumn[]
      */
     private function processColumns(): Collection
     {
@@ -201,7 +202,7 @@ EOF
     /**
      * List of foreign keys for the table
      *
-     * @return Collection|Relationship[]
+     * @return Collection|MysqlRelationship[]
      *
      * @example
      *  {
@@ -232,6 +233,10 @@ EOF
         ));
     }
 
+    /**
+     * @param Collection|MysqlColumn[] $columns
+     * @return Collection
+     */
     public function addRules(Collection $columns)
     {
         $ignore_patterns = [
@@ -242,7 +247,7 @@ EOF
         ];
 
         foreach ($columns as $column) {
-            if (preg_match("/" . implode('|', $ignore_patterns) . "/", $column->Field)) {
+            if (preg_match("/" . implode('|', $ignore_patterns) . "/", $column->getField())) {
                 continue;
             }
 

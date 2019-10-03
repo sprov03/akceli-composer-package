@@ -4,7 +4,7 @@ namespace Akceli;
 
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\ClassModifier;
-use Akceli\Schema\Schema;
+use Akceli\Schema\SchemaInterface;
 
 class GeneratorFlowController
 {
@@ -14,7 +14,7 @@ class GeneratorFlowController
     private $parser;
 
     /**
-     * @var Schema
+     * @var SchemaInterface
      */
     private $schema;
 
@@ -32,10 +32,10 @@ class GeneratorFlowController
      * GeneratorFlowController constructor
      *
      * @param Parser $parser
-     * @param Schema $schema
+     * @param SchemaInterface $schema
      * @param bool $force
      */
-    function __construct(Parser $parser, Schema $schema, $force = false)
+    function __construct(Parser $parser, SchemaInterface $schema, $force = false)
     {
         $this->parser = $parser;
         $this->schema = $schema;

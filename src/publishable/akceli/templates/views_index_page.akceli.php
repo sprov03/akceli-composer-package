@@ -1,3 +1,5 @@
+<?php /** @var  TemplateData $table */
+use Akceli\TemplateData;?>
 <html>
     <head>
         <!-- Latest compiled and minified CSS -->

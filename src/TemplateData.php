@@ -1,7 +1,8 @@
 <?php
 
 namespace Akceli;
-use Akceli\Schema\Column;
+use Akceli\Schema\ColumnInterface;
+use Akceli\Schema\MysqlColumn;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ use Illuminate\Support\Str;
  * @property string $table_name
  * @property string $primaryKey
  * @property array $extraData
- * @property Collection|Column[] $columns
+ * @property Collection|ColumnInterface[] $columns
  *
  * @mixin \AkceliExtraDataMixin
  */
@@ -97,7 +98,7 @@ class TemplateData
      */
     public function hasField(string $field_name): bool
     {
-        return $this->columns->contains(function (Column $column) use ($field_name) {
+        return $this->columns->contains(function (MysqlColumn $column) use ($field_name) {
             return $column->getField() === $field_name;
         });
     }
@@ -129,6 +130,7 @@ class TemplateData
             'app_namespace' => $this->app_namespace,
             'columns' => $this->columns,
             'primaryKey' => $this->primaryKey,
+            'table' => $this,
         ];
 
         return array_merge($mainData, $this->extraData);

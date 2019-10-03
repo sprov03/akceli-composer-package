@@ -2,7 +2,7 @@
 
 namespace Akceli;
 
-use Akceli\Schema\Schema;
+use Akceli\Schema\SchemaFactory;
 
 class GeneratorService
 {
@@ -47,7 +47,7 @@ class GeneratorService
         Console::info("Table Name: {$this->table_name}");
         Console::info("Model Name: {$this->model_name}");
 
-        $schema = new Schema($this->table_name);
+        $schema = SchemaFactory::resolve($this->table_name);
         $templateData = new TemplateData(
             $this->table_name,
             $this->model_name,
@@ -64,10 +64,7 @@ class GeneratorService
 
         if ($generateTemplates) {
             $templateParser = new Parser(base_path('resources/akceli/templates'), 'akceli.php');
-            // Used for [[Data]] syntax
             $templateParser->addData($templateData->toArray());
-            // Used for <?= > syntax
-            $templateParser->addData(['table' => $templateData]);
             foreach (self::$file_templates as $template) {
                 $template_path = $templateParser->render($template['path']);
                 if(file_exists($template_path) && ! $force) {
