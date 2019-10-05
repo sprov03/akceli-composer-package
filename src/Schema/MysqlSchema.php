@@ -2,6 +2,7 @@
 
 namespace Akceli\Schema;
 
+use Akceli\Config\ColumnSettingsConfig;
 use Akceli\Console;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -158,9 +159,13 @@ class MysqlSchema implements SchemaInterface
     private function processColumns(): Collection
     {
         $columns = $this->getTableColumns($this->table);
-        $columns = $this->addClassDocs($columns);
         $columns = $this->addRules($columns);
-        $columns = $this->addCasts($columns);
+        foreach ($columns as $column) {
+            $column->name = $column->Field;
+            $column->display = ucfirst(str_replace('_', ' ', $column->Field));
+            $column->casts = $this->getConfigValue($column, new ColumnSettingsConfig(config('akceli.column-settings.casts', [])));
+            $column->document_type = $this->getConfigValue($column, new ColumnSettingsConfig(config('akceli.column-settings.php_class_doc_type', [])));
+        }
 
         return $columns;
     }
@@ -242,15 +247,17 @@ EOF
     public function addRules(Collection $columns)
     {
         $ignore_patterns = [
-//            '^id$',
+            '^id$',
 //            '^created_at$',
 //            '^updated_at$',
 //            '^deleted_at$'
         ];
 
         foreach ($columns as $column) {
-            if (preg_match("/" . implode('|', $ignore_patterns) . "/", $column->getField())) {
-                continue;
+            if (count($ignore_patterns)) {
+                if (preg_match("/" . implode('|', $ignore_patterns) . "/", $column->getField())) {
+                    continue;
+                }
             }
 
             $column->rules = 'required|';
@@ -290,90 +297,26 @@ EOF
         return $columns;
     }
 
-    public function addClassDocs(Collection $columns)
+    public function getConfigValue(MysqlColumn $column, ColumnSettingsConfig $config)
     {
-        foreach ($columns as $column) {
-            $column->name = $column->Field;
-            $column->display = ucfirst(str_replace('_', ' ', $column->Field));
-
-            if ($column->Field === 'id') {
-                $column->type = 'id';
+        if (count($config->ignorePatterns)) {
+            if (preg_match("/" . implode('|', $config->ignorePatterns) . "/", $column->Field)) {
+                return null;
             }
-
-            if ($this->isInteger($column)) {
-                $column->document_type = 'integer';
-                $column->type = 'number';
-                continue;
-            }
-
-            if ($this->isString($column) || $this->isEnum($column)) {
-                $column->document_type = 'string';
-                $column->type = 'text';
-                continue;
-            }
-
-            if ($this->isTimeStamp($column)) {
-                $column->document_type = '\Carbon\Carbon';
-                $column->type = 'timestamp';
-                continue;
-            }
-
-            if ($this->isBoolean($column)) {
-                $column->document_type = 'boolean';
-                $column->type = 'boolean';
-                continue;
-            }
-
-            Console::info(
-                "Field Doc not yet implemented for this type: {$column->Type}\n" .
-                json_encode($column, JSON_PRETTY_PRINT)
-            );
         }
 
-        return $columns;
-    }
+        if ($this->isInteger($column)) return $config->integer;
+        if ($this->isString($column)) return $config->string;
+        if ($this->isEnum($column)) return $config->enum;
+        if ($this->isTimeStamp($column)) return $config->timestamp;
+        if ($this->isBoolean($column)) return $config->boolean;
 
-    public function addCasts(Collection $columns)
-    {
-        $ignore_patterns = [
-            '^created_at$',
-            '^updated_at$',
-            '^deleted_at$'
-        ];
+        Console::info(
+            "Field Cast not yet implemented for this type: {$column->Type} " .
+            json_encode($column, JSON_PRETTY_PRINT)
+        );
 
-        foreach ($columns as $column) {
-            if (preg_match("/" . implode('|', $ignore_patterns) . "/", $column->Field)) {
-                continue;
-            }
-            if ($this->isInteger($column)) {
-                continue;
-            }
-            if ($this->isString($column)) {
-                continue;
-            }
-
-            if ($this->isEnum($column)) {
-                continue;
-            }
-
-            if ($this->isTimeStamp($column)) {
-                $column->casts = '\Carbon\Carbon';
-                continue;
-            }
-
-            if ($this->isBoolean($column)) {
-                $column->casts = 'boolean';
-                continue;
-            }
-
-            Console::info(
-                "Field Cast not yet implemented for this type: {$column->Type} " .
-                json_encode($column, JSON_PRETTY_PRINT)
-            );
-        }
-
-        return $columns;
-
+        return null;
     }
 
     public function isInteger($column)
@@ -407,6 +350,7 @@ EOF
             ->where('CONSTRAINT_NAME', '=', "{$this->table}_{$column->Field}_unique")
             ->first();
     }
+
     public function isCompositeKey($column)
     {
         return !! $this->getCompositeKey($column);

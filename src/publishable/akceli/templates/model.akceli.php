@@ -2,12 +2,14 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
+
 namespace <?=$table->namespace?>;
 
 use <?=$table->fully_qualified_base_model_name?>;
 <?php if ($table->hasField('deleted_at')): ?>
 use Illuminate\Database\Eloquent\SoftDeletes;
 <?php endif; ?>
+use Carbon\Carbon;
 
 /**
  * Class <?=$table->ModelName . PHP_EOL?>
@@ -35,8 +37,8 @@ class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
 <?php if ($table->primaryKey !== 'id'): ?>
     public $incrementing = false;
     protected $primaryKey = '<?=$table->primaryKey?>';
-<?php endif; ?>
 
+<?php endif; ?>
     protected $casts = [
 <?php foreach ($table->columns as $column): ?>
 <?php if ($column->hasCastsToAttribute()): ?>

@@ -23,6 +23,33 @@ return [
      */
     'root_model_path' => 'app',
 
+    'column-settings' => [
+        'php_class_doc_type' => [
+            'ignore_patterns' => [
+//                '^created_at$',
+//                '^updated_at$',
+//                '^deleted_at$'
+            ],
+            'integer' => 'integer',
+            'string' => 'string',
+            'enum' => 'string',
+            'timestamp' => 'Carbon',
+            'boolean' => 'boolean'
+        ],
+        'casts' => [
+            'ignore_patterns' => [
+//                '^created_at$',
+//                '^updated_at$',
+//                '^deleted_at$'
+            ],
+            'integer' => null,
+            'string' => null,
+            'enum' => null,
+            'timestamp' => 'datetime',
+            'boolean' => 'boolean'
+        ]
+    ],
+
     /**
      * This is the default template set that is used
      */
@@ -38,7 +65,7 @@ return [
             ],
             [
                 'name' => 'model_controller',
-                'path' => "app/Http/Controllers/Api/[[ModelName]]Controller.php"
+                'path' => "app/Http/Controllers/[[ModelName]]Controller.php"
             ],
             [
                 'name' => 'model_controller_test',
@@ -56,13 +83,33 @@ return [
                 'name' => 'model_seeder',
                 'path' => "database/seeds/[[ModelName]]Seeder.php"
             ],
+            [
+                'name' => 'store_model_request',
+                'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
+            ],
+            [
+                'name' => 'update_model_request',
+                'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
+            ],
+            [
+                'name' => 'views_create_page',
+                'path' => "resources/views/models/[[modelNames]]/create.blade.php",
+            ],
+            [
+                'name' => 'views_edit_page',
+                'path' => "resources/views/models/[[modelNames]]/edit.blade.php",
+            ],
+            [
+                'name' => 'views_index_page',
+                'path' => "resources/views/models/[[modelNames]]/index.blade.php",
+            ],
         ],
         'inline_templates' => [
-//            [
-//                'name' => 'route_resource',
-//                'identifier' => '/** Routes File Marker: Do Not Remove Being Used Buy Code Generator */',
-//                'path' => 'app/Http/routes.php'
-//            ],
+            [
+                'name' => 'route_resource',
+                'identifier' => '/** All Web controllers will go here */',
+                'path' => 'routes/web.php'
+            ],
 //            [
 //                'name' => 'seeder_reference',
 //                'identifier' => '        /** Seeder File Marker: Do Not Remove Being Used Buy Code Generator */',

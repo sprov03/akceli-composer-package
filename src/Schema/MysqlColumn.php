@@ -49,7 +49,7 @@ class MysqlColumn implements ColumnInterface
      */
     public function getCastsToAttribute(): string
     {
-        return $this->casts;
+        return $this->casts ?? '';
     }
 
     /**
@@ -65,7 +65,7 @@ class MysqlColumn implements ColumnInterface
      */
     public function getValidationRulesAsString(): string
     {
-        return $this->rules;
+        return $this->rules ?? '';
     }
 
     /**
