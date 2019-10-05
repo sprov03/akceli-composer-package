@@ -96,6 +96,10 @@ return [
                 'path' => "resources/views/models/[[modelNames]]/create.blade.php",
             ],
             [
+                'name' => 'views_create_page',
+                'path' => "resources/views/models/[[modelNames]]/show.blade.php",
+            ],
+            [
                 'name' => 'views_edit_page',
                 'path' => "resources/views/models/[[modelNames]]/edit.blade.php",
             ],

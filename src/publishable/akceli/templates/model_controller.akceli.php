@@ -31,7 +31,7 @@ class <?=$table->ModelName?>Controller extends Controller
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
 
-        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->ModelName?>' => $<?=$table->modelName?>]);
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => $<?=$table->modelName?>]);
     }
 
     /**
@@ -59,14 +59,14 @@ class <?=$table->ModelName?>Controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  Update<?=$table->ModelName?>Request  $request
-     * @param  int  $id
+     * @param  <?=$table->ModelName?> $<?=$table->modelName?>
      * @return \Illuminate\Contracts\View\View
      */
-    public function update(Update<?=$table->ModelName?>Request $request, $id)
+    public function update(Update<?=$table->ModelName?>Request $request, <?=$table->ModelName?> $<?=$table->modelName?>)
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
 
-        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->ModelName?>' => $<?=$table->modelName?>]);
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => $<?=$table->modelName?>]);
     }
 
     /**
