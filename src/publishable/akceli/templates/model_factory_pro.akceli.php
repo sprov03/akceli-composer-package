@@ -4,7 +4,6 @@ use Akceli\TemplateData;?>
 
 namespace Factories;
 
-use App\Models\Account;
 use App\Models\<?=$table->ModelName?>;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;

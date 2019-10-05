@@ -4,8 +4,9 @@ use Akceli\TemplateData;?>
 
 namespace Tests\App\Http\Controllers;
 
+use App\Models\<?=$table->ModelName?>;
+use Factories\<?=$table->ModelName?>Factory;
 use Tests\TestCase;
-use <?=$table->namespace?>\<?=$table->ModelName?>;
 
 class <?=$table->ModelName?>ControllerTest extends TestCase
 {
@@ -14,39 +15,8 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function index()
     {
-        $this->get("/<?=$table->model_names?>");
-
-        $this->assertResponseOk();
-
-        $this->seeJsonStructure([
-            'total',
-            'per_page',
-            'current_page',
-            'data' => [
-                [
-<?php foreach ($table->columns as $column): ?>
-                    '<?=$column->getField()?>',
-<?php endforeach; ?>
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function show()
-    {
-        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
-
-        $this->get("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}");
-
-        $this->assertResponseOk();
-        $this->seeJsonStructure([
-<?php foreach ($table->columns as $column): ?>
-            '<?=$column->getField()?>',
-<?php endforeach; ?>
-        ]);
+        $response = $this->get("/<?=$table->modelNames?>");
+        $response->assertOk();
     }
 
     /**
@@ -54,23 +24,21 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function store()
     {
-        $request = [
+        $data_request = [
 <?php foreach ($table->columns as $column): ?>
-            // '<?=$column->getField()?>' => 99999,
+            '<?=$column->getField()?>' => '999999',
 <?php endforeach; ?>
         ];
 
-        $this->post("/<?=$table->model_names?>", $request);
-        $this->assertResponseOk();
+        $response = $this->post("/<?=$table->modelNames?>", $data_request);
+        $response->assertOk();
+        /** @var <?=$table->ModelName?> $<?=$table->modelName?> */
+        $<?=$table->modelName?> = <?=$table->ModelName?>::all()->last();
 
-        $this->seeJsonStructure([
+        $this->assertDatabaseHas('<?=$table->modelNames?>', [
+            'id' => $<?=$table->modelName?>->id,
 <?php foreach ($table->columns as $column): ?>
-            '<?=$column->getField()?>',
-<?php endforeach; ?>
-        ]);
-        $this->seeInDatabase('<?=$table->table_name?>', [
-<?php foreach ($table->columns as $column): ?>
-            // '<?=$column->getField()?>' => 99999,
+            '<?=$column->getField()?>' => '999999',
 <?php endforeach; ?>
         ]);
     }
@@ -78,27 +46,44 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
     /**
      * @test
      */
+    public function create()
+    {
+        $response = $this->get("/<?=$table->modelNames?>/create");
+        $response->assertOk();
+    }
+
+
+    /**
+     * @test
+     */
+    public function show()
+    {
+        $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
+
+        $response = $this->get("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}");
+        $response->assertOk();
+    }
+
+    /**
+     * @test
+     */
     public function update()
     {
-        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
+        $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
 
-        $request = [
+        $request_data = [
 <?php foreach ($table->columns as $column): ?>
-            // '<?=$column->getField()?>' => 99999,
+            '<?=$column->getField()?>' => '999999',
 <?php endforeach; ?>
         ];
 
-        $this->put("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}", $request);
-        $this->assertResponseOk();
+        $response = $this->put("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}", $request_data);
+        $response->assertOk();
 
-        $this->seeJsonStructure([
+        $this->assertDatabaseHas('<?=$table->modelNames?>', [
+            'id' => $<?=$table->modelName?>->id,
 <?php foreach ($table->columns as $column): ?>
-            '<?=$column->getField()?>',
-<?php endforeach; ?>
-        ]);
-        $this->seeInDatabase('<?=$table->table_name?>', [
-<?php foreach ($table->columns as $column): ?>
-            // '<?=$column->getField()?>' => 99999,
+            '<?=$column->getField()?>' => '999999',
 <?php endforeach; ?>
         ]);
     }
@@ -108,17 +93,18 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function destroy()
     {
-        $<?=$table->model_name?> = <?=$table->ModelName?>::first();
+        $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
 
-        $this->delete("/<?=$table->model_names?>/{$<?=$table->model_name?>->id}");
-        $this->assertResponseOk();
+        $response = $this->delete("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}");
+        $response->assertOk();
 
-        $this->assertInstanceSoftDeleted($<?=$table->model_name?>);
-        $this->seeJsonStructure([
-<?php foreach ($table->columns as $column): ?>
-            '<?=$column->getField()?>',
-<?php endforeach; ?>
+<?php if ($table->hasField('deleted_at')): ?>
+        $this->assertSoftDeleted($<?=$table->modelName?>);
+<?php else: ?>
+        $this->assertDatabaseMissing('<?=$table->modelNames?>', [
+            'id' => $<?=$table->modelName?>->id
         ]);
+<?php endif; ?>
     }
-
 }
+

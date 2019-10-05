@@ -4,101 +4,92 @@ use Akceli\TemplateData;?>
 
 namespace App\Http\Controllers;
 
+use App\Models\<?=$table->ModelName?>;
+use App\Http\Requests\Store<?=$table->ModelName?>Request;
+use App\Http\Requests\Update<?=$table->ModelName?>Request;
 use Illuminate\Support\Facades\View;
-use <?=$table->namespace?>\<?=$table->ModelName?>;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class <?=$table->ModelName?>Controller extends Controller
 {
     /**
-     * Get all <?=$table->ModelNames . PHP_EOL?>
+     * Display a listing of the resource.
      *
-     * GET /<?=$table->model_names . PHP_EOL?>
-     *
-     * @param Request $request
-     *
-     * @return LengthAwarePaginator
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        return View::make('models.<?=$table->model_names?>.index', ['<?=$table->model_names?>' => <?=$table->ModelName?>::all()]);
+        return View::make('models.<?=$table->modelNames?>.index', ['<?=$table->modelNames?>' => <?=$table->ModelName?>::all()]);
     }
 
     /**
-     * Get <?=$table->ModelName?> Create Page
+     * Store a newly created resource in storage.
+     *
+     * @param  Store<?=$table->ModelName?>Request  $request
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function store(Store<?=$table->ModelName?>Request $request)
+    {
+        $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
+
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->ModelName?>' => $<?=$table->modelName?>]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
-        return View::make('models.<?=$table->model_names?>.create');
+        return View::make('models.<?=$table->modelNames?>.create');
     }
 
     /**
-     * Get <?=$table->ModelName?> Edit Page
+     * Display the specified resource.
      *
-     * @param $<?=$table->model_name?>_id
-     *
+     * @param  int $<?=$table->modelName?>_id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit($<?=$table->model_name?>_id)
+    public function show($<?=$table->modelName?>_id)
     {
-        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->model_name?>' => <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id)]);
+        return View::make('models.<?=$table->modelNames?>.show', ['<?=$table->modelName?>' => <?=$table->ModelName?>::findOrFail($<?=$table->modelName?>_id)]);
     }
 
     /**
-     * Create Single <?=$table->ModelName . PHP_EOL?>
+     * Update the specified resource in storage.
      *
-     * POST /<?=$table->model_names . PHP_EOL?>
-     *
-     * @param Request $request
-     *
-     * @return <?=$table->ModelName . PHP_EOL?>
+     * @param  Update<?=$table->ModelName?>Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function store(Request $request)
+    public function update(Update<?=$table->ModelName?>Request $request, $id)
     {
-        $this->validate($request, <?=$table->ModelName?>::rules());
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::create($request->all());
+        $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
 
-        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->ModelName?>' => $<?=$table->ModelName?>]);
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->ModelName?>' => $<?=$table->modelName?>]);
     }
 
     /**
-     * Update Site <?=$table->ModelName . PHP_EOL?>
+     * Remove the specified resource from storage.
      *
-     * PUT /<?=$table->model_names?>/{<?=$table->ModelName?>_id}/update
-     *
-     * @param $<?=$table->model_name?>_id <?=$table->ModelName?> id
-     * @param Request $request
-     *
-     * @return <?=$table->ModelName . PHP_EOL?>
+     * @param $<?=$table->modelName?>_id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function update($<?=$table->model_name?>_id, Request $request)
+    public function destroy($<?=$table->modelName?>_id)
     {
-        $this->validate($request, <?=$table->ModelName?>::rules());
+        <?=$table->ModelName?>::findOrFail($<?=$table->modelName?>_id)->delete();
 
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
-        $<?=$table->ModelName?>->update($request->all());
-
-        return View::make('models.<?=$table->model_names?>.edit', ['<?=$table->model_name?>' => $<?=$table->ModelName?>]);
+        return View::make('models.owners.index', ['owners' => Owner::all()]);
     }
 
     /**
-     * Delete <?=$table->ModelName . PHP_EOL?>
-     * Not best practice but simple delete with link instead of a form
+     * Show the form for editing the specified resource.
      *
-     * Get /<?=$table->model_names?>/{<?=$table->ModelName?>_id}/delete
-     *
-     * @param $<?=$table->model_name?>_id
-     *
-     * @return View
+     * @param int $<?=$table->modelName?>_id
+     * @return \Illuminate\Contracts\View\View
      */
-    public function destroy($<?=$table->model_name?>_id)
+    public function edit($<?=$table->modelName?>_id)
     {
-        $<?=$table->ModelName?> = <?=$table->ModelName?>::findOrFail($<?=$table->model_name?>_id);
-        $<?=$table->ModelName?>->delete();
-
-        return View::make('models.<?=$table->model_names?>.index', ['<?=$table->model_names?>' => <?=$table->ModelName?>::all()]);
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => <?=$table->ModelName?>::findOrFail($<?=$table->modelName?>_id)]);
     }
 }

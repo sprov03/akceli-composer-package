@@ -25,9 +25,10 @@ class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
 {
 <?php if ($table->hasField('deleted_at')): ?>
     use SoftDeletes;
-<?php endif; ?>
 
+<?php endif; ?>
     protected $table = '<?=$table->table_name?>';
+
 <?php if ($table->missingField('updated_at') && ! $table->hasField('created_at')): ?>
     public $timestamps = false;
 <?php endif; ?>
