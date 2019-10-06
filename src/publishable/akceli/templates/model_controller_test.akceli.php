@@ -31,7 +31,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
         ];
 
         $response = $this->post("/<?=$table->modelNames?>", $data_request);
-        $response->assertOk();
+        $response->assertStatus(302);
         /** @var <?=$table->ModelName?> $<?=$table->modelName?> */
         $<?=$table->modelName?> = <?=$table->ModelName?>::all()->last();
 
@@ -78,7 +78,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
         ];
 
         $response = $this->put("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}", $request_data);
-        $response->assertOk();
+        $response->assertStatus(302);
 
         $this->assertDatabaseHas('<?=$table->modelNames?>', [
             'id' => $<?=$table->modelName?>->id,
@@ -96,7 +96,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
         $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
 
         $response = $this->delete("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}");
-        $response->assertOk();
+        $response->assertStatus(302);
 
 <?php if ($table->hasField('deleted_at')): ?>
         $this->assertSoftDeleted($<?=$table->modelName?>);

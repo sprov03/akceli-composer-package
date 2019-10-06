@@ -31,7 +31,7 @@ class <?=$table->ModelName?>Controller extends Controller
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
 
-        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => $<?=$table->modelName?>]);
+        return redirect("/<?=$table->modelNamesKabob?>/{$<?=$table->modelName?>}/edit");
     }
 
     /**
@@ -59,37 +59,38 @@ class <?=$table->ModelName?>Controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  Update<?=$table->ModelName?>Request  $request
-     * @param  <?=$table->ModelName?> $<?=$table->modelName?>
+     * @param  <?=$table->ModelName?> $<?=$table->modelName . PHP_EOL?>
      * @return \Illuminate\Contracts\View\View
      */
     public function update(Update<?=$table->ModelName?>Request $request, <?=$table->ModelName?> $<?=$table->modelName?>)
     {
-        $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
+        $<?=$table->modelName?>->update($request->validated());
 
-        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => $<?=$table->modelName?>]);
+        return redirect('/<?=$table->modelNamesKabob?>');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param $<?=$table->modelName?>_id
+     * @param <?=$table->ModelName?> $<?=$table->modelName . PHP_EOL?>
      * @return \Illuminate\Contracts\View\View
+     * @throws \Exception
      */
-    public function destroy($<?=$table->modelName?>_id)
+    public function destroy(<?=$table->ModelName?> $<?=$table->modelName?>)
     {
-        <?=$table->ModelName?>::findOrFail($<?=$table->modelName?>_id)->delete();
+        $<?=$table->modelName?>->delete();
 
-        return View::make('models.owners.index', ['owners' => Owner::all()]);
+        return redirect('/<?=$table->modelNamesKabob?>');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $<?=$table->modelName?>_id
+     * @param <?=$table->ModelName?> $<?=$table->modelName . PHP_EOL?>
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit($<?=$table->modelName?>_id)
+    public function edit(<?=$table->ModelName?> $<?=$table->modelName?>)
     {
-        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => <?=$table->ModelName?>::findOrFail($<?=$table->modelName?>_id)]);
+        return View::make('models.<?=$table->modelNames?>.edit', ['<?=$table->modelName?>' => $<?=$table->modelName?>]);
     }
 }

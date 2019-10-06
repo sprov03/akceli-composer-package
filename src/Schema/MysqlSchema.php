@@ -262,15 +262,15 @@ EOF
 
             $column->rules = 'required|';
 
-            if ($this->isTimeStamp($column)) {
+            if ($column->isTimeStamp()) {
                 $column->rules .= "date|";
             }
 
-            if ($this->isInteger($column)) {
+            if ($column->isInteger()) {
                 $column->rules .= "integer|";
             }
 
-            if ($this->isEnum($column)) {
+            if ($column->isEnum()) {
                 $string = $column->Type;
                 $string = substr($string, 6);
                 $string = substr($string, 0, strlen($string) -2);
@@ -279,7 +279,7 @@ EOF
                 $column->rules .= "in:{$types}|";
             }
 
-            if ($this->isBoolean($column)) {
+            if ($column->isBoolean()) {
                 $column->rules .= "boolean|";
             }
 
@@ -305,43 +305,18 @@ EOF
             }
         }
 
-        if ($this->isInteger($column)) return $config->integer;
-        if ($this->isString($column)) return $config->string;
-        if ($this->isEnum($column)) return $config->enum;
-        if ($this->isTimeStamp($column)) return $config->timestamp;
-        if ($this->isBoolean($column)) return $config->boolean;
+        if ($column->isInteger()) return $config->integer;
+        if ($column->isString()) return $config->string;
+        if ($column->isEnum()) return $config->enum;
+        if ($column->isTimeStamp()) return $config->timestamp;
+        if ($column->isBoolean()) return $config->boolean;
 
         Console::info(
-            "Field Cast not yet implemented for this type: {$column->Type} " .
+            "Column info not identified for: {$column->Type} " .
             json_encode($column, JSON_PRETTY_PRINT)
         );
 
         return null;
-    }
-
-    public function isInteger($column)
-    {
-        return preg_match('/^(big)?int\((\d*)\)/', $column->Type);
-    }
-
-    public function isBoolean($column)
-    {
-        return preg_match('/^tinyint\((\d*)\)/', $column->Type);
-    }
-
-    public function isTimeStamp($column)
-    {
-        return preg_match('/^timestamp$/', $column->Type);
-    }
-
-    public function isEnum($column)
-    {
-        return str_contains($column->Type, 'enum(');
-    }
-
-    public function isString($column)
-    {
-        return preg_match('/^varchar\((\d*)\)$|^text$/', $column->Type);
     }
 
     public function isUnique($column)

@@ -1,5 +1,6 @@
 <?php /** @var  TemplateData $table */
-use Akceli\TemplateData;?>
+use Akceli\TemplateData;
+use Illuminate\Support\Str; ?>
 <html>
 <head>
     <!-- Latest compiled and minified CSS -->
@@ -18,11 +19,24 @@ use Akceli\TemplateData;?>
         <form action="/<?=$table->model_names?>/{{$<?=$table->model_name?>->id}}" method="POST" class="form-horizontal">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
 <?php foreach ($table->columns as $column): ?>
+<?php if (($column->getField() === 'id')): ?>
             <div class="form-group">
-                <label for="<?=$column->getField()?>"><?=studly_case($column->getField())?>:</label>
+                <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
+                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" readonly class="form-control">
+            </div>
+<?php elseif ($column->isString() || $column->isEnum() || $column->isBoolean() || $column->isInteger()): ?>
+            <div class="form-group">
+                <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
                 <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" class="form-control">
             </div>
+<?php elseif ($column->isTimeStamp()): ?>
+            <div class="form-group">
+                <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
+                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" readonly class="form-control">
+            </div>
+<?php endif ?>
 <?php endforeach; ?>
 
             <div class="form-group">

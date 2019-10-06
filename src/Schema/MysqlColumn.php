@@ -75,4 +75,30 @@ class MysqlColumn implements ColumnInterface
     {
         return $this->document_type ?? 'string';
     }
+
+    public function isInteger(): bool
+    {
+        return preg_match('/^(big)?int\((\d*)\)/', $this->Type);
+    }
+
+    public function isBoolean(): bool
+    {
+        return preg_match('/^tinyint\((\d*)\)/', $this->Type);
+    }
+
+    public function isTimeStamp(): bool
+    {
+        return preg_match('/^timestamp$/', $this->Type);
+    }
+
+    public function isEnum(): bool
+    {
+        return str_contains($this->Type, 'enum(');
+    }
+
+    public function isString(): bool
+    {
+        return preg_match('/^varchar\((\d*)\)$|^text$/', $this->Type);
+    }
+
 }
