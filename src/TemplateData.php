@@ -6,6 +6,7 @@ use Akceli\Schema\MysqlColumn;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * Class TemplateData
@@ -26,11 +27,11 @@ use Illuminate\Support\Str;
  * @property string $primaryKey
  * @property array $extraData
  * @property Collection|ColumnInterface[] $columns
- *
- * @mixin \AkceliExtraDataMixin
  */
 class TemplateData
 {
+    use \AkceliTableDataTrait;
+
     public $open_php_tag = "<?php";
     public $app_namespace;
     public $table_name;

@@ -18,7 +18,7 @@ use Illuminate\Support\Str; ?>
         <br>
         <form action="/<?=$table->model_names?>" method="POST" class="form-horizontal">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-<?php foreach ($table->columns as $column): ?>
+<?php foreach ($table->filterDates($table->columns) as $column): ?>
 <?php if (($column->getField() === 'id')): ?>
 <?php elseif ($column->isString() || $column->isEnum() || $column->isBoolean() || $column->isInteger()): ?>
             <div class="form-group">
