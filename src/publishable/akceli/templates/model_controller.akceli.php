@@ -31,7 +31,7 @@ class <?=$table->ModelName?>Controller extends Controller
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
 
-        return redirect("/<?=$table->modelNamesKabob?>/{$<?=$table->modelName?>}/edit");
+        return redirect("/<?=$table->modelNamesKabob?>/{$<?=$table->modelName?>->id}/edit");
     }
 
     /**
