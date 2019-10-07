@@ -53,6 +53,17 @@ class AkceliGenerateCommand extends Command
                 '--provider' => AkceliServiceProvider::class
             ]);
 
+            /**
+             * Add the Trait to the composer json
+             */
+            $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
+            $composerJson['autoload-dev'] = $composerJson['autoload-dev'] ?? [];
+            $composerJson['autoload-dev']['files'] = $composerJson['autoload-dev']['files'] ?? [];
+            array_push($composerJson['autoload-dev']['files'], "resources/akceli/AkceliTableDataTrait.php");
+            $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+            file_put_contents(base_path('composer.json'), $newComposerJson);
+
+
             if ($exitCode) {
                 $this->error('');
                 $this->error('There was an error publishing the config file: Try running the following command for more details:');
