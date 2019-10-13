@@ -95,7 +95,7 @@ class AkceliGenerateCommand extends Command
             sort($templateSets);
             array_unshift($templateSets, 'cancel');
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
-                $template_set = $this->anticipate('What template set do you want to use?', $templateSets);
+                $template_set = $this->anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
             } else {
                 $template_set = $this->choice('What template set do you want to use?', $templateSets);
             }
