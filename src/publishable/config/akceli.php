@@ -72,11 +72,11 @@ return [
                 'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
             ],
             [
-                'name' => 'model_factory_standard',
+                'name' => 'model_factory_pro',
                 'path' => "database/factories/[[ModelName]]Factory.php"
             ],
             [
-                'name' => 'model_factory_pro',
+                'name' => 'model_factory_standard',
                 'path' => "database/factories/[[ModelName]]Factory.php"
             ],
             [

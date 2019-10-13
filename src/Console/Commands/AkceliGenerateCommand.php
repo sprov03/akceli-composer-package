@@ -72,7 +72,7 @@ class AkceliGenerateCommand extends Command
                 return;
             } else {
                 $this->info('The akceli.php config file we published to /config/akceli.php');
-                $this->info('Run the command again, and it will work.');
+                $this->info('resources/akceli/AkceliTableDataTrait.php was published');
                 return;
             }
         }
