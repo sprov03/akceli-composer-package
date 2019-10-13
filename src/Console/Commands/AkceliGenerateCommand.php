@@ -42,8 +42,16 @@ class AkceliGenerateCommand extends Command
         $this->info('    ****************************************');
         $table_name = $this->argument('table-name');
         $model_name = $this->option('model-name');
+        if (is_null($model_name)) {
+            $model_name = studly_case(str_singular($table_name));
+        }
+
         $template_set = $this->argument('template-set');
         $config = config('akceli');
+
+
+        $this::info("Table Name: {$table_name}");
+        $this::info("Model Name: {$model_name}");
 
         /**
          * If config file has not been published then publish it.
@@ -78,8 +86,27 @@ class AkceliGenerateCommand extends Command
         }
 
         if (is_null($this->argument('template-set'))) {
-            $templateSets = array_diff(array_keys($config), ['options', 'root_model_path']);
-            $template_set = $this->anticipate('What template set do you want to use?', $templateSets);
+            $templateSets = array_diff(array_keys($config), [
+                'options',
+                'root_model_path',
+                'column-settings',
+                'select-template-behavior'
+            ]);
+            sort($templateSets);
+            array_unshift($templateSets, 'cancel');
+            if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
+                $template_set = $this->anticipate('What template set do you want to use?', $templateSets);
+            } else {
+                $template_set = $this->choice('What template set do you want to use?', $templateSets);
+            }
+
+            if (is_null($template_set)) {
+                $template_set = $this->choice('What template set do you want to use?', $templateSets);
+            }
+
+            if ($template_set === 'cancel') {
+                return;
+            }
         }
 
         /**
@@ -103,10 +130,6 @@ class AkceliGenerateCommand extends Command
         }
 
         $extraData = array_merge($config['options'], $templates['options'], $extraData);
-
-        if (is_null($model_name)) {
-            $model_name = studly_case(str_singular($table_name));
-        }
 
         /**
          * Setup Global Classes

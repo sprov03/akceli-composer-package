@@ -44,8 +44,6 @@ class GeneratorService
     {
         Console::info('');
         Console::info("Creating Templates:");
-        Console::info("Table Name: {$this->table_name}");
-        Console::info("Model Name: {$this->model_name}");
 
         $schema = SchemaFactory::resolve($this->table_name);
         $templateData = new TemplateData(

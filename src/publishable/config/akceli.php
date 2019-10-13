@@ -23,6 +23,12 @@ return [
      */
     'root_model_path' => 'app',
 
+    /**
+     * Options: 'auto-complete' or 'multiple-choice'
+     * will default to 'multiple-choice' if this is missing or set to an invalid option
+     */
+    'select-template-behavior' => 'auto-complete',
+
     'column-settings' => [
         'php_class_doc_type' => [
             'ignore_patterns' => [
