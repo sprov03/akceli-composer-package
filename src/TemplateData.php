@@ -2,11 +2,8 @@
 
 namespace Akceli;
 use Akceli\Schema\ColumnInterface;
-use Akceli\Schema\MysqlColumn;
-use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * Class TemplateData
@@ -32,52 +29,43 @@ class TemplateData
 {
     use \AkceliTableDataTrait;
 
-    public $open_php_tag = "<?php";
-    public $app_namespace;
-    public $table_name;
-    public $primaryKey;
     private $extraData = [];
-    public $columns;
-
-    public $ModelName;
-    public $ModelNames;
-    public $modelName;
-    public $modelNames;
-    public $model_name;
-    public $model_names;
-    public $modelNamesKabob;
-    public $modelNameKabob;
-
+    private $columns;
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * TemplateData constructor.
-     * @param string $table_name
-     * @param string $model_name
-     * @param Collection $columns
-     * @param array $extra_data
+     * @param array $data
+     * @param Collection|ColumnInterface[] $columns
      */
-    public function __construct(string $table_name, string $model_name, Collection $columns, array $extra_data = [])
+    public function __construct(array $data, Collection $columns)
     {
-        $this->table_name = $table_name;
-        $this->app_namespace = Container::getInstance()->getNamespace();
-        $this->ModelName = Str::singular(Str::studly($model_name));
-        $this->ModelNames = Str::plural(Str::studly($model_name));
-        $this->modelName = Str::singular(Str::camel($model_name));
-        $this->modelNames = Str::plural(Str::camel($model_name));
-        $this->model_name = Str::singular(Str::snake($model_name));
-        $this->model_names = Str::plural(Str::snake($model_name));
-        $this->modelNameKabob = str_replace('_', '-', $this->model_name);
-        $this->modelNamesKabob = str_replace('_', '-', $this->model_names);
-
         $this->columns = $columns;
-        $this->primaryKey = $this->columns->firstWhere('Key', '==', 'PRI')->Field;
-
-        foreach ($extra_data as $key => $value) {
+        foreach ($data as $key => $value) {
             $parser = new Parser();
             $parser->addData($this->toArray());
 
             $this->extraData[$key] = $parser->render($value);
         }
+    }
+
+    public static function buildModelAliases(string $model_name)
+    {
+        return [
+            'ModelName' => Str::singular(Str::studly($model_name)),
+            'ModelNames' => Str::plural(Str::studly($model_name)),
+            'modelName' => Str::singular(Str::camel($model_name)),
+            'modelNames' => Str::plural(Str::camel($model_name)),
+            'model_name' => Str::singular(Str::snake($model_name)),
+            'model_names' => Str::plural(Str::snake($model_name)),
+            'model-name' => str_replace('_', '-', Str::singular(Str::snake($model_name))),
+            'model-names' => str_replace('_', '-', Str::plural(Str::snake($model_name))),
+            'modelNameKabob' => str_replace('_', '-', Str::singular(Str::snake($model_name))),
+            'modelNamesKabob' => str_replace('_', '-', Str::plural(Str::snake($model_name))),
+        ];
     }
 
     /**
@@ -86,6 +74,10 @@ class TemplateData
      */
     public function __get($name)
     {
+        if ($name === 'columns') {
+            return $this->columns;
+        }
+
         if (isset($this->extraData[$name])) {
             return $this->extraData[$name];
         }
@@ -99,7 +91,7 @@ class TemplateData
      */
     public function hasField(string $field_name): bool
     {
-        return $this->columns->contains(function (MysqlColumn $column) use ($field_name) {
+        return $this->columns->contains(function (ColumnInterface $column) use ($field_name) {
             return $column->getField() === $field_name;
         });
     }
@@ -116,21 +108,6 @@ class TemplateData
     public function toArray()
     {
         $mainData = [
-            'open_php_tag' => "<?php",
-            'table_name' => $this->table_name,
-
-            'ModelName' => $this->ModelName,
-            'ModelNames' => $this->ModelNames,
-            'modelName' => $this->modelName,
-            'modelNames' => $this->modelNames,
-            'model_name' => $this->model_name,
-            'model_names' => $this->model_names,
-            'model-name' => $this->modelNameKabob,
-            'model-names' => $this->modelNamesKabob,
-
-            'app_namespace' => $this->app_namespace,
-            'columns' => $this->columns,
-            'primaryKey' => $this->primaryKey,
             'table' => $this,
         ];
 

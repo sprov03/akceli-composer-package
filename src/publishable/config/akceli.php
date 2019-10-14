@@ -36,6 +36,7 @@ return [
 //                '^updated_at$',
 //                '^deleted_at$'
             ],
+            'default' => 'string',
             'integer' => 'integer',
             'string' => 'string',
             'enum' => 'string',
@@ -48,6 +49,7 @@ return [
 //                '^updated_at$',
 //                '^deleted_at$'
             ],
+            'default' => null,
             'integer' => null,
             'string' => null,
             'enum' => null,
@@ -56,130 +58,156 @@ return [
         ]
     ],
 
-    /**
-     * This is the default template set that is used
-     */
-    'default' => [
-        'templates' => [
-            [
-                'name' => 'model',
-                'path' => "app/[[namespace_path]]/[[ModelName]].php"
+    'template-groups' => [
+        /**
+         * This is the default template set that is used
+         */
+        'default_laravel_blade' => [
+            'templates' => [
+                [
+                    'name' => 'model',
+                    'path' => "app/[[namespace_path]]/[[ModelName]].php"
+                ],
+                [
+                    'name' => 'model_test',
+                    'path' => "tests/[[namespace_path]]/[[ModelName]]Test.php"
+                ],
+                [
+                    'name' => 'blade_controller',
+                    'path' => "app/Http/Controllers/[[ModelName]]Controller.php"
+                ],
+                [
+                    'name' => 'model_controller_test',
+                    'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
+                ],
+                [
+                    'name' => 'model_factory_standard',
+                    'path' => "database/factories/[[ModelName]]Factory.php"
+                ],
+                [
+                    'name' => 'model_factory_pro',
+                    'path' => "database/factories/[[ModelName]]Factory.php"
+                ],
+                [
+                    'name' => 'model_seeder',
+                    'path' => "database/seeds/[[ModelName]]Seeder.php"
+                ],
+                [
+                    'name' => 'store_model_request',
+                    'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
+                ],
+                [
+                    'name' => 'update_model_request',
+                    'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
+                ],
+                [
+                    'name' => 'views_create_page',
+                    'path' => "resources/views/models/[[modelNames]]/create.blade.php",
+                ],
+                [
+                    'name' => 'views_create_page',
+                    'path' => "resources/views/models/[[modelNames]]/show.blade.php",
+                ],
+                [
+                    'name' => 'views_edit_page',
+                    'path' => "resources/views/models/[[modelNames]]/edit.blade.php",
+                ],
+                [
+                    'name' => 'views_index_page',
+                    'path' => "resources/views/models/[[modelNames]]/index.blade.php",
+                ],
             ],
-            [
-                'name' => 'model_test',
-                'path' => "tests/[[namespace_path]]/[[ModelName]]Test.php"
-            ],
-            [
-                'name' => 'model_controller',
-                'path' => "app/Http/Controllers/[[ModelName]]Controller.php"
-            ],
-            [
-                'name' => 'model_controller_test',
-                'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
-            ],
-            [
-                'name' => 'model_factory_pro',
-                'path' => "database/factories/[[ModelName]]Factory.php"
-            ],
-            [
-                'name' => 'model_factory_standard',
-                'path' => "database/factories/[[ModelName]]Factory.php"
-            ],
-            [
-                'name' => 'model_seeder',
-                'path' => "database/seeds/[[ModelName]]Seeder.php"
-            ],
-            [
-                'name' => 'store_model_request',
-                'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
-            ],
-            [
-                'name' => 'update_model_request',
-                'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
-            ],
-            [
-                'name' => 'views_create_page',
-                'path' => "resources/views/models/[[modelNames]]/create.blade.php",
-            ],
-            [
-                'name' => 'views_create_page',
-                'path' => "resources/views/models/[[modelNames]]/show.blade.php",
-            ],
-            [
-                'name' => 'views_edit_page',
-                'path' => "resources/views/models/[[modelNames]]/edit.blade.php",
-            ],
-            [
-                'name' => 'views_index_page',
-                'path' => "resources/views/models/[[modelNames]]/index.blade.php",
-            ],
-        ],
-        'inline_templates' => [
-            [
-                'name' => 'route_resource',
-                'identifier' => '/** All Web controllers will go here */',
-                'path' => 'routes/web.php'
-            ],
+            'inline_templates' => [
+                [
+                    'name' => 'route_resource',
+                    'identifier' => '/** All Web controllers will go here */',
+                    'path' => 'routes/web.php'
+                ],
 //            [
 //                'name' => 'seeder_reference',
 //                'identifier' => '        /** Seeder File Marker: Do Not Remove Being Used Buy Code Generator */',
 //                'path' => 'database/seeds/DatabaseSeeder.php'
 //            ]
+            ],
+
+            /**
+             * highest Priority options can only be overwritten form the command
+             *      line using the --other-variables option
+             */
+            'options' => [
+//            'namespace' => 'Models'
+            ],
         ],
 
         /**
-         * highest Priority options can only be overwritten form the command
-         *      line using the --other-variables option
+         * This is a simple example of a template that you can create
          */
-        'options' => [
-//            'namespace' => 'Models'
-        ],
-    ],
-
-    /**
-     * This is a simple example of a template that you can create
-     */
-    'admin' => [
-        'templates' => [
-            [
-                'name' => 'model',
-                'path' => "app/[[namespace_path]]/[[ModelName]].php"
+        'service' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Service' => [
+                    'type' => 'ask',
+                    'message' => "What is the Class Name of the Service?\n Example: File will create a FileService Class"
+                ],
             ],
-            [
-                'name' => 'model_test',
-                'path' => "tests/app/[[namespace_path]]/[[ModelName]]Test.php"
-            ],
-            [
-                'name' => 'model_controller',
-                'path' => "app/Http/Controllers/[[ModelName]]Controller.php"
-            ],
-            [
-                'name' => 'model_controller_test',
-                'path' => "tests/app/Http/Controllers/[[ModelName]]ControllerTest.php"
-            ],
-            [
-                'name' => 'model_factory',
-                'path' => "database/factories/[[namespace_path]]/[[ModelName]]Factory.php"
-            ],
-            [
-                'name' => 'model_seeder',
-                'path' => "database/seeds/[[ModelName]]Seeder.php"
-            ],
-        ],
-        'inline_templates' => [
-            [
-                'name' => 'route_resource',
-                'identifier' => '/** Routes File Marker: Do Not Remove Being Used Buy Code Generator */',
-                'path' => 'app/Http/routes.php'
+            'templates' => [
+                [
+                    'name' => 'service',
+                    'path' => "app/Services/[[Service]]Service/[[Service]]Service.php"
+                ],
+                [
+                    'name' => 'service_test',
+                    'path' => "tests/Services/[[Service]]Service/[[Service]]ServiceTest.php"
+                ],
+                [
+                    'name' => 'service_stubs',
+                    'path' => "tests/Services/[[Service]]Service/[[Service]]ServiceStubs.php"
+                ],
             ]
         ],
 
         /**
-         * highest Priority options can only be overwritten form the command
-         *      line using the --other-variables option
+         * This is a simple example of a template that you can create
          */
-        'options' => [
-            'namespace' => 'Admin'
+        'repository_pattern' => [
+            'templates' => [
+                [
+                    'name' => 'model',
+                    'path' => "app/[[namespace_path]]/[[ModelName]].php"
+                ],
+                [
+                    'name' => 'model_test',
+                    'path' => "tests/[[namespace_path]]/[[ModelName]]Test.php"
+                ],
+                [
+                    'name' => 'api_controller',
+                    'path' => "app/Http/Controllers/Api/[[ModelName]]Controller.php"
+                ],
+                [
+                    'name' => 'api_controller_test',
+                    'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
+                ],
+                [
+                    'name' => 'model_factory_pro',
+                    'path' => "database/factories/[[ModelName]]Factory.php"
+                ],
+                [
+                    'name' => 'create_model_request',
+                    'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
+                ],
+                [
+                    'name' => 'patch_model_request',
+                    'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
+                ],
+            ],
+            'inline_templates' => [
+                [
+                    'name' => 'route_resource',
+                    'identifier' => '/** All Web controllers will go here */',
+                    'path' => 'routes/web.php'
+                ],
+            ],
         ],
+
     ],
 ];

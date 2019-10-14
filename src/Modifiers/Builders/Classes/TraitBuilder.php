@@ -15,7 +15,7 @@ class TraitBuilder extends ClassModifier implements BuilderInterface
         $traitFileInfo = FileService::findByClassName("{$interface}Trait");
 
         if (isset($traitFileInfo)) {
-           Console::warn("{$interface}Trait.php already exists.");
+           Console::warn("{$interface}Trait.php (Already Exists).");
 
             return;
         }

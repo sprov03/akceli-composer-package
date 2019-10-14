@@ -2,6 +2,12 @@
 
 namespace Akceli\Schema;
 
+/**
+ * Interface ColumnInterface
+ * @package Akceli\Schema
+ *
+ * @mixin \AkceliColumnTrait
+ */
 interface ColumnInterface
 {
     /**
@@ -30,9 +36,11 @@ interface ColumnInterface
     public function getValidationRulesAsString(): string;
 
     /**
-     * @return string
+     * @param string $column_setting
+     * @param null $default
+     * @return string|null
      */
-    public function getDataType(): string;
+    public function getColumnSetting(string $column_setting, $default = null);
 
     /**
      * @return bool

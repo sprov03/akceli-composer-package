@@ -16,7 +16,7 @@ use Carbon\Carbon;
  *
  * Database Fields
 <?php foreach ($table->columns as $column): ?>
- * @property <?=$column->getDataType()?> $<?=$column->getField() . PHP_EOL?>
+ * @property <?=$column->getColumnSetting('php_class_doc_type', 'string')?> $<?=$column->getField() . PHP_EOL?>
 <?php endforeach; ?>
  *
  * Relationships
@@ -41,8 +41,8 @@ class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
 <?php endif; ?>
     protected $casts = [
 <?php foreach ($table->columns as $column): ?>
-<?php if ($column->hasCastsToAttribute()): ?>
-        '<?=$column->getField()?>' => '<?=$column->getCastsToAttribute()?>',
+<?php if ($column->getColumnSetting('casts')): ?>
+        '<?=$column->getField()?>' => '<?=$column->getColumnSetting('casts')?>',
 <?php endif; ?>
 <?php endforeach; ?>
     ];

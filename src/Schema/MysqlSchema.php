@@ -47,7 +47,9 @@ class MysqlSchema implements SchemaInterface
             return $this->columns;
         }
 
-        return $this->processColumns();
+        $columns = $this->getTableColumns($this->table);
+        $columns = $this->addRules($columns);
+        return $columns;
     }
 
     /**
@@ -151,23 +153,6 @@ class MysqlSchema implements SchemaInterface
         }
 
         return array_intersect($interface_types, $interface_ids);
-    }
-
-    /**
-     * @return Collection|MysqlColumn[]
-     */
-    private function processColumns(): Collection
-    {
-        $columns = $this->getTableColumns($this->table);
-        $columns = $this->addRules($columns);
-        foreach ($columns as $column) {
-            $column->name = $column->Field;
-            $column->display = ucfirst(str_replace('_', ' ', $column->Field));
-            $column->casts = $this->getConfigValue($column, new ColumnSettingsConfig(config('akceli.column-settings.casts', [])));
-            $column->document_type = $this->getConfigValue($column, new ColumnSettingsConfig(config('akceli.column-settings.php_class_doc_type', [])));
-        }
-
-        return $columns;
     }
 
     /**

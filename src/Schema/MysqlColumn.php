@@ -2,21 +2,22 @@
 
 namespace Akceli\Schema;
 
+use Akceli\Config\ColumnSettingsConfig;
+use Akceli\Console;
+use AkceliColumnTrait;
+
 class MysqlColumn implements ColumnInterface
 {
+    use AkceliColumnTrait;
+
     public $Field;
     public $Type;
     public $Null;
     public $Key;
     public $Default;
     public $Extra;
-    public $name;
-    public $display;
 
-    public $document_type;
-    public $type;
     public $rules;
-    public $casts;
 
     public function __construct($column)
     {
@@ -69,11 +70,36 @@ class MysqlColumn implements ColumnInterface
     }
 
     /**
-     * @return string
+     * @param string $column_setting
+     * @param null $default
+     * @return string|null
      */
-    public function getDataType(): string
+    public function getColumnSetting(string $column_setting, $default = null)
     {
-        return $this->document_type ?? 'string';
+        if (!config("akceli.column-settings.{$column_setting}")) {
+            Console::info("Invalid Column Setting: {$column_setting}");
+        }
+
+        $config = new ColumnSettingsConfig(config("akceli.column-settings.{$column_setting}", []));
+
+        if (count($config->ignorePatterns)) {
+            if (preg_match("/" . implode('|', $config->ignorePatterns) . "/", $this->Field)) {
+                return null;
+            }
+        }
+
+        if ($this->isInteger()) return $config->integer;
+        if ($this->isString()) return $config->string;
+        if ($this->isEnum()) return $config->enum;
+        if ($this->isTimeStamp()) return $config->timestamp;
+        if ($this->isBoolean()) return $config->boolean;
+
+        Console::info(
+            "Column info not identified for: {$this->Type} " .
+            json_encode($this, JSON_PRETTY_PRINT)
+        );
+
+        return $default;
     }
 
     public function isInteger(): bool

@@ -15,7 +15,7 @@ class InterfaceBuilder extends ClassModifier implements BuilderInterface
         $interfaceFileInfo = FileService::findByClassName("{$interface}Interface");
 
         if (isset($interfaceFileInfo)) {
-            Console::warn("{$interface}Interface.php already exists.");
+            Console::warn("{$interface}Interface.php (Already Exists)");
 
             return;
         }
