@@ -6,7 +6,6 @@ use Akceli\AkceliServiceProvider;
 use Akceli\FileService;
 use Akceli\GeneratorService;
 use Akceli\Console;
-use Akceli\Parser;
 use Akceli\Schema\SchemaFactory;
 use Akceli\TemplateData;
 use Illuminate\Console\Command;
@@ -40,11 +39,16 @@ class AkceliGenerateCommand extends Command
      */
     public function handle()
     {
-        $this->info('    ****************************************');
-        $this->info('    *                                      *');
-        $this->info('    *                Akceli                *');
-        $this->info('    *                                      *');
-        $this->info('    ****************************************');
+        /**
+         * Setup Global Classes
+         */
+        Console::setLogger($this);
+
+        Console::info('    ****************************************');
+        Console::info('    *                                      *');
+        Console::info('    *                Akceli                *');
+        Console::info('    *                                      *');
+        Console::info('    ****************************************');
 
         $template_set = $this->argument('template-set');
         $config = config('akceli');
@@ -70,14 +74,14 @@ class AkceliGenerateCommand extends Command
 
 
             if ($exitCode) {
-                $this->error('');
-                $this->error('There was an error publishing the config file: Try running the following command for more details:');
-                $this->error('php artisan vendor:publish --provider=' . AkceliServiceProvider::class);
-                $this->error('');
+                Console::error('');
+                Console::error('There was an error publishing the config file: Try running the following command for more details:');
+                Console::error('php artisan vendor:publish --provider=' . AkceliServiceProvider::class);
+                Console::error('');
                 return;
             } else {
-                $this->info('The akceli.php config file we published to /config/akceli.php');
-                $this->info('resources/akceli/AkceliTableDataTrait.php was published');
+                Console::info('The akceli.php config file we published to /config/akceli.php');
+                Console::info('resources/akceli/AkceliTableDataTrait.php was published');
                 return;
             }
         }
@@ -85,13 +89,13 @@ class AkceliGenerateCommand extends Command
         if (is_null($this->argument('template-set'))) {
             $templateSets = array_keys($config['template-groups']);
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
-                $template_set = $this->anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
+                $template_set = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
             } else {
-                $template_set = $this->choice('What template set do you want to use?', $templateSets);
+                $template_set = Console::choice('What template set do you want to use?', $templateSets);
             }
 
             if (is_null($template_set)) {
-                $template_set = $this->choice('What template set do you want to use?', $templateSets);
+                $template_set = Console::choice('What template set do you want to use?', $templateSets);
             }
         }
 
@@ -99,9 +103,9 @@ class AkceliGenerateCommand extends Command
          * Validate the the Template is a valid option
          */
         if (!isset($config['template-groups'][$template_set])) {
-            $this->error('');
-            $this->error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
-            $this->error('');
+            Console::error('');
+            Console::error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
+            Console::error('');
             return;
         }
 
@@ -143,8 +147,8 @@ class AkceliGenerateCommand extends Command
             $extraData['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
             $extraData = array_merge($extraData, TemplateData::buildModelAliases($model_name));
 
-            $this::info("Table Name: {$table_name}");
-            $this::info("Model Name: {$model_name}");
+            Console::info("Table Name: {$table_name}");
+            Console::info("Model Name: {$model_name}");
         } else {
             $columns = collect([]);
         }
@@ -153,9 +157,7 @@ class AkceliGenerateCommand extends Command
          * Process Data Prompts
          */
         if ($templateSet['data'] ?? false) {
-            foreach ($templateSet['data'] as $key => $prompt) {
-                $extraData[$key] = $this->{$prompt['type']}($prompt['message']);
-            }
+            $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet['data'], $extraData);
         }
 
         $template_data = array_merge($config['options'], $templateSet['options'] ?? [], $extraData);
@@ -164,10 +166,6 @@ class AkceliGenerateCommand extends Command
             dd($template_data);
         }
 
-        /**
-         * Setup Global Classes
-         */
-        Console::setLogger($this);
         FileService::setRootDirectory(base_path(config('akceli.root_model_path')));
         GeneratorService::setData($template_data); // Set Globally for use during relationship generation
         GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
@@ -183,7 +181,7 @@ class AkceliGenerateCommand extends Command
 //                $classParser->addData($this->templateData->toArray());
 //            (new GeneratorFlowController($classParser, $schema, $force))->start();
             } else {
-                $this->alert('You can not generate relationships with this template');
+                Console::alert('You can not generate relationships with this template');
             }
             return;
         }

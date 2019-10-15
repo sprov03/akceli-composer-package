@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
  * @method static info(string $message, $verbosity = null)
  * @method static error(string $message, $verbosity = null)
  * @method static warn(string $message, $verbosity = null)
+ * @method static alert(string $message, $verbosity = null)
  * @method static ask($question, $default = null)
  * @method static choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
  */
@@ -22,6 +23,9 @@ class Console
      */
     private static $logger;
 
+    /**
+     * @param Command $logger
+     */
     public static function setLogger(Command $logger)
     {
         self::$logger = $logger;
@@ -29,6 +33,6 @@ class Console
 
     public static function __callStatic($name, $arguments)
     {
-        call_user_func([self::$logger, $name], ...$arguments);
+        return call_user_func([self::$logger, $name], ...$arguments);
     }
 }

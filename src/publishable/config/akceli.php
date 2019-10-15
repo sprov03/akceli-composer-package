@@ -1,5 +1,7 @@
 <?php
 
+use Akceli\Console;
+
 return [
     /**
      * Global Setting You can over wright these in specific template options or
@@ -140,15 +142,38 @@ return [
         ],
 
         /**
+         * Job Template where you can prompt which queue the job should use
+         */
+        'job' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Job' => [
+                    'type' => 'ask',
+                    'question' => "What is the Class Name of the Job?\n Example: File will create a FileJob Class",
+                ],
+                'Queue' => [
+                    'type' => 'choice',
+                    'question' => "What queue will this job be running in?",
+                    'choices' => ['default', 'long-running']
+                ],
+            ],
+            'templates' => [
+                [
+                    'name' => 'job',
+                    'path' => "tests/Akceli/ActualFiles/app/Jobs/[[Job]]Job.php"
+                ],
+            ]
+        ],
+
+        /**
          * This is a simple example of a template that you can create
          */
         'service' => [
             'requires_table_name' => false,
             'data' => [
-                'Service' => [
-                    'type' => 'ask',
-                    'message' => "What is the Class Name of the Service?\n Example: File will create a FileService Class"
-                ],
+                'Service' => function () {
+                    return Console::ask("What is the Class Name of the Service?\n Example: File will create a FileService Class", 'Dummy Data');
+                }
             ],
             'templates' => [
                 [
@@ -208,6 +233,5 @@ return [
                 ],
             ],
         ],
-
     ],
 ];

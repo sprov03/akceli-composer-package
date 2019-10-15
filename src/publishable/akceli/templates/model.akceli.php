@@ -1,7 +1,7 @@
-<?php echo '<?php';
+<?php echo '<?php' . PHP_EOL;
 /** @var  TemplateData $table */
-use Akceli\TemplateData;?>
-
+use Akceli\TemplateData;
+?>
 
 namespace <?=$table->namespace?>;
 

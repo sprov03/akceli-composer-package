@@ -96,7 +96,6 @@ class FileService
     }
 
     /**
-     *
      * @param bool $reload
      *
      * @return RecursiveIteratorIterator|SplFileInfo[]
