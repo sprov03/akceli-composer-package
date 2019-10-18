@@ -64,7 +64,7 @@ return [
         /**
          * This is the default template set that is used
          */
-        'default_laravel_blade' => [
+        'basic_crud' => [
             'templates' => [
                 [
                     'name' => 'model',

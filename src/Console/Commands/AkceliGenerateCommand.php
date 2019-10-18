@@ -69,6 +69,7 @@ class AkceliGenerateCommand extends Command
             $composerJson['autoload-dev'] = $composerJson['autoload-dev'] ?? [];
             $composerJson['autoload-dev']['files'] = $composerJson['autoload-dev']['files'] ?? [];
             array_push($composerJson['autoload-dev']['files'], "resources/akceli/AkceliTableDataTrait.php");
+            array_push($composerJson['autoload-dev']['files'], "resources/akceli/AkceliColumnTrait.php");
             $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
             file_put_contents(base_path('composer.json'), $newComposerJson);
 
@@ -82,6 +83,7 @@ class AkceliGenerateCommand extends Command
             } else {
                 Console::info('The akceli.php config file we published to /config/akceli.php');
                 Console::info('resources/akceli/AkceliTableDataTrait.php was published');
+                Console::info('resources/akceli/AkceliColumnTrait.php was published');
                 return;
             }
         }
