@@ -21,8 +21,7 @@ class AkceliGenerateCommand extends Command
      * @var string
      */
     protected $signature = 'akceli {template-set?} {table-name?} {--dump} {--force} ' .
-                                    '{--only-relationships} {--only-templates} ' .
-                                    '{--model-name=} {--extra-data=}';
+    '{--model-name=} {--extra-data=}';
 
     /**
      * The console command description.
@@ -175,29 +174,6 @@ class AkceliGenerateCommand extends Command
 
         $templateData = new TemplateData($template_data, $columns);
         $generator = new GeneratorService($templateData);
-
-        if ($this->option('only-relationships') && !$this->option('only-templates')) {
-
-            if ($templateSet['requires_table_name'] ?? true) {
-//                $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'akceli.php');
-//                $classParser->addData($this->templateData->toArray());
-//            (new GeneratorFlowController($classParser, $schema, $force))->start();
-            } else {
-                Console::alert('You can not generate relationships with this template');
-            }
-            return;
-        }
-
-        if ($this->option('only-templates') && !$this->option('only-relationships')) {
-            $generator->generate($this->option('force'));
-            return;
-        }
-
         $generator->generate($this->option('force'));
-        if ($templateSet['requires_table_name'] ?? true) {
-//                $classParser = new Parser(base_path('resources/templates/relationship-methods'), 'akceli.php');
-//                $classParser->addData($this->templateData->toArray());
-//            (new GeneratorFlowController($classParser, $schema, $force))->start();
-        }
     }
 }
