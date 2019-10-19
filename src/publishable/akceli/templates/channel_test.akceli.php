@@ -20,7 +20,7 @@ class <?=$Channel?>ChannelTest extends TestCase
     {
         $user = UserFactory::createDefault();
         /** @var <?=$Channel?>Channel $<?=Str::snake($Channel)?>Channel */
-        $<?=Str::snake($Channel)?>Channel = app(<?=Str::snake($Channel)?>Channel::class);
+        $<?=Str::snake($Channel)?>Channel = app(<?=$Channel?>Channel::class);
 
         $this->assertTrue($<?=Str::snake($Channel)?>Channel->join($user));
     }
