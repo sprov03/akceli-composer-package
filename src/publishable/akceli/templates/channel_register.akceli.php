@@ -1,0 +1,1 @@
+Broadcast::channel('[[Channel]].{[[Channel]]}', [[Channel]]Channel::class);

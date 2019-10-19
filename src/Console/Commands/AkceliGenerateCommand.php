@@ -175,5 +175,9 @@ class AkceliGenerateCommand extends Command
         $templateData = new TemplateData($template_data, $columns);
         $generator = new GeneratorService($templateData);
         $generator->generate($this->option('force'));
+
+        if ($templateSet['completion_message'] ?? false) {
+            $templateSet['completion_message']();
+        }
     }
 }
