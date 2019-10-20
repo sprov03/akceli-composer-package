@@ -1,6 +1,10 @@
 <?php
 
+use Akceli\Akceli;
 use Akceli\Console;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+use function Clue\StreamFilter\fun;
 
 return [
     /**
@@ -32,113 +36,118 @@ return [
     'select-template-behavior' => 'auto-complete',
 
     'column-settings' => [
-        'php_class_doc_type' => [
-            'ignore_patterns' => [
-//                '^created_at$',
-//                '^updated_at$',
-//                '^deleted_at$'
-            ],
-            'default' => 'string',
-            'integer' => 'integer',
-            'string' => 'string',
-            'enum' => 'string',
-            'timestamp' => 'Carbon',
-            'boolean' => 'boolean'
-        ],
-        'casts' => [
-            'ignore_patterns' => [
-//                '^created_at$',
-//                '^updated_at$',
-//                '^deleted_at$'
-            ],
-            'default' => null,
-            'integer' => null,
-            'string' => null,
-            'enum' => null,
-            'timestamp' => 'datetime',
-            'boolean' => 'boolean'
-        ]
+        'php_class_doc_type' => Akceli::columnSetting('string', 'integer', 'string', 'string', 'Carbon', 'boolean'),
+        'casts' => Akceli::columnSetting(null, null, null, null, 'datetime', 'boolean'),
     ],
 
     'template-groups' => [
+
+        'auth-not-doing-this-one' => [
+            'templates' => []
+        ],
+
         /**
-         * This is the default template set that is used
+         * Broadcast Channel Generator
          */
-        'basic_crud' => [
+        'channel' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Channel' => function () {
+                    return Str::studly(Console::ask('What is the name of the Channel you want to create?'));
+                },
+            ],
             'templates' => [
-                [
-                    'name' => 'model',
-                    'path' => "app/[[namespace_path]]/[[ModelName]].php"
-                ],
-                [
-                    'name' => 'model_test',
-                    'path' => "tests/[[namespace_path]]/[[ModelName]]Test.php"
-                ],
-                [
-                    'name' => 'blade_controller',
-                    'path' => "app/Http/Controllers/[[ModelName]]Controller.php"
-                ],
-                [
-                    'name' => 'model_controller_test',
-                    'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
-                ],
-                [
-                    'name' => 'model_factory_standard',
-                    'path' => "database/factories/[[ModelName]]Factory.php"
-                ],
-                [
-                    'name' => 'model_factory_pro',
-                    'path' => "database/factories/[[ModelName]]Factory.php"
-                ],
-                [
-                    'name' => 'model_seeder',
-                    'path' => "database/seeds/[[ModelName]]Seeder.php"
-                ],
-                [
-                    'name' => 'store_model_request',
-                    'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
-                ],
-                [
-                    'name' => 'update_model_request',
-                    'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
-                ],
-                [
-                    'name' => 'views_create_page',
-                    'path' => "resources/views/models/[[modelNames]]/create.blade.php",
-                ],
-                [
-                    'name' => 'views_create_page',
-                    'path' => "resources/views/models/[[modelNames]]/show.blade.php",
-                ],
-                [
-                    'name' => 'views_edit_page',
-                    'path' => "resources/views/models/[[modelNames]]/edit.blade.php",
-                ],
-                [
-                    'name' => 'views_index_page',
-                    'path' => "resources/views/models/[[modelNames]]/index.blade.php",
-                ],
+                Akceli::fileTemplate('channel', 'app/Broadcasting/[[Channel]]Channel.php'),
+                Akceli::fileTemplate('channel_test', 'tests/Broadcasting/[[Channel]]ChannelTest.php'),
             ],
             'inline_templates' => [
-                [
-                    'name' => 'route_resource',
-                    'identifier' => '/** All Web controllers will go here */',
-                    'path' => 'routes/web.php'
-                ],
-//            [
-//                'name' => 'seeder_reference',
-//                'identifier' => '        /** Seeder File Marker: Do Not Remove Being Used Buy Code Generator */',
-//                'path' => 'database/seeds/DatabaseSeeder.php'
-//            ]
+                //Akceli::inlineTemplate('channel_register', 'routes/channels.php', '/** Dont forget to add the channel to the channels.php file */')
             ],
+            'completion_message' => function () {
+                Console::alert('Dont forget to register the Channel in routes/channels.php');
+                Console::warn('Documentation: https://laravel.com/docs/5.8/broadcasting#defining-channel-classes');
+            }
+        ],
 
-            /**
-             * highest Priority options can only be overwritten form the command
-             *      line using the --other-variables option
-             */
-            'options' => [
-//            'namespace' => 'Models'
+        /**
+         * Command Generator
+         */
+        'command' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Command' => function() {
+                    return Console::ask('What is the name of the Command?');
+                },
+                'Signature' => function() {
+                    return Console::ask('What is the signature for the command?');
+                }
             ],
+            'templates' => [
+                Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]]Command.php'),
+                Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]CommandTest.php'),
+            ]
+        ],
+
+        /**
+         * This is the controller template set that is used
+         */
+        'controller' => [
+            'templates' => [
+                Akceli::fileTemplate('controller', 'app/Http/Controllers/[[ModelName]]Controller.php'),
+                Akceli::fileTemplate('controller_test', 'tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php'),
+                Akceli::fileTemplate('store_model_request', 'app/Http/Requests/Store[[ModelName]]Request.php'),
+                Akceli::fileTemplate('update_model_request', 'app/Http/Requests/Update[[ModelName]]Request.php'),
+                Akceli::fileTemplate('views_create_page', 'resources/views/models/[[modelNames]]/create.blade.php'),
+                Akceli::fileTemplate('views_create_page', 'resources/views/models/[[modelNames]]/show.blade.php'),
+                Akceli::fileTemplate('views_edit_page', 'resources/views/models/[[modelNames]]/edit.blade.php'),
+                Akceli::fileTemplate('views_index_page', 'resources/views/models/[[modelNames]]/index.blade.php'),
+            ],
+            'inline_templates' => [
+                Akceli::inlineTemplate('route_resource', 'routes/web.php', '/** All Web controllers will go here */'),
+            ],
+        ],
+
+        /**
+         * Event Template set
+         */
+        'event' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Event' => function () {
+                    return Console::ask('What is the name of the event?');
+                }
+            ],
+            'templates' => [
+                Akceli::fileTemplate('event', 'app/Events/[[Event]]Event.php'),
+                Akceli::fileTemplate('event_test', 'tests/Events/[[Event]]EventTest.php')
+            ],
+            'completion_message' => function() {
+                Console::alert('Dont forget to register the Event in app/Providers/EventServiceProvider.php');
+                Console::warn('Documentation: https://laravel.com/docs/5.8/events#registering-events-and-listeners');
+            }
+        ],
+
+        /**
+         * Exception Template
+         */
+        'exception' => [
+            'data' => [
+                'Exception' => function() {
+                    return Console::ask('What is the name of the Exception?');
+                }
+            ],
+            'templates' => [
+                Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]]Exception.php')
+            ]
+        ],
+
+        /**
+         * Generates a detailed custom factory
+         */
+        'factory' => [
+            'templates' => [
+                Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+            ]
         ],
 
         /**
@@ -147,23 +156,157 @@ return [
         'job' => [
             'requires_table_name' => false,
             'data' => [
-                'Job' => [
-                    'type' => 'ask',
-                    'question' => "What is the Class Name of the Job?\n Example: File will create a FileJob Class",
-                ],
-                'Queue' => [
-                    'type' => 'choice',
-                    'question' => "What queue will this job be running in?",
-                    'choices' => ['default', 'long-running']
-                ],
+                'Job' => function () {
+                    return Console::ask("What is the Class Name of the Job?\n Example: File will create a FileJob Class");
+                },
+                'Queue' => function () {
+                    $queues = ['default', 'long-running'];
+                    return Console::choice("What queue will this job be running in?", $queues, $queues[0]);
+                }
             ],
             'templates' => [
-                [
-                    'name' => 'job',
-                    'path' => "tests/Akceli/ActualFiles/app/Jobs/[[Job]]Job.php"
-                ],
+                Akceli::fileTemplate('job', 'tests/Akceli/ActualFiles/app/Jobs/[[Job]]Job.php'),
             ]
         ],
+
+        /**
+         * Listener template
+         */
+        'listener' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Listener' => function() {
+                    return Console::ask('What is the name of the Listener?');
+                }
+            ],
+            'templates' => [
+                Akceli::fileTemplate('listener', 'app/Listeners/[[Listener]]Listener.php'),
+                Akceli::fileTemplate('listener_test', 'tests/Listeners/[[Listener]]ListenerTest.php'),
+            ],
+            'completion_message' => function() {
+                Console::alert('Dont forget to register the Listener in app/Providers/EventServiceProvider.php');
+                Console::warn('Documentation: https://laravel.com/docs/5.8/events#registering-events-and-listeners');
+            }
+        ],
+
+        /**
+         * Mail Template
+         */
+        'mail' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Mailable' => function() {
+                    Console::info('Markdown Messages Documentation: https://laravel.com/docs/5.8/mail#writing-markdown-messages');
+                    return Console::ask('What is the name of the Mailable?');
+                },
+                'mailable_type' => function() {
+                    return Console::choice('Is [[Mailable]]Mailable using view or markdown?', ['markdown', 'view'], 'markdown');
+                },
+                'markdown_path' => function() {
+                    return Console::ask('What is the path for the markdown file? example (example will be placed in resources/views/email/example)');
+                },
+            ],
+            'templates' => [
+                Akceli::fileTemplate('mailable', 'app/Mail/[[Mailable]]Mailable.php'),
+                Akceli::fileTemplate('mailable_markdown', 'resources/views/emails/[[markdown_path]].blade.php'),
+            ]
+        ],
+
+        /**
+         * Middleware Template
+         */
+        'middleware' => [
+            'requires_table_name' => false,
+            'data' => [
+                'Middleware' => function() {
+                    return Console::ask('What is the name of the Middleware?');
+                }
+            ],
+            'templates' => [
+                Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]]Middleware.php'),
+                Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]MiddlewareTest.php'),
+            ]
+        ],
+
+        /**
+         * Migration Template
+         */
+        'migration' => [
+            'requires_table_name' => false,
+            'data' => [
+                'migration_timestamp' => function() {
+                    return now()->format('Y_m_d_u');
+                },
+                'migration_name' => function() {
+                    $response = Console::ask('What is the name of the migration?');
+                    return Str::snake(str_replace(' ', '_', $response));
+                },
+                'migration_type' => function() {
+                    return Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
+                },
+                'table_name' => function() {
+                    return Console::ask('What is the name of the table being used in the migration?');
+                }
+            ],
+            'templates' => [
+                Akceli::fileTemplate('migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
+            ]
+        ],
+
+        /**
+         * Generates Details Model
+         */
+        'model' => [
+            'templates' => [
+                Akceli::fileTemplate('model', 'app/[[namespace_path]]/[[ModelName]].php'),
+                Akceli::fileTemplate('model_test', 'tests/[[namespace_path]]/[[ModelName]]Test.php'),
+                Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+            ]
+        ],
+
+        'notification' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'observer' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'policy' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'provider' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'request' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'resource' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'rule' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+        'seeder' => [
+            'templates' => [
+                Akceli::fileTemplate('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
+            ],
+            'inline_templates' => [
+                Akceli::inlineTemplate('seeder_reference', 'database/seeds/DatabaseSeeder.php', '        /** Dont forget to add the Seeder to database/seeds/DatabaseSeeder.php */'),
+            ]
+        ],
+        'test' => [
+            'requires_table_name' => false,
+            'templates' => []
+        ],
+
+
+
 
         /**
          * This is a simple example of a template that you can create
@@ -176,18 +319,9 @@ return [
                 }
             ],
             'templates' => [
-                [
-                    'name' => 'service',
-                    'path' => "app/Services/[[Service]]Service/[[Service]]Service.php"
-                ],
-                [
-                    'name' => 'service_test',
-                    'path' => "tests/Services/[[Service]]Service/[[Service]]ServiceTest.php"
-                ],
-                [
-                    'name' => 'service_stubs',
-                    'path' => "tests/Services/[[Service]]Service/[[Service]]ServiceStubs.php"
-                ],
+                Akceli::filetemplate('service', 'app/Services/[[Service]]Service/[[Service]]Service.php'),
+                Akceli::filetemplate('service_test', 'tests/Services/[[Service]]Service/[[Service]]ServiceTest.php'),
+                Akceli::filetemplate('service_stubs', 'tests/Services/[[Service]]Service/[[Service]]ServiceStubs.php'),
             ]
         ],
 
@@ -196,41 +330,16 @@ return [
          */
         'repository_pattern' => [
             'templates' => [
-                [
-                    'name' => 'model',
-                    'path' => "app/[[namespace_path]]/[[ModelName]].php"
-                ],
-                [
-                    'name' => 'model_test',
-                    'path' => "tests/[[namespace_path]]/[[ModelName]]Test.php"
-                ],
-                [
-                    'name' => 'api_controller',
-                    'path' => "app/Http/Controllers/Api/[[ModelName]]Controller.php"
-                ],
-                [
-                    'name' => 'api_controller_test',
-                    'path' => "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"
-                ],
-                [
-                    'name' => 'model_factory_pro',
-                    'path' => "database/factories/[[ModelName]]Factory.php"
-                ],
-                [
-                    'name' => 'create_model_request',
-                    'path' => "app/Http/Requests/Store[[ModelName]]Request.php"
-                ],
-                [
-                    'name' => 'patch_model_request',
-                    'path' => "app/Http/Requests/Update[[ModelName]]Request.php",
-                ],
+                Akceli::fileTemplate('model', 'app/[[namespace_path]]/[[ModelName]].php'),
+                Akceli::fileTemplate('model_test', 'tests/[[namespace_path]]/[[ModelName]]Test.php'),
+                Akceli::fileTemplate('api_controller', 'app/Http/Controllers/Api/[[ModelName]]Controller.php'),
+                Akceli::fileTemplate('api_controller_test', 'tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php'),
+                Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+                Akceli::fileTemplate('create_model_request', 'app/Http/Requests/Store[[ModelName]]Request.php'),
+                Akceli::fileTemplate('patch_model_request', 'app/Http/Requests/Update[[ModelName]]Request.php"'),
             ],
             'inline_templates' => [
-                [
-                    'name' => 'route_resource',
-                    'identifier' => '/** All Web controllers will go here */',
-                    'path' => 'routes/web.php'
-                ],
+                Akceli::inlineTemplate('route_resource','routes/web.php', '/** All Web controllers will go here */'),
             ],
         ],
     ],
