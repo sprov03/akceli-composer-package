@@ -2,9 +2,14 @@
 
 use Akceli\Akceli;
 use Akceli\Console;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
-use function Clue\StreamFilter\fun;
+
+/**
+ * This is here to prevent this from running in production
+ */
+if (env('APP_ENV') !== 'local') {
+    return [];
+}
 
 return [
     /**
