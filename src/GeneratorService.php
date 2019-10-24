@@ -48,7 +48,7 @@ class GeneratorService
     {
         Console::info('');
         Console::info("Creating Templates:");
-        $templateParser = new Parser(base_path('resources/akceli/templates'), 'akceli.php');
+        $templateParser = new Parser(base_path('akceli/templates'), 'akceli.php');
         $templateParser->addData($this->templateData->toArray());
         foreach (self::$file_templates as $template) {
             $template_path = $templateParser->render($template['path']);

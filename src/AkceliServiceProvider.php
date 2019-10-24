@@ -16,7 +16,7 @@ class AkceliServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/publishable/config' => base_path('config'),
-            __DIR__ . '/publishable/akceli' => resource_path('akceli'),
+            __DIR__ . '/publishable/akceli' => base_path('akceli'),
 	    ]);
     }
 }

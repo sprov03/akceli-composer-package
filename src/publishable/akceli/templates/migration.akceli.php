@@ -9,7 +9,6 @@
 use Illuminate\Support\Str; ?>
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
@@ -32,7 +31,7 @@ class <?=Str::studly($migration_name)?> extends Migration
             $table->timestamps();
         });
 <?php else: ?>
-        Schema::table('<?=$table_name?>', function (Builder $table) {
+        Schema::table('<?=$table_name?>', function (Blueprint $table) {
 
         });
 <?php endif; ?>
