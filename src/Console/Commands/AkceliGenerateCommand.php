@@ -82,6 +82,7 @@ class AkceliGenerateCommand extends Command
                 Console::info('The akceli.php config file we published to /config/akceli.php');
                 Console::info('akceli/AkceliTableDataTrait.php was published');
                 Console::info('akceli/AkceliColumnTrait.php was published');
+                Console::info('akceli/generators was published');
                 return;
             }
         }
