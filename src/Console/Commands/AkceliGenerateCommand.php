@@ -65,6 +65,7 @@ class AkceliGenerateCommand extends Command
             $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
             $composerJson['autoload-dev'] = $composerJson['autoload-dev'] ?? [];
             $composerJson['autoload-dev']['files'] = $composerJson['autoload-dev']['files'] ?? [];
+            $composerJson['autoload-dev']['psr-4']['Akceli\\Generators\\'] = "akceli/generators/";
             array_push($composerJson['autoload-dev']['files'], "akceli/AkceliTableDataTrait.php");
             array_push($composerJson['autoload-dev']['files'], "akceli/AkceliColumnTrait.php");
             $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
