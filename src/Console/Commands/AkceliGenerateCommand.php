@@ -3,7 +3,6 @@
 namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
-use Akceli\FileService;
 use Akceli\GeneratorService;
 use Akceli\Console;
 use Akceli\Schema\SchemaFactory;
@@ -20,15 +19,14 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli {template-set?} {table-name?} {--dump} {--force} ' .
-    '{--model-name=} {--extra-data=}';
+    protected $signature = 'akceli {template-set?} {table-name?} {--dump} {--force}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create fully functional CRUD code based on a mysql table instantly';
+    protected $description = 'Akceli https://docs.akceli.io';
 
     /**
      * Execute the console command.
@@ -111,17 +109,13 @@ class AkceliGenerateCommand extends Command
         }
 
         $templateSet = $config['template-groups'][$template_set];
+        if (is_string($templateSet)) {
+            $templateSet = new $templateSet();
+        }
 
         $extraData = [
             'app_namespace' => Container::getInstance()->getNamespace()
         ];
-        if ($this->option('extra-data')) {
-            foreach (explode('|', str_replace('/', '\\', $this->option('extra-data'))) as $set) {
-                $parts = explode(':', $set);
-                $extraData[$parts[0]] = $parts[1];
-            }
-        }
-
 
         /**
          * Setup Model Data if Required
@@ -161,13 +155,12 @@ class AkceliGenerateCommand extends Command
             $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet['data'], $extraData);
         }
 
-        $template_data = array_merge($config['options'], $templateSet['options'] ?? [], $extraData);
+        $template_data = $extraData;
 
         if ($this->option('dump')) {
             dd($template_data);
         }
 
-        FileService::setRootDirectory(base_path(config('akceli.root_model_path')));
         GeneratorService::setData($template_data); // Set Globally for use during relationship generation
         GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
         GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
