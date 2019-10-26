@@ -7,7 +7,7 @@ use Akceli\TemplateData;?>
  *
  *  @var \Illuminate\Database\Eloquent\Factory $factory
  */
-$factory->define(<?=$table->namespace?>\<?=$table->ModelName?>::class, function (Faker\Generator $faker) use ($factory) {
+$factory->define(App\Models\<?=$table->ModelName?>::class, function (Faker\Generator $faker) use ($factory) {
 
     return [
 <?php foreach ($table->columns as $column): ?>

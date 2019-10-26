@@ -3,7 +3,7 @@
 use Akceli\TemplateData;?>
 
 use Illuminate\Database\Seeder;
-use <?=$table->namespace?>\<?=$table->ModelName?>;
+use App\Models\<?=$table->ModelName?>;
 
 class <?=$table->ModelName?>Seeder extends Seeder
 {

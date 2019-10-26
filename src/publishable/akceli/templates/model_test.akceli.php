@@ -2,11 +2,11 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
-namespace Tests\<?=$table->namespace?>;
+namespace Tests\App\Models;
 
 use Tests\TestCase;
 use Factories\<?=$table->ModelName?>Factory;
-use <?=$table->namespace?>\<?=$table->ModelName?>;
+use App\Models\<?=$table->ModelName?>;
 
 class <?=$table->ModelName?>Test extends TestCase
 {

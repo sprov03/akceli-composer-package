@@ -3,9 +3,9 @@
 use Akceli\TemplateData;
 ?>
 
-namespace <?=$table->namespace?>;
+namespace App\Models;
 
-use <?=$table->fully_qualified_base_model_name?>;
+use \Illuminate\Database\Eloquent\Model;
 <?php if ($table->hasField('deleted_at')): ?>
 use Illuminate\Database\Eloquent\SoftDeletes;
 <?php endif; ?>
@@ -21,9 +21,9 @@ use Carbon\Carbon;
  *
  * Relationships
  *
- * @package <?=$table->namespace . PHP_EOL?>
+ * @package App\Models
  */
-class <?=$table->ModelName?> extends <?=$table->base_model . PHP_EOL?>
+class <?=$table->ModelName?> extends Model
 {
 <?php if ($table->hasField('deleted_at')): ?>
     use SoftDeletes;
