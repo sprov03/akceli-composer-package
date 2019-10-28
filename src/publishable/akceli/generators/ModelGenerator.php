@@ -9,7 +9,7 @@ class ModelGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return false;
+        return true;
     }
 
     public function dataPrompter(): array

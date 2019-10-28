@@ -3,6 +3,7 @@
 namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
+use Akceli\Generators\AkceliGenerator;
 use Akceli\GeneratorService;
 use Akceli\Console;
 use Akceli\Schema\SchemaFactory;
@@ -49,7 +50,6 @@ class AkceliGenerateCommand extends Command
 
         $template_set = $this->argument('template-set');
         $config = config('akceli');
-
 
         /**
          * If config file has not been published then publish it.
@@ -124,15 +124,12 @@ class AkceliGenerateCommand extends Command
          */
         if ($templateSet['requires_table_name'] ?? true) {
             $table_name = $this->argument('table-name');
-            $model_name = $this->option('model-name');
 
             if (is_null($table_name)) {
                 $table_name = $this->ask('What is the table name being used in the template?');
             }
             $defaultModelName = Str::studly(Str::singular($table_name));
-            if (is_null($model_name)) {
-                $model_name = $this->ask('What is the Model name for the table?', $defaultModelName);
-            }
+            $model_name = $this->ask('What is the Model name for the table?', $defaultModelName);
             if (is_null($model_name)) {
                 $model_name = $defaultModelName;
             }

@@ -4,17 +4,25 @@ namespace Akceli;
 
 class Akceli
 {
-    public static function inlineTemplate(string $temtemplate, string $destination_path, string $identifier) {
+    public static function inlineTemplate(string $template, string $destination_path, string $identifier) {
         return [
-            'name' => $temtemplate,
+            'name' => $template,
             'path' => $destination_path,
             'identifier' => $identifier,
         ];
     }
 
-    public static function fileTemplate(string $temtemplate, string $destination_path) {
+    public static function insertInline(string $destination_path, string $identifier, string $content) {
         return [
-            'name' => $temtemplate,
+            'path' => $destination_path,
+            'identifier' => $identifier,
+            'content' => $content,
+        ];
+    }
+
+    public static function fileTemplate(string $template, string $destination_path) {
+        return [
+            'name' => $template,
             'path' => $destination_path,
         ];
     }

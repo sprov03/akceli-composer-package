@@ -2,6 +2,7 @@
 
 namespace Akceli;
 
+use Akceli\Generators\AkceliGenerator;
 use Akceli\Schema\SchemaFactory;
 
 class GeneratorService
@@ -50,20 +51,31 @@ class GeneratorService
         Console::info("Creating Templates:");
         $templateParser = new Parser(base_path('akceli/templates'), 'akceli.php');
         $templateParser->addData($this->templateData->toArray());
+
+        $this->processFileTemplates($templateParser, $force);
+        $this->processInlineTemplates($templateParser);
+    }
+
+
+    private function processFileTemplates(Parser $parser, bool $force)
+    {
         foreach (self::$file_templates as $template) {
-            $template_path = $templateParser->render($template['path']);
+            $template_path = $parser->render($template['path']);
             if(file_exists($template_path) && ! $force) {
                 Console::warn("File {$template_path} (Already Exists)");
 
                 continue;
             }
 
-            $this->putFile($templateParser->render($template['name']), $template_path);
+            $this->putFile($parser->render($template['name']), $template_path);
             Console::info("File {$template_path} (Created)");
         }
+    }
 
+    private function processInlineTemplates(Parser $parser)
+    {
         foreach (self::$inline_templates as $inlineTemplate) {
-            $rendered_template = $templateParser->render($inlineTemplate['name']);
+            $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
             $file_contents = file_get_contents(base_path($inlineTemplate['path']));
             if (! str_contains($file_contents, $inlineTemplate['identifier'])) {
                 Console::error("File {$inlineTemplate['path']} is missing the identifier: " .
@@ -73,6 +85,7 @@ class GeneratorService
             }
 
             if (str_contains($file_contents, $rendered_template)) {
+                Console::warn("File {$inlineTemplate['path']} (Already Has Content)");
                 continue;
             }
 
@@ -83,6 +96,7 @@ class GeneratorService
             );
 
             file_put_contents(base_path($inlineTemplate['path']), $file_contents);
+            Console::info("File {$inlineTemplate['path']} (Updated)");
         }
     }
 
