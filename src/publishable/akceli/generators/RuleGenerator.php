@@ -31,7 +31,7 @@ class RuleGenerator extends AkceliGenerator
         ];
     }
 
-    public function completionMessage(): void
+    public function completionMessage()
     {
         Console::info('Success');
     }

@@ -37,7 +37,7 @@ class ChannelGenerator extends AkceliGenerator
         ];
     }
 
-    public function completionMessage(): void
+    public function completionMessage()
     {
         Console::alert('Dont forget to register the Channel in routes/channels.php');
         Console::warn('Documentation: https://laravel.com/docs/5.8/broadcasting#defining-channel-classes');

@@ -36,7 +36,7 @@ class EventGenerator extends AkceliGenerator
         ];
     }
 
-    public function completionMessage(): void
+    public function completionMessage()
     {
         Console::alert('Dont forget to register the Event in app/Providers/EventServiceProvider.php');
         Console::warn('Documentation: https://laravel.com/docs/5.8/events#registering-events-and-listeners');
