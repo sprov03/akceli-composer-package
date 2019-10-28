@@ -4,6 +4,8 @@ namespace Akceli\Generators;
 
 use Akceli\Akceli;
 use Akceli\Console;
+use Akceli\GeneratorService;
+use Illuminate\Support\Str;
 
 class NewAkceliGenerator extends AkceliGenerator
 {
@@ -18,14 +20,6 @@ class NewAkceliGenerator extends AkceliGenerator
             'GeneratorName' => function() {
                 return Console::ask('What is the name of the new Generator?');
             },
-
-            /**
-             * Used in the import Template
-             */
-            'ImportNamespace' => function(array $data) {
-                $generatorName = $data['GeneratorName'];
-                return 'Akceli\Generators\\' . $generatorName . 'Generator';
-            }
         ];
     }
 
@@ -38,17 +32,18 @@ class NewAkceliGenerator extends AkceliGenerator
 
     public function inlineTemplates(): array
     {
+        $command = Str::snake(GeneratorService::getData()['GeneratorName']);
         return [
-            Akceli::inlineTemplate(
-                'akceli_generator_register',
+            Akceli::insertInline(
                 'config/akceli.php',
-                '        /** New Generators Get Inserted Here */'
+                '        /** New Generators Get Inserted Here */',
+                "        '{$command}' => [[GeneratorName]]Generator::class,"
             ),
-             Akceli::inlineTemplate(
-                 'import',
-                 'config/akceli.php',
-                 '/** auto import new commands */'
-             )
+            Akceli::insertInline(
+                'config/akceli.php',
+                '/** auto import new commands */',
+                'use Akceli\Generators\[[GeneratorName]]Generator;'
+            )
         ];
     }
 
