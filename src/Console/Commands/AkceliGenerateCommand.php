@@ -20,7 +20,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli {template-set?} {table-name?} {--dump} {--force}';
+    protected $signature = 'akceli {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
 
     /**
      * The console command description.
@@ -123,7 +123,7 @@ class AkceliGenerateCommand extends Command
          * Setup Model Data if Required
          */
         if ($templateSet['requires_table_name'] ?? true) {
-            $table_name = $this->argument('table-name');
+            $table_name = $this->argument('arg1');
 
             if (is_null($table_name)) {
                 $table_name = $this->ask('What is the table name being used in the template?');
@@ -151,7 +151,7 @@ class AkceliGenerateCommand extends Command
          * Process Data Prompts
          */
         if ($templateSet['data'] ?? false) {
-            $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet['data'], $extraData);
+            $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet, $extraData, $this->arguments());
         }
 
         $template_data = $extraData;
