@@ -1,12 +1,14 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 use Illuminate\Support\Str;
 
-class MigrationGenerator extends AkceliGenerator
+class DefaultMigrationGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {

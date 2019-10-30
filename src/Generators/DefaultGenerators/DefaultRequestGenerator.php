@@ -1,11 +1,13 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class MiddlewareGenerator extends AkceliGenerator
+class DefaultRequestGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
@@ -14,18 +16,13 @@ class MiddlewareGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [
-            'Middleware' => function() {
-                return Console::ask('What is the name of the Middleware?');
-            }
-        ];
+        return [];
     }
 
     public function templates(): array
     {
         return [
-            Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]]Middleware.php'),
-            Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]MiddlewareTest.php'),
+            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/RequestGenerator.php'),
         ];
     }
 

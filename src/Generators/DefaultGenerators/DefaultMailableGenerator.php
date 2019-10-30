@@ -1,11 +1,13 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class MailableGenerator extends AkceliGenerator
+class DefaultMailableGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {

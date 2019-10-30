@@ -1,30 +1,28 @@
 <?php
 
 use Akceli\Akceli;
-use Akceli\Generators\NewAkceliGenerator;
-use Akceli\Generators\ChannelGenerator;
-use Akceli\Generators\CommandGenerator;
-use Akceli\Generators\ControllerGenerator;
-use Akceli\Generators\EventGenerator;
-use Akceli\Generators\ExceptionGenerator;
-use Akceli\Generators\FactoryGenerator;
-use Akceli\Generators\JobGenerator;
-use Akceli\Generators\ListenerGenerator;
-use Akceli\Generators\MailableGenerator;
-use Akceli\Generators\MiddlewareGenerator;
-use Akceli\Generators\MigrationGenerator;
-use Akceli\Generators\ModelGenerator;
-use Akceli\Generators\NotificationGenerator;
-use Akceli\Generators\ObserverGenerator;
-use Akceli\Generators\PolicyGenerator;
-use Akceli\Generators\ProviderGenerator;
-use Akceli\Generators\RequestGenerator;
-use Akceli\Generators\ResourceGenerator;
-use Akceli\Generators\RuleGenerator;
-use Akceli\Generators\TestGenerator;
-use Akceli\Generators\ApiControllerGenerator;
-use Akceli\Generators\ServiceGenerator;
-use Akceli\Generators\SeederGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultNewAkceliGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultChannelGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultCommandGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultControllerGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultEventGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultExceptionGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultFactoryGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultJobGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultListenerGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultMailableGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultMiddlewareGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultMigrationGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultModelGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultNotificationGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultObserverGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultPolicyGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultProviderGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultRequestGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultResourceGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultRuleGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultTestGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultSeederGenerator;
 /** auto import new commands */
 
 /**
@@ -47,30 +45,28 @@ return [
     ],
 
     'template-groups' => [
-        'new-command' => NewAkceliGenerator::class,
-        'channel' => ChannelGenerator::class,
-        'command' => CommandGenerator::class,
-        'controller' => ControllerGenerator::class,
-        'api_controller' => ApiControllerGenerator::class,
-        'event' => EventGenerator::class,
-        'exception' => ExceptionGenerator::class,
-        'factory' => FactoryGenerator::class,
-        'job' => JobGenerator::class,
-        'listener' => ListenerGenerator::class,
-        'mailable' => MailableGenerator::class,
-        'middleware' => MiddlewareGenerator::class,
-        'migration' => MigrationGenerator::class,
-        'model' => ModelGenerator::class,
-        'notification' => NotificationGenerator::class,
-        'observer' => ObserverGenerator::class,
-        'policy' => PolicyGenerator::class,
-        'provider' => ProviderGenerator::class,
-        'request' => RequestGenerator::class,
-        'resource' => ResourceGenerator::class,
-        'rule' => RuleGenerator::class,
-        'test' => TestGenerator::class,
-        'service' => ServiceGenerator::class,
-        'seeder' => SeederGenerator::class,
+        'new-command' => DefaultNewAkceliGenerator::class,
+        'channel' => DefaultChannelGenerator::class,
+        'command' => DefaultCommandGenerator::class,
+        'controller' => DefaultControllerGenerator::class,
+        'event' => DefaultEventGenerator::class,
+        'exception' => DefaultExceptionGenerator::class,
+        'factory' => DefaultFactoryGenerator::class,
+        'job' => DefaultJobGenerator::class,
+        'listener' => DefaultListenerGenerator::class,
+        'mailable' => DefaultMailableGenerator::class,
+        'middleware' => DefaultMiddlewareGenerator::class,
+        'migration' => DefaultMigrationGenerator::class,
+        'model' => DefaultModelGenerator::class,
+        'notification' => DefaultNotificationGenerator::class,
+        'observer' => DefaultObserverGenerator::class,
+        'policy' => DefaultPolicyGenerator::class,
+        'provider' => DefaultProviderGenerator::class,
+        'request' => DefaultRequestGenerator::class,
+        'resource' => DefaultResourceGenerator::class,
+        'rule' => DefaultRuleGenerator::class,
+        'test' => DefaultTestGenerator::class,
+        'seeder' => DefaultSeederGenerator::class,
         /** New Generators Get Inserted Here */
     ],
 ];

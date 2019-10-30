@@ -1,27 +1,33 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class FactoryGenerator extends AkceliGenerator
+class DefaultMiddlewareGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return true;
+        return false;
     }
 
     public function dataPrompter(): array
     {
         return [
+            'Middleware' => function() {
+                return Console::ask('What is the name of the Middleware?');
+            }
         ];
     }
 
     public function templates(): array
     {
         return [
-            Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+            Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]]Middleware.php'),
+            Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]MiddlewareTest.php'),
         ];
     }
 

@@ -1,11 +1,13 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class ExceptionGenerator extends AkceliGenerator
+class DefaultNotificationGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
@@ -14,17 +16,13 @@ class ExceptionGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [
-            'Exception' => function() {
-                return Console::ask('What is the name of the Exception?');
-            }
-        ];
+        return [];
     }
 
     public function templates(): array
     {
         return [
-            Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]]Exception.php')
+            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/NotificationGenerator.php'),
         ];
     }
 

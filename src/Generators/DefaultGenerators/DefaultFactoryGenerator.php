@@ -1,26 +1,29 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class NotificationGenerator extends AkceliGenerator
+class DefaultFactoryGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return false;
+        return true;
     }
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+        ];
     }
 
     public function templates(): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/NotificationGenerator.php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
         ];
     }
 

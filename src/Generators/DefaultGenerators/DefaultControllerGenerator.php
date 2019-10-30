@@ -1,11 +1,13 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class ControllerGenerator extends AkceliGenerator
+class DefaultControllerGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {

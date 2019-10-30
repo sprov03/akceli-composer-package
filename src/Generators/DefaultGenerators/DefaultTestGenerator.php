@@ -1,11 +1,11 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
 
-use Akceli\Akceli;
 use Akceli\Console;
+use Akceli\Generators\AkceliGenerator;
 
-class ProviderGenerator extends AkceliGenerator
+class DefaultTestGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
@@ -20,7 +20,7 @@ class ProviderGenerator extends AkceliGenerator
     public function templates(): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/ProviderGenerator.php'),
+            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/TestGenerator.php'),
         ];
     }
 

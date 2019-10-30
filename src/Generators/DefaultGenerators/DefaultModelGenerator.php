@@ -1,26 +1,31 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class PolicyGenerator extends AkceliGenerator
+class DefaultModelGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return false;
+        return true;
     }
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+        ];
     }
 
     public function templates(): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/PolicyGenerator.php'),
+            Akceli::fileTemplate('model', 'app/Models/[[ModelName]].php'),
+            Akceli::fileTemplate('model_test', 'tests/Models/[[ModelName]]Test.php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
         ];
     }
 

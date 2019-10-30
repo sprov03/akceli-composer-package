@@ -4,6 +4,7 @@ namespace Akceli;
 
 use Akceli\Generators\AkceliGenerator;
 use Akceli\Schema\SchemaFactory;
+use Illuminate\Support\Str;
 
 class GeneratorService
 {
@@ -77,14 +78,14 @@ class GeneratorService
         foreach (self::$inline_templates as $inlineTemplate) {
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
             $file_contents = file_get_contents(base_path($inlineTemplate['path']));
-            if (! str_contains($file_contents, $inlineTemplate['identifier'])) {
+            if (! Str::contains($file_contents, $inlineTemplate['identifier'])) {
                 Console::error("File {$inlineTemplate['path']} is missing the identifier: " .
                     "{$inlineTemplate['identifier']}");
 
                 continue;
             }
 
-            if (str_contains($file_contents, $rendered_template)) {
+            if (Str::contains($file_contents, $rendered_template)) {
                 Console::warn("File {$inlineTemplate['path']} (Already Has Content)");
                 continue;
             }

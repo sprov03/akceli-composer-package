@@ -1,11 +1,13 @@
 <?php
 
-namespace Akceli\Generators;
+namespace Akceli\Generators\DefaultGenerators;
+
+use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
 
-class RuleGenerator extends AkceliGenerator
+class DefaultResourceGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
@@ -20,7 +22,7 @@ class RuleGenerator extends AkceliGenerator
     public function templates(): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/RuleGenerator.php'),
+            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/ResourceGenerator.php'),
         ];
     }
 
