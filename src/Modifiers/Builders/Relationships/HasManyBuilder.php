@@ -6,43 +6,39 @@ use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Modifiers\ClassModifier;
+use Illuminate\Support\Str;
 
 class HasManyBuilder extends Builder implements BuilderInterface
 {
-    /**
-     * Build sections of files and place them in the files
-     *
-     * @param \SplFileInfo $fileInfo
-     * @param \SplFileInfo $otherFileInfo
-     * @param $relationship
-     *
-     * @return void
-     */
-    public function updateFiles(
-        \SplFileInfo $fileInfo,
-        \SplFileInfo $otherFileInfo,
-        $relationship
-    ) {
-        $otherModel = str_singular(studly_case($relationship->TABLE_NAME));
+    public function build()
+    {
+        return;
+    }
 
-        $this->addMethodToFile(
-            $fileInfo,
-            camel_case(str_plural($otherModel)),
-            $this->parser->render('hasMany', compact('relationship', 'otherModel'))
+    public function buildRelated($relationship, $interface = null)
+    {
+        /**
+         * Initalize Data
+         */
+        $fileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+        $otherFileInfo = $this->fileInfo;
+        $otherModel = FileService::getClassNameOfFile($otherFileInfo);
+        $templateData = [
+            'relationship' => $relationship,
+            'otherModel' => $otherModel,
+            'hasManyMethodName' => Str::plural(Str::camel($otherModel))
+        ];
+
+        /**
+         * Update Files
+         */
+        $this->addMethodToFile($fileInfo, Str::camel(Str::plural($otherModel)), $this->parser->render('hasMany', $templateData)
         );
         $this->addUseStatementToFile($fileInfo, $otherFileInfo);
         $this->addClassPropertyDocToFile(
             $fileInfo,
             "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection",
-            str_plural(camel_case($otherModel))
+            Str::plural(Str::camel($otherModel))
         );
-    }
-
-    public function analise($relationship, $interface = null)
-    {
-        $fileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
-        $otherFileInfo = FileService::findByTableName($this->schema->getTable());
-
-        $this->updateFiles($fileInfo, $otherFileInfo, $relationship);
     }
 }

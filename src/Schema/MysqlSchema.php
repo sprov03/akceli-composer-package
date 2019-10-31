@@ -104,7 +104,7 @@ class MysqlSchema implements SchemaInterface
         });
     }
 
-    public function getBelongsToRelationships()
+    public function getBelongsToRelationships(): Collection
     {
         $columns_that_have_relationships =  $this->getColumns()->filter(function ($key) {
             return (boolean) $this->getForeignKeys()
@@ -120,10 +120,6 @@ class MysqlSchema implements SchemaInterface
         });
     }
 
-    /**
-     *
-     * @return array
-     */
     public function getPolymorphicManyToManyInterfaces()
     {
         $primaryKey = $this->getPrimaryKey();

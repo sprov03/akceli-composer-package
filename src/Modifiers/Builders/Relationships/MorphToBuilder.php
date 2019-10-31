@@ -26,12 +26,12 @@ class MorphToBuilder extends Builder implements BuilderInterface
     ) {
         $this->addMethodToFile(
             $fileInfo,
-            camel_case(str_singular($relationship)),
+            Str::camel(Str::singular($relationship)),
             $this->parser->render('morphTo', compact('interface', 'relationship'))
         );
 
         $this->addUseStatementToFile($fileInfo, $interfaceFileInfo);
-        $this->addClassPropertyDocToFile($fileInfo, "{$interface}Interface", camel_case($relationship));
+        $this->addClassPropertyDocToFile($fileInfo, "{$interface}Interface", Str::camel($relationship));
     }
 
     public function analise($relationship, $interface = null)

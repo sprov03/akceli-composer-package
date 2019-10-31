@@ -4,6 +4,7 @@ namespace Akceli\Modifiers;
 
 use Akceli\FileService;
 use Akceli\Console;
+use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Parser;
 use Akceli\Schema\SchemaInterface;
 use SplFileInfo;
@@ -21,6 +22,8 @@ class ClassModifier
 
     /** @var SchemaInterface  */
     protected $schema;
+    
+    protected $builder_map;
 
     /**
      * ClassModifier constructor
@@ -35,6 +38,16 @@ class ClassModifier
         $this->parser = $parser;
         $this->schema = $schema;
         $this->force = $force;
+        $this->builder_map = config('akceli.relationships') ?? [];
+    }
+
+    /**
+     * @param string $builder
+     * @return BuilderInterface
+     */
+    public function getBuilder(string $builder)
+    {
+        return new $builder($this->parser, $this->schema, $this->builder_map, $this->force);
     }
 
     public function setPolymorphicRelationships($interface)

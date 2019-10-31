@@ -6,40 +6,35 @@ use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Modifiers\ClassModifier;
+use Illuminate\Support\Str;
 
 class HasOneBuilder extends Builder implements BuilderInterface
 {
-    /**
-     * Build sections of files and place them in the files
-     *
-     * @param \SplFileInfo $fileInfo
-     * @param \SplFileInfo $otherFileInfo
-     * @param $relationship
-     *
-     * @return void
-     */
-    public function updateFiles(
-        \SplFileInfo $fileInfo,
-        \SplFileInfo $otherFileInfo,
-        $relationship
-    ) {
-        $otherModel = str_singular(studly_case($relationship->TABLE_NAME));
 
-        $this->addMethodToFile(
-            $fileInfo,
-            camel_case(str_singular($otherModel)),
-            $this->parser->render('hasOne', compact('relationship', 'otherModel'))
-        );
-
-        $this->addUseStatementToFile($fileInfo, $otherFileInfo);
-        $this->addClassPropertyDocToFile($fileInfo, $otherModel, camel_case($otherModel));
-    }
-
-    public function analise($relationship, $interface = null)
+    public function build()
     {
+        return;
+    }
+    
+    public function buildRelated($relationship, $interface = null)
+    {
+        /**
+         * Initalize Data
+         */
         $fileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
-        $otherFileInfo = FileService::findByTableName($this->schema->getTable());
+        $otherFileInfo = $this->fileInfo;
+        $otherModel = FileService::getClassNameOfFile($otherFileInfo);
+        $templateData = [
+            'relationship' => $relationship,
+            'otherModel' => $otherModel,
+            'hasManyMethodName' => Str::plural(Str::camel($otherModel))
+        ];
 
-        $this->updateFiles($fileInfo, $otherFileInfo, $relationship);
+        /**
+         * Update File
+         */
+        $this->addMethodToFile($fileInfo, Str::camel(Str::singular($otherModel)), $this->parser->render('hasOne', $templateData));
+        $this->addUseStatementToFile($fileInfo, $otherFileInfo);
+        $this->addClassPropertyDocToFile($fileInfo, $otherModel, Str::camel($otherModel));
     }
 }

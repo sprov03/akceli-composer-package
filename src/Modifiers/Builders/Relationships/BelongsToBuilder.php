@@ -2,50 +2,62 @@
 
 namespace Akceli\Modifiers\Builders\Relationships;
 
+use Akceli\Console;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\GeneratorService;
+use Illuminate\Support\Str;
 
 class BelongsToBuilder extends Builder implements BuilderInterface
 {
-    /**
-     * Build sections of files and place them in the files
-     *
-     * @param \SplFileInfo $fileInfo
-     * @param \SplFileInfo $otherFileInfo
-     * @param $relationship
-     *
-     * @return void
-     */
-    public function updateFiles(
-        \SplFileInfo $fileInfo,
-        \SplFileInfo $otherFileInfo,
-        $relationship
-    ) {
-        $otherModel = str_singular(studly_case($relationship->REFERENCED_TABLE_NAME));
+    public function build()
+    {
+        foreach ($this->schema->getBelongsToRelationships() as $relationship) {
+            /**
+             * Initalize Data
+             */
+            $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+            $otherModel = FileService::getClassNameOfFile($otherFile);
+            $thisModel = FileService::getClassNameOfFile($this->fileInfo);
+            $templateData = [
+                'relationship' => $relationship,
+                'otherModel' => $otherModel,
+                'belongsToMethodName' => Str::camel($otherModel)
+            ];
 
-       $this->addMethodToFile(
-            $fileInfo,
-            camel_case($otherModel),
-            $this->parser->render('belongsTo', compact('relationship', 'otherModel'))
-        );
+            /**
+             * Update Files
+             */
+            $this->addUseStatementToFile($this->fileInfo, $otherFile);
+            $this->addClassPropertyDocToFile($this->fileInfo, $otherModel, Str::camel($otherModel));
+            $this->addMethodToFile($this->fileInfo, Str::camel($otherModel), $this->parser->render('belongsTo', $templateData));
+            
+            
+            /**
+             * Build Related
+             */
+            $choice = Console::choice(
+                "Dose a {$otherModel} have one or many " . Str::plural($thisModel) . "?",
+                [
+                    "0: Don't Set Up the other relationship",
+                    "1: {$otherModel} has one {$thisModel}",
+                    "2: {$otherModel} has many " . Str::plural($thisModel),
+                ]
+            );
 
-        $this->addUseStatementToFile($fileInfo, $otherFileInfo);
-        $this->addClassPropertyDocToFile($fileInfo, $otherModel, camel_case($otherModel));
+            if ($choice == 1) {
+                $builder = $this->builder_map['hasOne'];
+            } elseif ($choice == 2) {
+                $builder = $this->builder_map['hasMany'];
+            }
+
+
+            $this->getBuilder($builder)->buildRelated($relationship);
+        }
     }
-
+    
     public function analise($relationship, $interface = null)
     {
-        $fileInfo = FileService::findByTableName($this->schema->getTable());
-        $otherFileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
-
-        if (is_null($otherFileInfo)) {
-            (new GeneratorService($relationship->REFERENCED_TABLE_NAME, $otherFileInfo->getFilename()))
-                ->generate(false, false, true, true);
-            $otherFileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME, true);
-        }
-
-        $this->updateFiles($fileInfo, $otherFileInfo, $relationship);
     }
 }

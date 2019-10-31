@@ -20,7 +20,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
+    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
 
     /**
      * The console command description.
@@ -50,6 +50,7 @@ class AkceliGenerateCommand extends Command
 
         $template_set = $this->argument('template-set');
         $config = config('akceli');
+        $config['generators'] = $config['template-groups'] ?? $config['generators'];
 
         /**
          * If config file has not been published then publish it.
@@ -88,7 +89,7 @@ class AkceliGenerateCommand extends Command
         }
 
         if (is_null($this->argument('template-set'))) {
-            $templateSets = array_keys($config['template-groups']);
+            $templateSets = array_keys($config['generators']);
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
                 $template_set = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
             } else {
@@ -103,14 +104,14 @@ class AkceliGenerateCommand extends Command
         /**
          * Validate the the Template is a valid option
          */
-        if (!isset($config['template-groups'][$template_set])) {
+        if (!isset($config['generators'][$template_set])) {
             Console::error('');
             Console::error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
             Console::error('');
             return;
         }
 
-        $templateSet = $config['template-groups'][$template_set];
+        $templateSet = $config['generators'][$template_set];
         if (is_string($templateSet)) {
             $templateSet = new $templateSet();
         }

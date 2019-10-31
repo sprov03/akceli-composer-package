@@ -4,6 +4,7 @@ namespace Akceli;
 
 use Akceli\Modifiers\ClassModifier;
 use RecursiveIteratorIterator;
+use Illuminate\Support\Str;
 use SplFileInfo;
 
 class FileService
@@ -19,6 +20,15 @@ class FileService
     public static function setRootDirectory(string $root_path)
     {
         self::$root_path = $root_path;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     * @return string
+     */
+    public static function getClassNameOfFile(SplFileInfo $file)
+    {
+        return $file->getBasename('.' . $file->getExtension());
     }
 
     /**
@@ -39,12 +49,12 @@ class FileService
                 continue;
             }
 
-            if (str_contains(file_get_contents($file), "protected \$table = '{$table_name}';")) {
+            if (Str::contains(file_get_contents($file), "protected \$table = '{$table_name}';")) {
                 return $file;
             }
         }
 
-        return self::findByClassName(studly_case(str_singular($table_name)));
+        return self::findByClassName(Str::studly(Str::singular($table_name)));
     }
 
     /**

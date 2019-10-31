@@ -44,7 +44,7 @@ return [
         'casts' => Akceli::columnSetting(null, null, null, null, 'datetime', 'boolean'),
     ],
 
-    'template-groups' => [
+    'generators' => [
         'new-command' => DefaultNewAkceliGenerator::class,
         'channel' => DefaultChannelGenerator::class,
         'command' => DefaultCommandGenerator::class,

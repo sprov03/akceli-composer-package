@@ -25,12 +25,12 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         \SplFileInfo $fileInfoTwo,
         $relationshipTwo
     ) {
-        $modelOne = str_singular(studly_case($relationshipOne->REFERENCED_TABLE_NAME));
-        $modelTwo = str_singular(studly_case($relationshipTwo->REFERENCED_TABLE_NAME));
+        $modelOne = Str::singular(Str::studly($relationshipOne->REFERENCED_TABLE_NAME));
+        $modelTwo = Str::singular(Str::studly($relationshipTwo->REFERENCED_TABLE_NAME));
 
         $this->addMethodToFile(
             $fileInfoOne,
-            camel_case(str_plural($modelTwo)),
+            Str::camel(Str::plural($modelTwo)),
             $this->parser->render('belongsToMany', [
                 'relationship' => $relationshipTwo,
                 'otherModel' => $modelTwo
@@ -39,7 +39,7 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
 
         $this->addMethodToFile(
             $fileInfoTwo,
-            camel_case(str_plural($modelOne)),
+            Str::camel(Str::plural($modelOne)),
             $this->parser->render('belongsToMany', [
                 'relationship' => $relationshipOne,
                 'otherModel' => $modelOne
@@ -52,12 +52,12 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         $this->addClassPropertyDocToFile(
             $fileInfoOne,
             "{$modelTwo}[]|\\Illuminate\\Database\\Eloquent\\Collection",
-            str_plural(camel_case($modelTwo))
+            Str::plural(Str::camel($modelTwo))
         );
         $this->addClassPropertyDocToFile(
             $fileInfoTwo,
             "{$modelOne}[]|\\Illuminate\\Database\\Eloquent\\Collection",
-            str_plural(camel_case($modelOne))
+            Str::plural(Str::camel($modelOne))
         );
     }
 

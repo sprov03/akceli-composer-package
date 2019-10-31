@@ -22,8 +22,8 @@ class <?=$table->ModelName?>Test extends TestCase
 <?php if (str_contains($column->getField(), '_id')): ?>
 <?php $relationship = str_replace('_id', '', $column->getField()); ?>
 
-        $this->assertInstanceOf(<?=studly_case(str_singular($relationship))?>::class, $<?=$table->ModelName?>-><?=camel_case(str_singular($relationship))?>);
-        $this->assertCollectionOf(<?=studly_case(str_singular($relationship))?>::class, $<?=$table->ModelName?>-><?=camel_case(str_plural($relationship))?>);
+        $this->assertInstanceOf(<?=Str::studly(Str::singular($relationship))?>::class, $<?=$table->ModelName?>-><?=Str::camel(Str::singular($relationship))?>);
+        $this->assertCollectionOf(<?=Str::studly(Str::singular($relationship))?>::class, $<?=$table->ModelName?>-><?=Str::camel(Str::plural($relationship))?>);
 <?php endif; ?>
 <?php endforeach; ?>
     }
