@@ -47,6 +47,7 @@ class ClassModifier
      */
     public function getBuilder(string $builder)
     {
+        $builder = $this->builder_map[$builder];
         return new $builder($this->parser, $this->schema, $this->builder_map, $this->force);
     }
 

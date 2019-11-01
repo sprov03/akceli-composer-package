@@ -15,7 +15,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
         return;
     }
 
-    public function buildRelated($relationship, $interface = null)
+    public function buildRelated($relationship)
     {
         /**
          * Initalize Data

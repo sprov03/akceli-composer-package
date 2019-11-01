@@ -46,7 +46,7 @@ class MysqlSchema implements SchemaInterface
         if (isset($this->columns)) {
             return $this->columns;
         }
-
+        
         $columns = $this->getTableColumns($this->table);
         $columns = $this->addRules($columns);
         return $columns;
@@ -113,7 +113,6 @@ class MysqlSchema implements SchemaInterface
                 })
                 ->count();
         });
-
 
         return $columns_that_have_relationships->map(function ($column) {
             return $this->getForeignKeys()->firstWhere('COLUMN_NAME', '=', $column->Field);

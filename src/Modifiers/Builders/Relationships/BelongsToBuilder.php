@@ -7,6 +7,7 @@ use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\GeneratorService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class BelongsToBuilder extends Builder implements BuilderInterface
@@ -32,7 +33,15 @@ class BelongsToBuilder extends Builder implements BuilderInterface
             $this->addUseStatementToFile($this->fileInfo, $otherFile);
             $this->addClassPropertyDocToFile($this->fileInfo, $otherModel, Str::camel($otherModel));
             $this->addMethodToFile($this->fileInfo, Str::camel($otherModel), $this->parser->render('belongsTo', $templateData));
-            
+
+            $cacheKey = 'akceli.relationships.'.$relationship->REFERENCED_TABLE_NAME;
+            if (Cache::has($cacheKey)) {
+                $cache = Cache::get($cacheKey);
+                if ($builder = $cache[$this->schema->getTable()] ?? null) {
+                    $this->getBuilder($builder)->buildRelated($relationship);
+                    return;
+                }
+            }
             
             /**
              * Build Related
@@ -57,7 +66,8 @@ class BelongsToBuilder extends Builder implements BuilderInterface
         }
     }
     
-    public function analise($relationship, $interface = null)
+    public function buildRelated()
     {
+        return;
     }
 }
