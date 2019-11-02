@@ -25,8 +25,8 @@ class DefaultControllerGenerator extends AkceliGenerator
         return [
             Akceli::fileTemplate('controller', 'app/Http/Controllers/[[ModelName]]Controller.php'),
             Akceli::fileTemplate('controller_test', 'tests/Http/Controllers/[[ModelName]]ControllerTest.php'),
-            Akceli::fileTemplate('store_model_request', 'app/Http/Requests/Store[[ModelName]]Request.php'),
-            Akceli::fileTemplate('update_model_request', 'app/Http/Requests/Update[[ModelName]]Request.php'),
+            Akceli::fileTemplate('form_request_store', 'app/Http/Requests/Store[[ModelName]]Request.php'),
+            Akceli::fileTemplate('form_request_update', 'app/Http/Requests/Update[[ModelName]]Request.php'),
             Akceli::fileTemplate('views_create_page', 'resources/views/models/[[modelNames]]/create.blade.php'),
             Akceli::fileTemplate('views_create_page', 'resources/views/models/[[modelNames]]/show.blade.php'),
             Akceli::fileTemplate('views_edit_page', 'resources/views/models/[[modelNames]]/edit.blade.php'),
