@@ -55,39 +55,10 @@ class AkceliGenerateCommand extends Command
         $config['generators'] = $config['template-groups'] ?? $config['generators'];
 
         /**
-         * If config file has not been published then publish it.
+         * If config file has not been published then publish it, makeing sure not to force
          */
         if (is_null($config)) {
-            $exitCode = Artisan::call('vendor:publish', [
-                '--provider' => AkceliServiceProvider::class
-            ]);
-
-            /**
-             * Add the Trait to the composer json
-             */
-            $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
-            $composerJson['autoload-dev'] = $composerJson['autoload-dev'] ?? [];
-            $composerJson['autoload-dev']['files'] = $composerJson['autoload-dev']['files'] ?? [];
-            $composerJson['autoload-dev']['psr-4']['Akceli\\Generators\\'] = "akceli/generators/";
-            array_push($composerJson['autoload-dev']['files'], "akceli/AkceliTableDataTrait.php");
-            array_push($composerJson['autoload-dev']['files'], "akceli/AkceliColumnTrait.php");
-            $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
-            file_put_contents(base_path('composer.json'), $newComposerJson);
-
-
-            if ($exitCode) {
-                Console::error('');
-                Console::error('There was an error publishing the config file: Try running the following command for more details:');
-                Console::error('php artisan vendor:publish --provider=' . AkceliServiceProvider::class);
-                Console::error('');
-                return;
-            } else {
-                Console::info('The akceli.php config file we published to /config/akceli.php');
-                Console::info('akceli/AkceliTableDataTrait.php was published');
-                Console::info('akceli/AkceliColumnTrait.php was published');
-                Console::info('akceli/generators was published');
-                return;
-            }
+            Artisan::call('akceli:publish');
         }
 
         /**

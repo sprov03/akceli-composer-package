@@ -8,12 +8,6 @@ namespace Tests\App\Models;
 use Tests\TestCase;
 use Factories\<?=$table->ModelName?>Factory;
 use App\Models\<?=$table->ModelName?>;
-<?php foreach ($table->columns as $column): ?>
-<?php if (Str::contains($column->getField(), '_id')): ?>
-<?php $relationship = str_replace('_id', '', $column->getField()); ?>
-use App\Models\<?=Str::studly(Str::singular($relationship))?>;
-<?php endif; ?>
-<?php endforeach; ?>
 
 class <?=$table->ModelName?>Test extends TestCase
 {

@@ -32,7 +32,7 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(array $dat): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')

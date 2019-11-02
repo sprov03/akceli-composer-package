@@ -2,7 +2,8 @@
 /**
  * @var $Event
  */
-?>
+
+use Illuminate\Support\Str; ?>
 
 namespace App\Events;
 
@@ -33,7 +34,7 @@ class <?=$Event?>Event
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('example_channel');
+        return new PrivateChannel('<?=Str::singular(Str::snake($Event))?>_channel');
     }
 }
 
