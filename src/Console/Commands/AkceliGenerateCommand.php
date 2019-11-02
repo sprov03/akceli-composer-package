@@ -3,6 +3,7 @@
 namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
+use Akceli\FileService;
 use Akceli\Generators\AkceliGenerator;
 use Akceli\GeneratorService;
 use Akceli\Console;
@@ -20,7 +21,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
+    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force} {--all}';
 
     /**
      * The console command description.
@@ -41,6 +42,7 @@ class AkceliGenerateCommand extends Command
          * Setup Global Classes
          */
         Console::setLogger($this);
+        FileService::setRootDirectory(app_path());
 
         Console::info('    ****************************************');
         Console::info('    *                                      *');
@@ -136,10 +138,9 @@ class AkceliGenerateCommand extends Command
             if (is_null($table_name)) {
                 $table_name = $this->ask('What is the table name being used in the template?');
             }
-            $defaultModelName = Str::studly(Str::singular($table_name));
-            $model_name = $this->ask('What is the Model name for the table?', $defaultModelName);
-            if (is_null($model_name)) {
-                $model_name = $defaultModelName;
+            $model_name = Str::studly(Str::singular($table_name));
+            if ($modelFile = FileService::findByTableName($table_name)) {
+                $model_name = FileService::getClassNameOfFile($modelFile);
             }
 
             $schema = SchemaFactory::resolve($table_name);

@@ -7,6 +7,7 @@ use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\GeneratorService;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -19,6 +20,10 @@ class BelongsToBuilder extends Builder implements BuilderInterface
              * Initalize Data
              */
             $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+            if (!$otherFile) {
+                Artisan::call('akceli:generate model ' . $relationship->REFERENCED_TABLE_NAME);
+                $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+            }
             $otherModel = FileService::getClassNameOfFile($otherFile);
             $thisModel = FileService::getClassNameOfFile($this->fileInfo);
             $templateData = [
