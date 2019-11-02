@@ -14,8 +14,6 @@ class DefaultAllGenerator extends AkceliGenerator
         'failed_jobs',
         'migrations',
         'password_resets',
-        'users',
-        'cars'
     ];
 
     public function requiresTable(): bool
@@ -42,7 +40,7 @@ class DefaultAllGenerator extends AkceliGenerator
     {
         Console::info('Only Generators that require Database tables are available for this command');
         Console::info('This command can take up to 2 seconds per model');
-        
+
         $tables = DB::select('SHOW TABLES');
         $tables = array_filter($tables, function ($table) {
             return !in_array($table->Tables_in_demo, $this->blackList);
@@ -55,7 +53,7 @@ class DefaultAllGenerator extends AkceliGenerator
             return (new $generator())->requiresTable();
         });
         $generators = array_keys($generators);
-        
+
         if (is_null($generator)) {
             $generator = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $generators);
         }
@@ -68,6 +66,7 @@ class DefaultAllGenerator extends AkceliGenerator
             $schema = SchemaFactory::resolve($table->Tables_in_demo);
 
             if ($schema->getBelongsToManyRelationships()->count() === 2) {
+                Artisan::call("akceli:relationships {$table->Tables_in_demo}");
                 /** Dont generate a Many to Many Pivot table */
                 continue;
             }
