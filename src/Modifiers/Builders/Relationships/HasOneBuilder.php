@@ -15,7 +15,7 @@ class HasOneBuilder extends Builder implements BuilderInterface
     {
         return;
     }
-    
+
     public function buildRelated($relationship)
     {
         /**
@@ -27,7 +27,7 @@ class HasOneBuilder extends Builder implements BuilderInterface
         $templateData = [
             'relationship' => $relationship,
             'otherModel' => $otherModel,
-            'hasManyMethodName' => Str::plural(Str::camel($otherModel))
+            'hasOneMethodName' => Str::singular(Str::camel($otherModel))
         ];
 
         /**
