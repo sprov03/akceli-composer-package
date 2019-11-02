@@ -59,11 +59,10 @@ class AkceliBuildRelationshipsCommand extends Command
         Console::info('    *                                      *');
         Console::info('    ****************************************');
 
-        
         foreach ($relationships as $relationship => $builder) {
             /** @var BuilderInterface $builder */
             $builder = new $builder($classParser, $schema, $relationships, $this->option('force'));
-            $builder->build();
+            $builder->build($this->option('no-interaction'));
         }
     }
 }

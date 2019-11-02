@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class BelongsToBuilder extends Builder implements BuilderInterface
 {
-    public function build()
+    public function build(bool $noInteraction = false)
     {
         foreach ($this->schema->getBelongsToRelationships() as $relationship) {
             /**
@@ -46,6 +46,8 @@ class BelongsToBuilder extends Builder implements BuilderInterface
                     $this->getBuilder($builder)->buildRelated($relationship);
                     continue;
                 }
+            } elseif ($noInteraction) {
+                continue;
             }
             
             /**
