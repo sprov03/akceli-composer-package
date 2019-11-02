@@ -15,6 +15,7 @@ class DefaultAllGenerator extends AkceliGenerator
         'migrations',
         'password_resets',
         'users',
+        'cars'
     ];
 
     public function requiresTable(): bool
@@ -24,28 +25,7 @@ class DefaultAllGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [
-            'generator' => function (array $data) {
-                Console::info('Only Generators that require Database tables are available for this command');
-                
-                if ($generator = $data['arg1'] ?? null) {
-                    return $generator;
-                }
-
-                $generators = config('akceli.generators');
-                $generators = array_filter($generators, function ($generator) {
-                    return (new $generator())->requiresTable();
-                });
-                $generators = array_keys($generators);
-                $generator = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $generators);
-
-                if (is_null($generator)) {
-                    $generator = Console::choice('What template set do you want to use?', $generators);
-                }
-                
-                return $generator;
-            }
-        ];
+        return [];
     }
 
     public function templates(array $data): array
@@ -60,12 +40,29 @@ class DefaultAllGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
+        Console::info('Only Generators that require Database tables are available for this command');
+        Console::info('This command can take up to 2 seconds per model');
+        
         $tables = DB::select('SHOW TABLES');
         $tables = array_filter($tables, function ($table) {
             return !in_array($table->Tables_in_demo, $this->blackList);
         });
 
-        $generator = $data['arg1'] ?? 'model';
+
+        $generator = $data['arg1'];
+        $generators = config('akceli.generators');
+        $generators = array_filter($generators, function ($generator) {
+            return (new $generator())->requiresTable();
+        });
+        $generators = array_keys($generators);
+        
+        if (is_null($generator)) {
+            $generator = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $generators);
+        }
+
+        if (is_null($generator)) {
+            $generator = Console::choice('What template set do you want to use?', $generators);
+        }
 
         foreach ($tables as $table) {
             $schema = SchemaFactory::resolve($table->Tables_in_demo);
