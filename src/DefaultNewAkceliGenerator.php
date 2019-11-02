@@ -25,31 +25,31 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[GeneratorName]]Generator.php'),
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         $command = Str::snake(GeneratorService::getData()['GeneratorName']);
         return [
             Akceli::insertInline(
                 'config/akceli.php',
                 '        /** New Generators Get Inserted Here */',
-                "        '{$command}' => [[GeneratorName]]Generator::class,"
+                "        '{$command}' => [[GeneratorName]]Generator::class,\n"
             ),
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** auto import new commands */',
-                'use Akceli\Generators\[[GeneratorName]]Generator;'
+                'use Akceli\Generators\[[GeneratorName]]Generator;' . PHP_EOL
             )
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('You have successfully created the new Akceli Migration');
     }

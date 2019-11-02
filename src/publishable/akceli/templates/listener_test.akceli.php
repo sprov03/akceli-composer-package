@@ -15,7 +15,7 @@ class <?=$Listener?>ListenerTest extends TestCase
      */
     public function exampleListener()
     {
-        event(new ExampleEvent());
+        event(new <?=$Listener?>Event());
     }
 }
 

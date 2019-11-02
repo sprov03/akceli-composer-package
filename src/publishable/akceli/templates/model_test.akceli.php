@@ -1,6 +1,7 @@
 <?php echo '<?php';
 /** @var  TemplateData $table */
-use Akceli\TemplateData;?>
+use Akceli\TemplateData;
+use Illuminate\Support\Str; ?>
 
 namespace Tests\App\Models;
 
@@ -19,11 +20,11 @@ class <?=$table->ModelName?>Test extends TestCase
 
         $this->assertInstanceOf(<?=$table->ModelName?>::class, $<?=$table->modelName?>);
 <?php foreach ($table->columns as $column): ?>
-<?php if (str_contains($column->getField(), '_id')): ?>
+<?php if (Str::contains($column->getField(), '_id')): ?>
 <?php $relationship = str_replace('_id', '', $column->getField()); ?>
 
-        $this->assertInstanceOf(<?=studly_case(str_singular($relationship))?>::class, $<?=$table->ModelName?>-><?=camel_case(str_singular($relationship))?>);
-        $this->assertCollectionOf(<?=studly_case(str_singular($relationship))?>::class, $<?=$table->ModelName?>-><?=camel_case(str_plural($relationship))?>);
+        $this->assertInstanceOf(<?=Str::studly(Str::singular($relationship))?>::class, $<?=$table->modelName?>-><?=Str::camel(Str::singular($relationship))?>);
+        $this->assertCollectionOf(<?=Str::studly(Str::singular($relationship))?>::class, $<?=$table->modelName?>-><?=Str::camel(Str::plural($relationship))?>);
 <?php endif; ?>
 <?php endforeach; ?>
     }

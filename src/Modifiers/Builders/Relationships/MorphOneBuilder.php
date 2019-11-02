@@ -26,17 +26,17 @@ class MorphOneBuilder extends Builder implements BuilderInterface
         $interface,
         $relationship
     ) {
-        $interface = studly_case($interface);
-        $otherModel = str_singular(studly_case($this->schema->getTable()));
+        $interface = Str::studly($interface);
+        $otherModel = Str::singular(Str::studly($this->schema->getTable()));
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
-            camel_case(str_singular($otherModel)),
+            Str::camel(Str::singular($otherModel)),
             $this->parser->render('morphOne', compact('relationship', 'interface', 'otherModel'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
-            camel_case(str_singular($otherModel)),
+            Str::camel(Str::singular($otherModel)),
             $this->parser->render('morphOne', compact('relationship', 'interface', 'otherModel'))
         );
 
@@ -44,7 +44,7 @@ class MorphOneBuilder extends Builder implements BuilderInterface
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
         $docType = $otherModel;
-        $variable = str_singular(camel_case($otherModel));
+        $variable = Str::singular(Str::camel($otherModel));
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
     }

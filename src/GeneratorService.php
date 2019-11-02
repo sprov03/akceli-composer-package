@@ -4,6 +4,8 @@ namespace Akceli;
 
 use Akceli\Generators\AkceliGenerator;
 use Akceli\Schema\SchemaFactory;
+use Akceli\GeneratorFlowController;
+use Akceli\Parser;
 use Illuminate\Support\Str;
 
 class GeneratorService
@@ -56,7 +58,14 @@ class GeneratorService
         $this->processFileTemplates($templateParser, $force);
         $this->processInlineTemplates($templateParser);
     }
-
+    
+    public function buildRelationships($force = false)
+    {
+        $classParser = new Parser(base_path('akceli/templates/relationships'), 'akceli.php');
+        $classParser->addData($this->templateData->toArray());
+        
+        (new GeneratorFlowController($classParser, $schema, $this->output, $force))->start();
+    }
 
     private function processFileTemplates(Parser $parser, bool $force)
     {
@@ -92,7 +101,7 @@ class GeneratorService
 
             $file_contents = str_replace(
                 $inlineTemplate['identifier'],
-                $rendered_template . PHP_EOL . $inlineTemplate['identifier'],
+                $rendered_template . $inlineTemplate['identifier'],
                 $file_contents
             );
 

@@ -23,21 +23,21 @@ class DefaultExceptionGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]]Exception.php')
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

@@ -20,7 +20,7 @@ class DefaultControllerGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('controller', 'app/Http/Controllers/[[ModelName]]Controller.php'),
@@ -34,14 +34,14 @@ class DefaultControllerGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             Akceli::inlineTemplate('route_resource', 'routes/web.php', '/** All Web controllers will go here */'),
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

@@ -1,6 +1,7 @@
 <?php
 
 use Akceli\Akceli;
+use Akceli\Generators\DefaultGenerators\DefaultAllGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultNewAkceliGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultChannelGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultCommandGenerator;
@@ -44,7 +45,8 @@ return [
         'casts' => Akceli::columnSetting(null, null, null, null, 'datetime', 'boolean'),
     ],
 
-    'template-groups' => [
+    'generators' => [
+        'all' => DefaultAllGenerator::class,
         'new-command' => DefaultNewAkceliGenerator::class,
         'channel' => DefaultChannelGenerator::class,
         'command' => DefaultCommandGenerator::class,

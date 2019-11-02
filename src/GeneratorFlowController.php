@@ -74,22 +74,22 @@ class GeneratorFlowController
 
     private function setPolymorphicRelationships($relationship)
     {
-        $relationship = studly_case($relationship);
-        $otherModel = str_singular(studly_case($this->schema->getTable()));
+        $relationship = Str::studly($relationship);
+        $otherModel = Str::singular(Str::studly($this->schema->getTable()));
 
         $relationshipChoice = Console::choice(
-            "Dose a {$relationship} have one or many " . str_plural($otherModel) . "?",
+            "Dose a {$relationship} have one or many " . Str::plural($otherModel) . "?",
             [
                 "0: Don't Set Up the other relationship",
                 "1: {$relationship} has one {$otherModel}",
-                "2: {$relationship} has many " . str_plural($otherModel),
+                "2: {$relationship} has many " . Str::plural($otherModel),
             ]
         );
 
         if ($relationshipChoice == 1) {
             $method = $relationship;
         } elseif ($relationshipChoice == 2) {
-            $method = str_plural($relationship);
+            $method = Str::plural($relationship);
         } else {
             return;
         }
@@ -99,7 +99,7 @@ class GeneratorFlowController
         }
 
         $interface = Console::ask(
-            "What is the name of the Interface that " . str_plural($relationship) . " will implement"
+            "What is the name of the Interface that " . Str::plural($relationship) . " will implement"
         );
         $interface = str_replace('Interface', '', $interface);
 
@@ -117,15 +117,15 @@ class GeneratorFlowController
 
     private function setBelongsToRelationship($relationship)
     {
-        $otherModel = str_singular(studly_case($relationship->REFERENCED_TABLE_NAME));
-        $thisModel = str_singular(studly_case($relationship->TABLE_NAME));
+        $otherModel = Str::singular(Str::studly($relationship->REFERENCED_TABLE_NAME));
+        $thisModel = Str::singular(Str::studly($relationship->TABLE_NAME));
 
         $choice = Console::choice(
-            "Dose a {$otherModel} have one or many " . str_plural($thisModel) . "?",
+            "Dose a {$otherModel} have one or many " . Str::plural($thisModel) . "?",
             [
                 "0: Don't Set Up the other relationship",
                 "1: {$otherModel} has one {$thisModel}",
-                "2: {$otherModel} has many " . str_plural($thisModel),
+                "2: {$otherModel} has many " . Str::plural($thisModel),
             ]
         );
 
@@ -157,7 +157,7 @@ class GeneratorFlowController
         $this->getBuilder('MorphToMany')->analise(null, $interface);
 
         // TODO-shawnpivonka Add MorphedByMany template and Builder
-//        $this->getBuilder('MorphedByMany')->analise($interface);
+//        $this->getBuilder('MorphedByMany')->$this->analise($interface);
     }
 
     protected function appendToEndOfFile($path, $text, $remove_last_chars = 0, $dont_add_if_exist = false) {

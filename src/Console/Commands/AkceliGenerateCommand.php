@@ -3,6 +3,7 @@
 namespace Akceli\Console\Commands;
 
 use Akceli\AkceliServiceProvider;
+use Akceli\FileService;
 use Akceli\Generators\AkceliGenerator;
 use Akceli\GeneratorService;
 use Akceli\Console;
@@ -20,7 +21,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
+    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
 
     /**
      * The console command description.
@@ -41,6 +42,7 @@ class AkceliGenerateCommand extends Command
          * Setup Global Classes
          */
         Console::setLogger($this);
+        FileService::setRootDirectory(app_path());
 
         Console::info('    ****************************************');
         Console::info('    *                                      *');
@@ -50,45 +52,20 @@ class AkceliGenerateCommand extends Command
 
         $template_set = $this->argument('template-set');
         $config = config('akceli');
+        $config['generators'] = $config['template-groups'] ?? $config['generators'];
 
         /**
-         * If config file has not been published then publish it.
+         * If config file has not been published then publish it, makeing sure not to force
          */
         if (is_null($config)) {
-            $exitCode = Artisan::call('vendor:publish', [
-                '--provider' => AkceliServiceProvider::class
-            ]);
-
-            /**
-             * Add the Trait to the composer json
-             */
-            $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
-            $composerJson['autoload-dev'] = $composerJson['autoload-dev'] ?? [];
-            $composerJson['autoload-dev']['files'] = $composerJson['autoload-dev']['files'] ?? [];
-            $composerJson['autoload-dev']['psr-4']['Akceli\\Generators\\'] = "akceli/generators/";
-            array_push($composerJson['autoload-dev']['files'], "akceli/AkceliTableDataTrait.php");
-            array_push($composerJson['autoload-dev']['files'], "akceli/AkceliColumnTrait.php");
-            $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
-            file_put_contents(base_path('composer.json'), $newComposerJson);
-
-
-            if ($exitCode) {
-                Console::error('');
-                Console::error('There was an error publishing the config file: Try running the following command for more details:');
-                Console::error('php artisan vendor:publish --provider=' . AkceliServiceProvider::class);
-                Console::error('');
-                return;
-            } else {
-                Console::info('The akceli.php config file we published to /config/akceli.php');
-                Console::info('akceli/AkceliTableDataTrait.php was published');
-                Console::info('akceli/AkceliColumnTrait.php was published');
-                Console::info('akceli/generators was published');
-                return;
-            }
+            Artisan::call('akceli:publish');
         }
 
+        /**
+         * Selecting a Template
+         */
         if (is_null($this->argument('template-set'))) {
-            $templateSets = array_keys($config['template-groups']);
+            $templateSets = array_keys($config['generators']);
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
                 $template_set = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
             } else {
@@ -103,20 +80,37 @@ class AkceliGenerateCommand extends Command
         /**
          * Validate the the Template is a valid option
          */
-        if (!isset($config['template-groups'][$template_set])) {
+        if (!isset($config['generators'][$template_set])) {
             Console::error('');
             Console::error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
             Console::error('');
             return;
         }
 
-        $templateSet = $config['template-groups'][$template_set];
+        /**
+         * Resolving the template Set
+         */
+        $templateSet = $config['generators'][$template_set];
         if (is_string($templateSet)) {
             $templateSet = new $templateSet();
         }
 
-        $extraData = [
-            'app_namespace' => Container::getInstance()->getNamespace()
+        /**
+         * Initalizing Template Data
+         */
+        $template_data = [
+            'arg1' => $this->argument('arg1'),
+            'arg2' => $this->argument('arg2'),
+            'arg3' => $this->argument('arg3'),
+            'arg4' => $this->argument('arg4'),
+            'arg5' => $this->argument('arg5'),
+            'arg6' => $this->argument('arg6'),
+            'arg7' => $this->argument('arg7'),
+            'arg8' => $this->argument('arg8'),
+            'arg9' => $this->argument('arg9'),
+            'arg10' => $this->argument('arg10'),
+            'dump' => $this->option('dump'),
+            'force' => $this->option('force'),
         ];
 
         /**
@@ -128,18 +122,17 @@ class AkceliGenerateCommand extends Command
             if (is_null($table_name)) {
                 $table_name = $this->ask('What is the table name being used in the template?');
             }
-            $defaultModelName = Str::studly(Str::singular($table_name));
-            $model_name = $this->ask('What is the Model name for the table?', $defaultModelName);
-            if (is_null($model_name)) {
-                $model_name = $defaultModelName;
+            $model_name = Str::studly(Str::singular($table_name));
+            if ($modelFile = FileService::findByTableName($table_name)) {
+                $model_name = FileService::getClassNameOfFile($modelFile);
             }
 
             $schema = SchemaFactory::resolve($table_name);
             $columns = $schema->getColumns();
-            $extraData['table_name'] = $table_name;
-            $extraData['columns'] = $columns;
-            $extraData['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
-            $extraData = array_merge($extraData, TemplateData::buildModelAliases($model_name));
+            $template_data['table_name'] = $table_name;
+            $template_data['columns'] = $columns;
+            $template_data['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
+            $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
 
             Console::info("Table Name: {$table_name}");
             Console::info("Model Name: {$model_name}");
@@ -151,16 +144,17 @@ class AkceliGenerateCommand extends Command
          * Process Data Prompts
          */
         if ($templateSet['data'] ?? false) {
-            $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet, $extraData, $this->arguments());
+            $template_data = Console\DataPrompter\DataPrompter::prompt($templateSet, $template_data, $this->arguments());
         }
 
-        $template_data = $extraData;
-
+        /**
+         * Optionaly Dump Template Data
+         */
         if ($this->option('dump')) {
             dd($template_data);
         }
 
-        GeneratorService::setData($template_data); // Set Globally for use during relationship generation
+        GeneratorService::setData($template_data);
         GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
         GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
 
@@ -169,7 +163,7 @@ class AkceliGenerateCommand extends Command
         $generator->generate($this->option('force'));
 
         if ($templateSet['completion_message'] ?? false) {
-            $templateSet['completion_message']();
+            $templateSet['completion_message']($template_data);
         }
     }
 }

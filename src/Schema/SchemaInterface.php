@@ -17,4 +17,14 @@ interface SchemaInterface
      * @return ColumnInterface[]|Collection
      */
     public function getColumns(): Collection;
+
+    /**
+     * @return Collection
+     */
+    public function getBelongsToRelationships(): Collection;
+
+    /**
+     * @return Collection
+     */
+    public function getBelongsToManyRelationships(): Collection;
 }

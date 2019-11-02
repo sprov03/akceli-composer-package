@@ -19,14 +19,14 @@ class DefaultSeederGenerator extends AkceliGenerator
         return [];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             Akceli::insertInline(
@@ -37,7 +37,7 @@ class DefaultSeederGenerator extends AkceliGenerator
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

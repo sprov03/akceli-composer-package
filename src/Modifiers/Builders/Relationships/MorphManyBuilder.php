@@ -27,17 +27,17 @@ class MorphManyBuilder extends Builder implements BuilderInterface
         $interface,
         $relationship
     ) {
-        $interface = studly_case($interface);
-        $otherModel = str_singular(studly_case($this->schema->getTable()));
+        $interface = Str::studly($interface);
+        $otherModel = Str::singular(Str::studly($this->schema->getTable()));
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
-            camel_case(str_plural($otherModel)),
+            Str::camel(Str::plural($otherModel)),
             $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
-            camel_case(str_plural($otherModel)),
+            Str::camel(Str::plural($otherModel)),
             $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
         );
 
@@ -45,7 +45,7 @@ class MorphManyBuilder extends Builder implements BuilderInterface
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
         $docType = "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection";
-        $variable = str_plural(camel_case($otherModel));
+        $variable = Str::plural(Str::camel($otherModel));
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
     }

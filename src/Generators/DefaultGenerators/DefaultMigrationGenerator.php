@@ -18,37 +18,41 @@ class DefaultMigrationGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'migration_timestamp' => function() {
-                return now()->format('Y_m_d_u');
+            'table_name' => function() {
+                return Console::ask('What is the name of the table being used in the migration?');
             },
-            'migration_name' => function() {
-                $response = Console::ask('What is the name of the migration?');
-                return Str::snake(str_replace(' ', '_', $response));
+            'migration_timestamp' => function() {
+                return now()->format('Y_m_d_His');
             },
             'migration_type' => function() {
                 return Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
             },
-            'table_name' => function() {
-                return Console::ask('What is the name of the table being used in the migration?');
-            }
+            'migration_name' => function($data) {
+                if ($data['migration_type'] === 'update') {
+                    $name = Console::ask('What is the name of the migration?');
+                } else {
+                    $name = 'create_' . $data['table_name'] . '_table';
+                }
+                return Str::snake(str_replace(' ', '_', $name));
+            },
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

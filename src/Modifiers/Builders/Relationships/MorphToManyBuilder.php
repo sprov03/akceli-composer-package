@@ -21,14 +21,14 @@ class MorphToManyBuilder extends Builder implements BuilderInterface
 
             $this->addMethodToFile(
                 $fileInfo,
-                str_plural(camel_case($otherModel)),
+                Str::plural(Str::camel($otherModel)),
                 $this->parser->render('morphToMany', compact('interface', 'otherModel'))
             );
 
             $this->addClassPropertyDocToFile(
                 $fileInfo,
                 "{$interface}Interface[]|\\Illuminate\\Database\\Eloquent\\Collection",
-                str_plural(camel_case($otherModel))
+                Str::plural(Str::camel($otherModel))
             );
         }
 

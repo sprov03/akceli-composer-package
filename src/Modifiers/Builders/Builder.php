@@ -7,16 +7,16 @@ use Akceli\Modifiers\ClassModifier;
 class Builder extends ClassModifier
 {
     private static $builderFactory = [
-        'BelongsTo' => '\Akceli\Modifiers\Builders\Relationships\BelongsToBuilder',
-        'BelongsToMany' => '\Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder',
-        'HasOne' => '\Akceli\Modifiers\Builders\Relationships\HasOneBuilder',
-        'HasMany' => '\Akceli\Modifiers\Builders\Relationships\HasManyBuilder',
-        'MorphMany' => '\Akceli\Modifiers\Builders\Relationships\MorphManyBuilder',
-        'MorphOne' => '\Akceli\Modifiers\Builders\Relationships\MorphOneBuilder',
-        'MorphTo' => '\Akceli\Modifiers\Builders\Relationships\MorphToBuilder',
-        'MorphToMany' => '\Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder',
-        'Trait' => '\Akceli\Modifiers\Builders\Classes\TraitBuilder',
-        'Interface' => '\Akceli\Modifiers\Builders\Classes\InterfaceBuilder'
+        'belongsTo' => '\Akceli\Modifiers\Builders\Relationships\BelongsToBuilder',
+        'belongsToMany' => '\Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder',
+        'hasOne' => '\Akceli\Modifiers\Builders\Relationships\HasOneBuilder',
+        'hasMany' => '\Akceli\Modifiers\Builders\Relationships\HasManyBuilder',
+        'morphMany' => '\Akceli\Modifiers\Builders\Relationships\MorphManyBuilder',
+        'morphOne' => '\Akceli\Modifiers\Builders\Relationships\MorphOneBuilder',
+        'morphTo' => '\Akceli\Modifiers\Builders\Relationships\MorphToBuilder',
+        'morphToMany' => '\Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder',
+        'trait' => '\Akceli\Modifiers\Builders\Classes\TraitBuilder',
+        'interface' => '\Akceli\Modifiers\Builders\Classes\InterfaceBuilder'
     ];
 
     /**

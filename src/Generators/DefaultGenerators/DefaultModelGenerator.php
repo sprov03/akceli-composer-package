@@ -6,6 +6,7 @@ use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
+use Illuminate\Support\Facades\Artisan;
 
 class DefaultModelGenerator extends AkceliGenerator
 {
@@ -20,7 +21,7 @@ class DefaultModelGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('model', 'app/Models/[[ModelName]].php'),
@@ -29,15 +30,16 @@ class DefaultModelGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage($data)
     {
+        Artisan::call('akceli:relationships '.$data['table_name']);
         Console::info('Success');
     }
 }

@@ -5,6 +5,7 @@ namespace Akceli\Schema;
 use Akceli\Config\ColumnSettingsConfig;
 use Akceli\Console;
 use AkceliColumnTrait;
+use Illuminate\Support\Str;
 
 class MysqlColumn implements ColumnInterface
 {
@@ -119,7 +120,7 @@ class MysqlColumn implements ColumnInterface
 
     public function isEnum(): bool
     {
-        return str_contains($this->Type, 'enum(');
+        return Str::contains($this->Type, 'enum(');
     }
 
     public function isString(): bool

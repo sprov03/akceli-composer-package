@@ -11,9 +11,9 @@ interface AkceliGeneratorInterface
 
     public function dataPrompter(): array;
 
-    public function templates(): array;
+    public function templates(array $data): array;
 
-    public function inlineTemplates(): array;
+    public function inlineTemplates(array $data): array;
 
-    public function completionMessage();
+    public function completionMessage(array $data);
 }

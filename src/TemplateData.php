@@ -19,7 +19,6 @@ use Illuminate\Support\Str;
  * @property string $modelNameKabob
  * @property string $modelNamesKabob
  *
- * @property string $app_namespace
  * @property string $table_name
  * @property string $primaryKey
  * @property array $extraData
