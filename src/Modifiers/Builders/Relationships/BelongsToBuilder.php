@@ -39,7 +39,7 @@ class BelongsToBuilder extends Builder implements BuilderInterface
                 $cache = Cache::get($cacheKey);
                 if ($builder = $cache[$this->schema->getTable()] ?? null) {
                     $this->getBuilder($builder)->buildRelated($relationship);
-                    return;
+                    continue;
                 }
             }
             
