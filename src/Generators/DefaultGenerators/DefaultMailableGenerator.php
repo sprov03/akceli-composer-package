@@ -30,7 +30,7 @@ class DefaultMailableGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('mailable', 'app/Mail/[[Mailable]]Mailable.php'),

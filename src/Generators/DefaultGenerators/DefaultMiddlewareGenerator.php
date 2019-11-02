@@ -23,7 +23,7 @@ class DefaultMiddlewareGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]]Middleware.php'),

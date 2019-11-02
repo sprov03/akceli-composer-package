@@ -19,7 +19,7 @@ class DefaultProviderGenerator extends AkceliGenerator
         return [];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             // Akceli::fileTemplate('akceli_generator', 'akceli/generators/ProviderGenerator.php'),

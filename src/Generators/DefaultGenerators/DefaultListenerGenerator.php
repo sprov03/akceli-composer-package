@@ -23,7 +23,7 @@ class DefaultListenerGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('listener', 'app/Listeners/[[Listener]]Listener.php'),

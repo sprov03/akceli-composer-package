@@ -60,7 +60,7 @@ abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->{$offset}();
+        return $this->{$offset}(GeneratorService::getData());
     }
 
     /**

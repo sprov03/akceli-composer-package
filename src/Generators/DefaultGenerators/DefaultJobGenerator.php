@@ -27,7 +27,7 @@ class DefaultJobGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('job', 'tests/Akceli/ActualFiles/app/Jobs/[[Job]]Job.php'),

@@ -20,7 +20,7 @@ class DefaultControllerGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('controller', 'app/Http/Controllers/[[ModelName]]Controller.php'),

@@ -21,7 +21,7 @@ class DefaultModelGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('model', 'app/Models/[[ModelName]].php'),
@@ -39,8 +39,7 @@ class DefaultModelGenerator extends AkceliGenerator
 
     public function completionMessage($data)
     {
-        dd($data);
-        Artisan::call('akceli:relationships '.$data['']);
+        Artisan::call('akceli:relationships '.$data['table_name']);
         Console::info('Success');
     }
 }

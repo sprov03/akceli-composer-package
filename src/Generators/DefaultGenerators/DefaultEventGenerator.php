@@ -23,7 +23,7 @@ class DefaultEventGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('event', 'app/Events/[[Event]]Event.php'),
