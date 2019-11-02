@@ -34,7 +34,7 @@ class ClassModifier
      */
     public function __construct(Parser $parser, SchemaInterface $schema, $force = false)
     {
-        $this->fileInfo = FileService::findByTableName($schema->getTable());
+        $this->fileInfo = FileService::findByTableName($schema->getTable(), true);
         $this->parser = $parser;
         $this->schema = $schema;
         $this->force = $force;
