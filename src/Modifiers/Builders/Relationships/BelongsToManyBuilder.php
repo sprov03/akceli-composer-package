@@ -33,10 +33,6 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         $fileInfoOne = FileService::findByTableName($relationshipOne->REFERENCED_TABLE_NAME);
         $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
 
-        $modelOne = FileService::getClassNameOfFile($fileInfoOne);
-        $modelTwo = FileService::getClassNameOfFile($fileInfoOne);
-
-
         if (is_null($fileInfoOne)) {
             Artisan::call('akceli:generate model ' . $relationshipOne->REFERENCED_TABLE_NAME);
             $fileInfoOne = FileService::findByTableName($relationshipOne->REFERENCED_TABLE_NAME, true);
@@ -45,7 +41,10 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
             Artisan::call('akceli:generate model ' . $relationshipTwo->REFERENCED_TABLE_NAME);
             $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
         }
-        
+
+        $modelOne = FileService::getClassNameOfFile($fileInfoOne);
+        $modelTwo = FileService::getClassNameOfFile($fileInfoOne);
+
         /**
          * Update Files
          */
