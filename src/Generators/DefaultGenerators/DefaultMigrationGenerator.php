@@ -22,7 +22,7 @@ class DefaultMigrationGenerator extends AkceliGenerator
                 return Console::ask('What is the name of the table being used in the migration?');
             },
             'migration_timestamp' => function() {
-                return now()->format('Y_m_d_u');
+                return now()->format('Y_m_d_His');
             },
             'migration_type' => function() {
                 return Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
@@ -45,14 +45,14 @@ class DefaultMigrationGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

@@ -31,14 +31,14 @@ class DefaultEventGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::alert('Dont forget to register the Event in app/Providers/EventServiceProvider.php');
         Console::warn('Documentation: https://laravel.com/docs/5.8/events#registering-events-and-listeners');

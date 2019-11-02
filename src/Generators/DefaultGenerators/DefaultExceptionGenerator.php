@@ -30,14 +30,14 @@ class DefaultExceptionGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('Success');
     }

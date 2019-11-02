@@ -3,25 +3,27 @@
 namespace Akceli\Generators;
 
 
+use Akceli\GeneratorService;
+
 abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
 {
-    public function completion_message()
-    {
-        $this->completionMessage();
-    }
-
-    public function inline_templates()
-    {
-        return $this->inlineTemplates();
+    public function requires_table_name() {
+        return $this->requiresTable();
     }
 
     public function data()
     {
-        return $this->dataPrompter();
+        return $this->dataPrompter(GeneratorService::getData());
     }
 
-    public function requires_table_name() {
-        return $this->requiresTable();
+    public function inline_templates()
+    {
+        return $this->inlineTemplates(GeneratorService::getData());
+    }
+    
+    public function completion_message()
+    {
+        $this->completionMessage(GeneratorService::getData());
     }
 
     /**

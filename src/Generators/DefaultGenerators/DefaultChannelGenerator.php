@@ -32,14 +32,14 @@ class DefaultChannelGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         return [
             //Akceli::inlineTemplate('channel_register', 'routes/channels.php', '/** Dont forget to add the channel to the channels.php file */')
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::alert('Dont forget to register the Channel in routes/channels.php');
         Console::warn('Documentation: https://laravel.com/docs/5.8/broadcasting#defining-channel-classes');

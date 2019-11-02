@@ -88,6 +88,9 @@ class AkceliGenerateCommand extends Command
             }
         }
 
+        /**
+         * Selecting a Template
+         */
         if (is_null($this->argument('template-set'))) {
             $templateSets = array_keys($config['generators']);
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
@@ -111,14 +114,18 @@ class AkceliGenerateCommand extends Command
             return;
         }
 
+        /**
+         * Resolving the template Set
+         */
         $templateSet = $config['generators'][$template_set];
         if (is_string($templateSet)) {
             $templateSet = new $templateSet();
         }
 
-        $extraData = [
-            'app_namespace' => Container::getInstance()->getNamespace()
-        ];
+        /**
+         * Initalizing Template Data
+         */
+        $template_data = [];
 
         /**
          * Setup Model Data if Required
@@ -137,10 +144,10 @@ class AkceliGenerateCommand extends Command
 
             $schema = SchemaFactory::resolve($table_name);
             $columns = $schema->getColumns();
-            $extraData['table_name'] = $table_name;
-            $extraData['columns'] = $columns;
-            $extraData['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
-            $extraData = array_merge($extraData, TemplateData::buildModelAliases($model_name));
+            $template_data['table_name'] = $table_name;
+            $template_data['columns'] = $columns;
+            $template_data['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
+            $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
 
             Console::info("Table Name: {$table_name}");
             Console::info("Model Name: {$model_name}");
@@ -152,16 +159,17 @@ class AkceliGenerateCommand extends Command
          * Process Data Prompts
          */
         if ($templateSet['data'] ?? false) {
-            $extraData = Console\DataPrompter\DataPrompter::prompt($templateSet, $extraData, $this->arguments());
+            $template_data = Console\DataPrompter\DataPrompter::prompt($templateSet, $template_data, $this->arguments());
         }
 
-        $template_data = $extraData;
-
+        /**
+         * Optionaly Dump Template Data
+         */
         if ($this->option('dump')) {
             dd($template_data);
         }
 
-        GeneratorService::setData($template_data); // Set Globally for use during relationship generation
+        GeneratorService::setData($template_data);
         GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
         GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
 
@@ -170,7 +178,7 @@ class AkceliGenerateCommand extends Command
         $generator->generate($this->option('force'));
 
         if ($templateSet['completion_message'] ?? false) {
-            $templateSet['completion_message']();
+            $templateSet['completion_message']($template_data);
         }
     }
 }

@@ -32,7 +32,7 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(): array
+    public function inlineTemplates(array $data): array
     {
         $command = Str::snake(GeneratorService::getData()['GeneratorName']);
         return [
@@ -49,7 +49,7 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
         ];
     }
 
-    public function completionMessage()
+    public function completionMessage(array $data)
     {
         Console::info('You have successfully created the new Akceli Migration');
     }
