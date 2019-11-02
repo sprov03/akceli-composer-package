@@ -38,6 +38,11 @@ class AkceliPublishCommand extends Command
      */
     public function handle()
     {
+        /**
+         * Setup Global Classes
+         */
+        Console::setLogger($this);
+
         Console::info('    ****************************************');
         Console::info('    *                                      *');
         Console::info('    *                Akceli                *');
