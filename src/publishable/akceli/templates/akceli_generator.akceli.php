@@ -25,21 +25,21 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
         ];
     }
 
-    public function templates(array $data): array
+    public function templates(): array
     {
         return [
             Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[GeneratorName]]Generator.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function inlineTemplates(): array
     {
         return [
             // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
-    public function completionMessage(array $data)
+    public function completionMessage()
     {
         Console::info('Success');
     }
