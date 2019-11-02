@@ -54,7 +54,8 @@ class FileService
             }
         }
 
-        return self::findByClassName(Str::studly(Str::singular($table_name)));
+        $file = self::findByClassName(Str::studly(Str::singular($table_name)));
+        return ($file) ? $file : self::findByTableName($table_name, true);
     }
 
     /**
