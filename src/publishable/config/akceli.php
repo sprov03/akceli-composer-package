@@ -24,6 +24,14 @@ use Akceli\Generators\DefaultGenerators\DefaultResourceGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultRuleGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultTestGenerator;
 use Akceli\Generators\DefaultGenerators\DefaultSeederGenerator;
+use Akceli\Modifiers\Builders\Relationships\BelongsToBuilder;
+use Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder;
+use Akceli\Modifiers\Builders\Relationships\HasManyBuilder;
+use Akceli\Modifiers\Builders\Relationships\HasOneBuilder;
+use Akceli\Modifiers\Builders\Relationships\MorphOneBuilder;
+use Akceli\Modifiers\Builders\Relationships\MorphToBuilder;
+use Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder;
+
 /** auto import new commands */
 
 /**
@@ -71,4 +79,15 @@ return [
         'seeder' => DefaultSeederGenerator::class,
         /** New Generators Get Inserted Here */
     ],
+
+    'relationships' => [
+        'belongsToMany' => BelongsToManyBuilder::class,
+        'belongsTo' => BelongsToBuilder::class,
+        'hasOne' => HasOneBuilder::class,
+        'hasMany' => HasManyBuilder::class,
+//        'morphMany' => MorphToManyBuilder::class,
+//        'morphOne' => MorphOneBuilder::class,
+//        'morphTo' => MorphToBuilder::class,
+//        'morphToMany' => MorphToManyBuilder::class,
+    ]
 ];
