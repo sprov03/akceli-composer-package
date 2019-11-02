@@ -55,7 +55,12 @@ class FileService
         }
 
         $file = self::findByClassName(Str::studly(Str::singular($table_name)));
-        return (is_null($file)) ? $file : self::findByTableName($table_name, true);
+
+        if ($reload === false && is_null($file)) {
+            return self::findByTableName($table_name, true);
+        } else {
+            return $file;
+        }
     }
 
     /**
