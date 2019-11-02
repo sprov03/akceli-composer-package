@@ -87,7 +87,12 @@ class MysqlSchema implements SchemaInterface
         return $this->getInterfaces($non_primary_key_columns);
     }
 
-    public function getBelongsToManyRelationships()
+    /**
+     * Belongs to Relationship Consits of a Primary Key of two Coulumns that have Relationships to two other tables.
+     * 
+     * @return Collection
+     */
+    public function getBelongsToManyRelationships(): Collection
     {
         $primaryKey = $this->getPrimaryKey();
 
@@ -95,18 +100,37 @@ class MysqlSchema implements SchemaInterface
 
             return new Collection();
         }
-
-        return $primaryKey->map(function ($key) {
+        
+        
+        $relationships = $primaryKey->map(function ($key) {
             return $this->getForeignKeys()
-                ->first(function ($index, $value) use ($key) {
-                    return $value->COLUMN_NAME == $key->Field;
-                });
+                ->first(function ($foreignKey) use ($key) {
+                    return $foreignKey->COLUMN_NAME == $key->Field;
+            });
+        })->filter(function($relationship) {
+            return !!$relationship;
         });
+        
+        if ($relationships->count() !== 2) {
+            return new Collection();
+        }
+        
+        return $relationships;
     }
 
+    /**
+     * @return Collection
+     */
     public function getBelongsToRelationships(): Collection
     {
-        $columns_that_have_relationships =  $this->getColumns()->filter(function ($key) {
+        /**
+         * Filter Other Relationship Types
+         */
+        $columns = $this->getColumns()->filter(function ($column) {
+            return !$this->getBelongsToManyRelationships()->contains('COLUMN_NAME', '=', $column->Field);
+        });
+        
+        $columns_that_have_relationships =  $columns->filter(function ($key) {
             return (boolean) $this->getForeignKeys()
                 ->filter(function ($foreign) use ($key) {
                     return $foreign->COLUMN_NAME == $key->Field;

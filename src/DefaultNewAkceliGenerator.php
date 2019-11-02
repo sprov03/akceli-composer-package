@@ -25,7 +25,7 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(): array
+    public function templates(array $data): array
     {
         return [
             Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[GeneratorName]]Generator.php'),
@@ -39,12 +39,12 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
             Akceli::insertInline(
                 'config/akceli.php',
                 '        /** New Generators Get Inserted Here */',
-                "        '{$command}' => [[GeneratorName]]Generator::class,"
+                "        '{$command}' => [[GeneratorName]]Generator::class,\n"
             ),
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** auto import new commands */',
-                'use Akceli\Generators\[[GeneratorName]]Generator;'
+                'use Akceli\Generators\[[GeneratorName]]Generator;' . PHP_EOL
             )
         ];
     }

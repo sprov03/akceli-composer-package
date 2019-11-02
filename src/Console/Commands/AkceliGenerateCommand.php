@@ -21,7 +21,7 @@ class AkceliGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force} {--all}';
+    protected $signature = 'akceli:generate {template-set?} {arg1?} {arg2?} {arg3?} {arg4?} {arg5?} {arg6?} {arg7?} {arg8?} {arg9?} {arg10?} {--dump} {--force}';
 
     /**
      * The console command description.
@@ -127,7 +127,20 @@ class AkceliGenerateCommand extends Command
         /**
          * Initalizing Template Data
          */
-        $template_data = [];
+        $template_data = [
+            'arg1' => $this->argument('arg1'),
+            'arg2' => $this->argument('arg2'),
+            'arg3' => $this->argument('arg3'),
+            'arg4' => $this->argument('arg4'),
+            'arg5' => $this->argument('arg5'),
+            'arg6' => $this->argument('arg6'),
+            'arg7' => $this->argument('arg7'),
+            'arg8' => $this->argument('arg8'),
+            'arg9' => $this->argument('arg9'),
+            'arg10' => $this->argument('arg10'),
+            'dump' => $this->option('dump'),
+            'force' => $this->option('force'),
+        ];
 
         /**
          * Setup Model Data if Required

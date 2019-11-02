@@ -45,6 +45,13 @@ class AkceliBuildRelationshipsCommand extends Command
          * Setup Global Classes
          */
         Console::setLogger($this);
+        FileService::setRootDirectory(app_path());
+        $config = config('akceli');
+        $relationships = $config['relationships'] ?? [];
+        $schema = SchemaFactory::resolve($this->argument('table'));
+        $classParser = new Parser(base_path('akceli/templates/relationships'), 'akceli.php');
+        $classParser->addData([]);
+
 
         Console::info('    ****************************************');
         Console::info('    *                                      *');
@@ -52,13 +59,6 @@ class AkceliBuildRelationshipsCommand extends Command
         Console::info('    *                                      *');
         Console::info('    ****************************************');
 
-        $config = config('akceli');
-        $relationships = $config['relationships'] ?? [];
-        $schema = SchemaFactory::resolve($this->argument('table'));
-        FileService::setRootDirectory(app_path());
-        
-        $classParser = new Parser(base_path('akceli/templates/relationships'), 'akceli.php');
-        $classParser->addData([]);
         
         foreach ($relationships as $relationship => $builder) {
             /** @var BuilderInterface $builder */

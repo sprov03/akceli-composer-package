@@ -22,4 +22,9 @@ interface SchemaInterface
      * @return Collection
      */
     public function getBelongsToRelationships(): Collection;
+
+    /**
+     * @return Collection
+     */
+    public function getBelongsToManyRelationships(): Collection;
 }

@@ -22,7 +22,7 @@ class BelongsToBuilder extends Builder implements BuilderInterface
             $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
             if (!$otherFile) {
                 Artisan::call('akceli:generate model ' . $relationship->REFERENCED_TABLE_NAME);
-                $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
+                $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME, true);
             }
             $otherModel = FileService::getClassNameOfFile($otherFile);
             $thisModel = FileService::getClassNameOfFile($this->fileInfo);
