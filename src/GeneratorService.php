@@ -4,8 +4,8 @@ namespace Akceli;
 
 use Akceli\Generators\AkceliGenerator;
 use Akceli\Schema\SchemaFactory;
-use CrudGenerator\GeneratorFlowController;
-use CrudGenerator\Parser;
+use Akceli\GeneratorFlowController;
+use Akceli\Parser;
 use Illuminate\Support\Str;
 
 class GeneratorService
@@ -101,7 +101,7 @@ class GeneratorService
 
             $file_contents = str_replace(
                 $inlineTemplate['identifier'],
-                $rendered_template . PHP_EOL . $inlineTemplate['identifier'],
+                $rendered_template . $inlineTemplate['identifier'],
                 $file_contents
             );
 
