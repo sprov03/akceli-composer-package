@@ -79,6 +79,8 @@ class AkceliPublishCommand extends Command
             Console::info('akceli/AkceliTableDataTrait.php was published');
             Console::info('akceli/AkceliColumnTrait.php was published');
             Console::info('akceli/generators was published');
+
+            shell_exec('composer dump-autoload');
             return;
         }
     }
