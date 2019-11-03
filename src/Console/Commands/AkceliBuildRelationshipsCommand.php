@@ -49,7 +49,7 @@ class AkceliBuildRelationshipsCommand extends Command
         $config = config('akceli');
         $relationships = $config['relationships'] ?? [];
         $schema = SchemaFactory::resolve($this->argument('table'));
-        $classParser = new Parser(base_path('akceli/templates/relationships'), 'akceli.php');
+        $classParser = new Parser(base_path('vendor/akceli/laravel-code-generator/src/Modifiers/templates/relationships'), 'akceli.php');
         $classParser->addData([]);
 
 
