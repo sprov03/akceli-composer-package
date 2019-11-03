@@ -8,6 +8,7 @@
 
 use Illuminate\Support\Str; ?>
 
+use Akceli\Schema\Builders\RelationshipBuilder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
@@ -27,6 +28,9 @@ class <?=Str::studly($migration_name)?> extends Migration
 <?php if ($migration_type === 'create'): ?>
         Schema::create('<?=$table_name?>', function (Blueprint $table) {
             $table->bigIncrements('id');
+
+            RelationshipBuilder::table($table);
+
             $table->softDeletes();
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
-class SchemaBuilder
+class RelationshipBuilder
 {
     /**
      * @var Blueprint
@@ -29,11 +29,11 @@ class SchemaBuilder
 
     /**
      * @param Blueprint $table
-     * @return SchemaBuilder
+     * @return RelationshipBuilder
      */
     public static function table(Blueprint $table)
     {
-        return new SchemaBuilder($table);
+        return new RelationshipBuilder($table);
     }
     
     public function belongsTo(string $model, string $onDelete = 'restrict', bool $nullable = false)
