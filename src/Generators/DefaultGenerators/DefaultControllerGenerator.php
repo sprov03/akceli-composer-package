@@ -37,7 +37,7 @@ class DefaultControllerGenerator extends AkceliGenerator
     public function inlineTemplates(array $data): array
     {
         return [
-            Akceli::inlineTemplate('route_resource', 'routes/web.php', '/** All Web controllers will go here */'),
+            Akceli::insertInline('routes/web.php', '/** All Web controllers will go here */', "Route::resource('[[model_names]]', '[[ModelName]]Controller');\n"),
         ];
     }
 
