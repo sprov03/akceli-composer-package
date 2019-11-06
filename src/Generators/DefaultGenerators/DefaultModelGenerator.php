@@ -40,6 +40,6 @@ class DefaultModelGenerator extends AkceliGenerator
     public function completionMessage(array $data)
     {
         Artisan::call('akceli:relationships '.$data['table_name'].' --no-interaction');
-        Console::info('Success!!');
+        Console::info('Success');
     }
 }
