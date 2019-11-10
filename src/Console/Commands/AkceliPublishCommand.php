@@ -67,6 +67,22 @@ class AkceliPublishCommand extends Command
         $newComposerJson = json_encode($composerJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $newComposerJson);
 
+        /**
+         * Publish Generators
+         */
+        FileService::setRootDirectory(base_path('vendor/akceli/laravel-code-generator/src/Generators/DefaultGenerators'));
+        $files = FileService::getAppFiles();
+        foreach ($files as $file) {
+            $content = file_get_contents($file->getPathname());
+            $content = str_replace('namespace Akceli\Generators\DefaultGenerators;', 'namespace Akceli\Generators;', $content);
+            $content = str_replace('class Default', 'class ', $content);
+            $className = str_replace('Default', '', FileService::getClassNameOfFile($file));
+            if ($className === '.') {
+                continue;
+            }
+            file_put_contents(base_path('akceli/generators/' . $className . '.php'), $content);
+        }
+
 
         if ($exitCode) {
             Console::error('');
