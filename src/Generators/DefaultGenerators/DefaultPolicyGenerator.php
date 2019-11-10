@@ -16,20 +16,23 @@ class DefaultPolicyGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Policy" => function(array $data) {
+                return Console::ask('What is the name of the Policy?');
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/PolicyGenerator.php'),
+            Akceli::fileTemplate('policy', 'app/Policies/[[Policy]]Policy.php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
         return [
-            // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
