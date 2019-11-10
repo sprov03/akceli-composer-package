@@ -16,20 +16,23 @@ class DefaultObserverGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Observer" => function(array $data) {
+                return Console::ask('What is the name of the Observer?');
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/ObserverGenerator.php'),
+            Akceli::fileTemplate('observer', 'app/Observers/[[Observer]]Observer.php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
         return [
-            // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 
