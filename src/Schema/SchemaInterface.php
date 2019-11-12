@@ -27,4 +27,6 @@ interface SchemaInterface
      * @return Collection
      */
     public function getBelongsToManyRelationships(): Collection;
+
+    public function getPolymorphicRelationships();
 }

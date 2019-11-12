@@ -139,4 +139,24 @@ class FileService
             RecursiveIteratorIterator::LEAVES_ONLY
         );
     }
+
+    public static function putFile(string $path, string $content)
+    {
+        $nodes = explode('/', $path);
+
+        $path = base_path();
+        $file_name = array_pop($nodes);
+
+        foreach ($nodes as $node) {
+            $path .= "/{$node}";
+
+            if (! file_exists($path)) {
+                mkdir($path);
+            }
+        }
+
+        $path .= "/{$file_name}";
+
+        file_put_contents($path, $content);
+    }
 }

@@ -59,14 +59,6 @@ class GeneratorService
         $this->processInlineTemplates($templateParser);
     }
     
-    public function buildRelationships($force = false)
-    {
-        $classParser = new Parser(base_path('akceli/templates/relationships'), 'akceli.php');
-        $classParser->addData($this->templateData->toArray());
-        
-        (new GeneratorFlowController($classParser, $schema, $this->output, $force))->start();
-    }
-
     private function processFileTemplates(Parser $parser, bool $force)
     {
         foreach (self::$file_templates as $template) {
@@ -77,7 +69,7 @@ class GeneratorService
                 continue;
             }
 
-            $this->putFile($parser->render($template['name']), $template_path);
+            FileService::putFile($template_path, $parser->render($template['name']));
             Console::info("File {$template_path} (Created)");
         }
     }
@@ -108,25 +100,5 @@ class GeneratorService
             file_put_contents(base_path($inlineTemplate['path']), $file_contents);
             Console::info("File {$inlineTemplate['path']} (Updated)");
         }
-    }
-
-    protected function putFile($content, $path)
-    {
-        $nodes = explode('/', $path);
-
-        $path = base_path();
-        $file_name = array_pop($nodes);
-
-        foreach ($nodes as $node) {
-            $path .= "/{$node}";
-
-            if (! file_exists($path)) {
-                mkdir($path);
-            }
-        }
-
-        $path .= "/{$file_name}";
-
-        file_put_contents($path, $content);
     }
 }
