@@ -1,10 +1,10 @@
 
     /**
-     * Relationship to a <?=Str::studly($interface)?> item
+     * Relationship to a [[OtherModel]]
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne|<?=$otherModel . PHP_EOL?>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne|[[OtherModel]]
      */
-    public function <?=Str::camel(Str::singular($otherModel))?>()
+    public function [[otherModels]]()
     {
-        return $this->morphOne(<?=$otherModel?>::class, '<?=snake_case($relationship)?>');
+        return $this->morphOne([[OtherModel]]::class, '[[relationship]]');
     }

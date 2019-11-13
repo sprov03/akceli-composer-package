@@ -34,4 +34,9 @@ class MorphToManyBuilder extends Builder implements BuilderInterface
 
         $this->addUseStatementToFile($fileInfo, $interfaceFileInfo);
     }
+
+    public function build()
+    {
+        return;
+    }
 }

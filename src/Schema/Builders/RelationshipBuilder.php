@@ -2,6 +2,7 @@
 
 namespace Akceli\Schema\Builders;
 
+use Akceli\Console;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -13,23 +14,10 @@ class RelationshipBuilder
      */
     private $table;
 
-    /**
-     * @var array
-     */
-    private $relatedTables = [];
-
-    private static $relationshipMaps = [
-        'belongsTo' => [
-            'hasOne' => 'hasOne',
-            'hasMany' => 'hasMany',
-        ],
-        'morphTo' => [
-            'hasOne' => 'morphOne',
-            'hasMany' => 'morphMany',
-        ]
-    ];
-
-    private $relationship;
+    private $relatedTable = null;
+    private $cacheKey = null;
+    private $temp = null;
+    private $relationship = null;
 
     /**
      * SchemaBuilder constructor.
@@ -58,8 +46,11 @@ class RelationshipBuilder
         }
         $this->table->foreign(Str::singular($related_table) . '_id')->references('id')->on(Str::plural($related_table))->onDelete($onDelete);
 
-        $this->relatedTables = [$related_table];
+        $this->cacheKey = null;
+        $this->temp = null;
+        $this->relatedTable = $related_table;
         $this->relationship = 'belongsTo';
+
         return $this;
     }
     
@@ -76,12 +67,15 @@ class RelationshipBuilder
 
         $this->table->primary([$a . '_id', $b . '_id']);
 
+        $this->cacheKey = null;
+        $this->temp = null;
         $this->relationship = 'belongsToMany';
-        $this->relatedTables = [];
+        $this->relatedTable = null;
+
         return $this;
     }
 
-    public function morphTo(string $relationship, array $related_tables, int $length = 255, bool $nullable = false)
+    public function morphTo(string $relationship, int $length = 255, bool $nullable = false)
     {
         $id = $this->table->unsignedBigInteger($relationship . '_id')->index();
         $type = $this->table->string($relationship . '_type', $length)->index();
@@ -91,37 +85,46 @@ class RelationshipBuilder
             $type->nullable();
         }
 
-        $cacheKey = 'akceli.'.$this->table->getTable().'.morphToRelationships';
-        $cache = Cache::get($cacheKey, []);
-        array_push($cache, $relationship);
-        Cache::put($cacheKey, $cache, 60 * 24 * 30 * 2);
-
+        $this->cacheKey = 'akceli.'.$this->table->getTable().'.morphToRelationships';
+        $this->temp = $relationship;
         $this->relationship = 'morphTo';
-        $this->relatedTables = $related_tables;
+        $this->relatedTable = null;
+
+        $cache = $this->getCache();
+        $cache[$this->temp] = '';
+        $this->setCache($cache);
+
         return $this;
     }
 
     public function whichHasManyOfThese()
     {
-        $hasMany = self::$relationshipMaps[$this->relationship]['hasMany'];
-        foreach ($this->relatedTables as $relatedTable) {
-            $this->setRelationshipCache($this->table->getTable(), $relatedTable, $hasMany);
+        if ($this->relationship === 'morphTo') {
+            $cache = $this->getCache();
+            $cache[$this->temp] = 'morphMany';
+            $this->setCache($cache);
+        } elseif ($this->relationship === 'belongsTo') {
+            $this->setBelongsToRelationshipCache($this->table->getTable(), $this->relatedTable, 'hasMany');
         }
+
 
         return $this;
     }
     
     public function whichHasOneOfThese()
     {
-        $hasOne = self::$relationshipMaps[$this->relationship]['hasOne'];
-        foreach ($this->relatedTables as $relatedTable) {
-            $this->setRelationshipCache($this->table->getTable(), $relatedTable, $hasOne);
+        if ($this->relationship === 'morphTo') {
+            $cache = $this->getCache();
+            $cache[$this->temp] = 'morphOne';
+            $this->setCache($cache);
+        } elseif ($this->relationship === 'belongsTo') {
+            $this->setBelongsToRelationshipCache($this->table->getTable(), $this->relatedTable, 'hasOne');
         }
 
         return $this;
     }
 
-    public function setRelationshipCache($table, $relatedTable, $relationship)
+    public function setBelongsToRelationshipCache($table, $relatedTable, $relationship)
     {
         $cacheKey = 'akceli.relationships.'.$relatedTable;
         $cache = Cache::get($cacheKey, []);
@@ -130,5 +133,15 @@ class RelationshipBuilder
 
         $this->relatedTable = null;
         return $this;
+    }
+
+    private function getCache()
+    {
+        return Cache::get($this->cacheKey, []);
+    }
+
+    private function setCache($cache)
+    {
+        Cache::put($this->cacheKey, $cache, 60 * 24 * 30 * 2);
     }
 }

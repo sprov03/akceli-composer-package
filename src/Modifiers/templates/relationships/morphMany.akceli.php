@@ -1,10 +1,10 @@
 
     /**
-     * Relationship to a <?=Str::studly($interface)?> item
+     * Relationship to a [[OtherModel]]
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany|<?=$otherModel . PHP_EOL?>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany|[[OtherModel]]
      */
-    public function <?=Str::camel(Str::plural($otherModel))?>()
+    public function [[otherModels]]()
     {
-        return $this->morphMany(<?=$otherModel?>::class, '<?=snake_case($relationship)?>');
+        return $this->morphMany([[OtherModel]]::class, '[[relationship]]');
     }
