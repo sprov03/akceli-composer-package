@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
-class RelationshipBuilder
+class AkceliRelationshipBuilder
 {
     /**
      * @var Blueprint
@@ -30,11 +30,11 @@ class RelationshipBuilder
 
     /**
      * @param Blueprint $table
-     * @return RelationshipBuilder
+     * @return AkceliRelationshipBuilder
      */
     public static function table(Blueprint $table)
     {
-        return new RelationshipBuilder($table);
+        return new AkceliRelationshipBuilder($table);
     }
     
     public function belongsTo(string $related_table, string $onDelete = 'restrict', bool $nullable = false)
