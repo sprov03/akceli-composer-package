@@ -5,6 +5,8 @@ namespace Akceli\Modifiers\Builders\Relationships;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class MorphToBuilder extends Builder implements BuilderInterface
 {
@@ -31,14 +33,43 @@ class MorphToBuilder extends Builder implements BuilderInterface
         );
 
         $this->addUseStatementToFile($fileInfo, $interfaceFileInfo);
-        $this->addClassPropertyDocToFile($fileInfo, "{$interface}Interface", Str::camel($relationship));
+        $this->addClassPropertyDocToFile($fileInfo, $interface, Str::camel($relationship));
     }
 
-    public function analise($relationship, $interface = null)
+    public function build(bool $noInteraction = false)
     {
-        $fileInfo = FileService::findByTableName($this->schema->getTable());
-        $interfaceFileInfo = FileService::findByClassName($interface . 'Interface');
+        $cacheKey = 'akceli.'.$this->schema->getTable().'.morphToRelationships';
+        if (!Cache::has($cacheKey)) {
+            return;
+        }
 
-        $this->updateFiles($fileInfo, $interfaceFileInfo, $interface, $relationship);
+        $relationships = Cache::get($cacheKey);
+        foreach ($relationships as $relationship => $reverse) {
+            $interface = Str::studly($relationship) . 'Interface';
+            $trait = Str::studly($relationship) . 'Trait';
+            $fileInfo = FileService::findByTableName($this->schema->getTable());
+            $interfaceFileInfo = FileService::findByClassName($interface);
+            $traitFileInfo = FileService::findByClassName($trait);
+            if (!$interfaceFileInfo) {
+                $fileContent = $this->parser->render('interface', compact('interface'));
+                FileService::putFile('app/Interfaces/'.$interface.'.php', $fileContent);
+                $interfaceFileInfo = FileService::findByClassName($interface, true);
+            }
+            if (!$traitFileInfo) {
+                $Relationship = Str::studly($relationship);
+                $fileContent = $this->parser->render('trait', compact('Relationship'));
+                FileService::putFile('app/Traits/'.$trait.'.php', $fileContent);
+                $traitFileInfo = FileService::findByClassName($trait, true);
+            }
+
+            $this->updateFiles($fileInfo, $interfaceFileInfo, $interface, $relationship);
+
+            $this->getBuilder($reverse)->buildRelated($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
+        }
+    }
+
+    public function buildRelated()
+    {
+        return;
     }
 }

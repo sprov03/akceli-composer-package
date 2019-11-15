@@ -5,6 +5,7 @@ namespace Akceli\Modifiers\Builders\Relationships;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
+use Illuminate\Support\Str;
 
 class MorphManyBuilder extends Builder implements BuilderInterface
 {
@@ -20,25 +21,26 @@ class MorphManyBuilder extends Builder implements BuilderInterface
      *
      * @return void
      */
-    public function updateFiles(
+    public function buildRelated(
         \SplFileInfo $fileInfo,
         \SplFileInfo $interfaceFileInfo,
         \SplFileInfo $traitFileInfo,
         $interface,
         $relationship
     ) {
-        $interface = Str::studly($interface);
-        $otherModel = Str::singular(Str::studly($this->schema->getTable()));
+        $OtherModel = FileService::getClassNameOfFile($fileInfo);
+        $otherModel = Str::camel($OtherModel);
+        $otherModels = Str::plural($otherModel);
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
-            Str::camel(Str::plural($otherModel)),
-            $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
+            $otherModels,
+            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
-            Str::camel(Str::plural($otherModel)),
-            $this->parser->render('morphMany', compact('relationship', 'interface', 'otherModel'))
+            $otherModels,
+            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel'))
         );
 
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
@@ -57,5 +59,10 @@ class MorphManyBuilder extends Builder implements BuilderInterface
         $traitFileInfo = FileService::findByClassName($interface . 'Trait');
 
         $this->updateFiles($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
+    }
+
+    public function build()
+    {
+        return;
     }
 }

@@ -5,6 +5,7 @@ namespace Akceli\Modifiers\Builders\Relationships;
 use Akceli\FileService;
 use Akceli\Modifiers\Builders\Builder;
 use Akceli\Modifiers\Builders\BuilderInterface;
+use Illuminate\Support\Str;
 
 class MorphOneBuilder extends Builder implements BuilderInterface
 {
@@ -19,25 +20,25 @@ class MorphOneBuilder extends Builder implements BuilderInterface
      *
      * @return void
      */
-    public function updateFiles(
+    public function buildRelated(
         \SplFileInfo $fileInfo,
         \SplFileInfo $interfaceFileInfo,
         \SplFileInfo $traitFileInfo,
         $interface,
         $relationship
     ) {
-        $interface = Str::studly($interface);
-        $otherModel = Str::singular(Str::studly($this->schema->getTable()));
+        $OtherModel = FileService::getClassNameOfFile($fileInfo);
+        $otherModel = Str::camel($OtherModel);
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
             Str::camel(Str::singular($otherModel)),
-            $this->parser->render('morphOne', compact('relationship', 'interface', 'otherModel'))
+            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
             Str::camel(Str::singular($otherModel)),
-            $this->parser->render('morphOne', compact('relationship', 'interface', 'otherModel'))
+            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel'))
         );
 
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
@@ -49,12 +50,8 @@ class MorphOneBuilder extends Builder implements BuilderInterface
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
     }
 
-    public function analise($relationship, $interface = null)
+    public function build()
     {
-        $fileInfo = FileService::findByTableName($this->schema->getTable());
-        $interfaceFileInfo = FileService::findByClassName($interface . 'Interface');
-        $traitFileInfo = FileService::findByClassName($interface . 'Trait');
-
-        $this->updateFiles($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
+        return;
     }
 }

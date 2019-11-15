@@ -131,7 +131,7 @@ class AkceliGenerateCommand extends Command
             $columns = $schema->getColumns();
             $template_data['table_name'] = $table_name;
             $template_data['columns'] = $columns;
-            $template_data['primaryKey'] = $columns->firstWhere('Key', '==', 'PRI')->Field;
+            $template_data['primaryKey'] =  ($columns->firstWhere('Key', '==', 'PRI')) ? $columns->firstWhere('Key', '==', 'PRI')->Field : null;
             $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
 
             Console::info("Table Name: {$table_name}");

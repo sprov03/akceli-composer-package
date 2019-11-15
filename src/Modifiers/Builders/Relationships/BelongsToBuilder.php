@@ -66,8 +66,9 @@ class BelongsToBuilder extends Builder implements BuilderInterface
                 $builder = $this->builder_map['hasOne'];
             } elseif ($choice == 2) {
                 $builder = $this->builder_map['hasMany'];
+            } else {
+                return;
             }
-
 
             $this->getBuilder($builder)->buildRelated($relationship);
         }

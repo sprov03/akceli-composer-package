@@ -1,18 +1,19 @@
-[[open_php_tag]]
+<?php echo '<?php' . PHP_EOL;
+?>
 
-namespace [[namespace]];
+namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Interfaces\[[Relationship]]Interface;
 
 /**
- * Class [[interface]]Trait
- * @mixin [[interface]]Interface
+ * Class [[Relationship]]Trait
+ * @mixin [[Relationship]]Interface
  * @mixin Model
  *
  * Relationships
  *
- * @package [[namespace]]
  */
-trait [[interface]]Trait
+trait [[Relationship]]Trait
 {
 }
