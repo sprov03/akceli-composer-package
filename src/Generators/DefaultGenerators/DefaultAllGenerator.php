@@ -42,8 +42,9 @@ class DefaultAllGenerator extends AkceliGenerator
         Console::info('This command can take up to 2 seconds per model');
 
         $tables = DB::select('SHOW TABLES');
+        $tableKey = 'Tables_in_' . env('DB_DATABASE');
         $tables = array_filter($tables, function ($table) {
-            return !in_array($table->Tables_in_demo, $this->blackList);
+            return !in_array($table->{$tableKey}, $this->blackList);
         });
 
 
@@ -63,15 +64,15 @@ class DefaultAllGenerator extends AkceliGenerator
         }
 
         foreach ($tables as $table) {
-            $schema = SchemaFactory::resolve($table->Tables_in_demo);
+            $schema = SchemaFactory::resolve($table->{$tableKey});
 
             if ($schema->getBelongsToManyRelationships()->count() === 2) {
-                Artisan::call("akceli:relationships {$table->Tables_in_demo}");
+                Artisan::call("akceli:relationships {$table->{$tableKey}}");
                 /** Dont generate a Many to Many Pivot table */
                 continue;
             }
 
-            Artisan::call("akceli:generate {$generator} {$table->Tables_in_demo}");
+            Artisan::call("akceli:generate {$generator} {$table->{$tableKey}}");
         }
 
         Console::info('Success');
