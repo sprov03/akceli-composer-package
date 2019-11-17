@@ -43,10 +43,9 @@ class DefaultAllGenerator extends AkceliGenerator
 
         $tables = DB::select('SHOW TABLES');
         $tableKey = 'Tables_in_' . env('DB_DATABASE');
-        $tables = array_filter($tables, function ($table) {
+        $tables = array_filter($tables, function ($table) use ($tableKey) {
             return !in_array($table->{$tableKey}, $this->blackList);
         });
-
 
         $generator = $data['arg1'];
         $generators = config('akceli.generators');
