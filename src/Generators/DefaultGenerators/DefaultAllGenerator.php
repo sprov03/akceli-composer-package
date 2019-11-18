@@ -10,6 +10,12 @@ use Akceli\Generators\AkceliGenerator;
 
 class DefaultAllGenerator extends AkceliGenerator
 {
+    private $blackList = [
+        'failed_jobs',
+        'migrations',
+        'password_resets',
+    ];
+
     public function requiresTable(): bool
     {
         return false;
@@ -38,7 +44,7 @@ class DefaultAllGenerator extends AkceliGenerator
         $tables = DB::select('SHOW TABLES');
         $tableKey = 'Tables_in_' . env('DB_DATABASE');
         $tables = array_filter($tables, function ($table) use ($tableKey) {
-            return !in_array($table->{$tableKey}, config('akceli.all-generator-blacklist'));
+            return !in_array($table->{$tableKey}, $this->blackList);
         });
 
         $generator = $data['arg1'];
@@ -57,17 +63,19 @@ class DefaultAllGenerator extends AkceliGenerator
         }
 
         $generateRelationships = config('akceli.generators_that_generate_relationships');
-        if (in_array($generator, $generateRelationships)) {
-            foreach ($tables as $table) {
-                $schema = SchemaFactory::resolve($table->{$tableKey});
-                if (in_array($generator, $generateRelationships) && $schema->getBelongsToManyRelationships()->count() === 2) {
-                    Artisan::call("akceli:relationships {$table->{$tableKey}}");
-                    /** Dont generate a Many to Many Pivot table */
-                    continue;
-                }
-
-                Artisan::call("akceli:generate {$generator} {$table->{$tableKey}}");
+        $totalTables = count($tables);
+        $tableCompleted = 1;
+        foreach ($tables as $table) {
+            echo ('('.$tableCompleted.'/'.$totalTables.') Table: ' . $table->{$tableKey} . PHP_EOL);
+            $tableCompleted++;
+            $schema = SchemaFactory::resolve($table->{$tableKey});
+            if (in_array($generator, $generateRelationships) && $schema->getBelongsToManyRelationships()->count() === 2) {
+                Artisan::call("akceli:relationships {$table->{$tableKey}}");
+                /** Dont generate a Many to Many Pivot table */
+                continue;
             }
+
+            Artisan::call("akceli:generate {$generator} {$table->{$tableKey}}");
         }
 
         Console::info('Success');
