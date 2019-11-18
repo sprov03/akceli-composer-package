@@ -60,7 +60,7 @@ class DefaultAllGenerator extends AkceliGenerator
         if (in_array($generator, $generateRelationships)) {
             foreach ($tables as $table) {
                 $schema = SchemaFactory::resolve($table->{$tableKey});
-                if ($schema->getBelongsToManyRelationships()->count() === 2) {
+                if (in_array($generator, $generateRelationships) && $schema->getBelongsToManyRelationships()->count() === 2) {
                     Artisan::call("akceli:relationships {$table->{$tableKey}}");
                     /** Dont generate a Many to Many Pivot table */
                     continue;
