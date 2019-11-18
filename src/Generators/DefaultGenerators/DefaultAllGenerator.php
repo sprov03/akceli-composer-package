@@ -10,12 +10,6 @@ use Akceli\Generators\AkceliGenerator;
 
 class DefaultAllGenerator extends AkceliGenerator
 {
-    private $blackList = [
-        'failed_jobs',
-        'migrations',
-        'password_resets',
-    ];
-
     public function requiresTable(): bool
     {
         return false;
@@ -44,7 +38,7 @@ class DefaultAllGenerator extends AkceliGenerator
         $tables = DB::select('SHOW TABLES');
         $tableKey = 'Tables_in_' . env('DB_DATABASE');
         $tables = array_filter($tables, function ($table) use ($tableKey) {
-            return !in_array($table->{$tableKey}, $this->blackList);
+            return !in_array($table->{$tableKey}, config('akceli.all-generator-blacklist'));
         });
 
         $generator = $data['arg1'];

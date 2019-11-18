@@ -55,6 +55,15 @@ return [
     'select-template-behavior' => 'auto-complete',
 
     /**
+     * tables that will be skipped when using the Generate All Generator
+     */
+    'all-generator-blacklist' => [
+        'failed_jobs',
+        'migrations',
+        'password_resets',
+    ],
+
+    /**
      * Generators that generate relationships
      *
      * If you have a generator that generates relationships, then add i here so that the all generator will flesh out the belongs to many
