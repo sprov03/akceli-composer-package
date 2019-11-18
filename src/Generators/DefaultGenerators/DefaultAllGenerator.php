@@ -62,16 +62,18 @@ class DefaultAllGenerator extends AkceliGenerator
             $generator = Console::choice('What template set do you want to use?', $generators);
         }
 
-        foreach ($tables as $table) {
-            $schema = SchemaFactory::resolve($table->{$tableKey});
+        $generateRelationships = config('akceli.generators_that_generate_relationships');
+        if (in_array($generator, $generateRelationships)) {
+            foreach ($tables as $table) {
+                $schema = SchemaFactory::resolve($table->{$tableKey});
+                if ($schema->getBelongsToManyRelationships()->count() === 2) {
+                    Artisan::call("akceli:relationships {$table->{$tableKey}}");
+                    /** Dont generate a Many to Many Pivot table */
+                    continue;
+                }
 
-            if ($schema->getBelongsToManyRelationships()->count() === 2) {
-                Artisan::call("akceli:relationships {$table->{$tableKey}}");
-                /** Dont generate a Many to Many Pivot table */
-                continue;
+                Artisan::call("akceli:generate {$generator} {$table->{$tableKey}}");
             }
-
-            Artisan::call("akceli:generate {$generator} {$table->{$tableKey}}");
         }
 
         Console::info('Success');

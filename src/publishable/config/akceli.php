@@ -55,6 +55,14 @@ return [
     'select-template-behavior' => 'auto-complete',
 
     /**
+     * Generators that generate relationships
+     *
+     * If you have a generator that generates relationships, then add i here so that the all generator will flesh out the belongs to many
+     * Relationships during the process, example models.  So all relationships are added to the models.
+     */
+    'generators_that_generate_relationships' => ['model'],
+
+    /**
      * This is for documenting what values you want to be show based on a given data type.
      */
     'column-settings' => [
