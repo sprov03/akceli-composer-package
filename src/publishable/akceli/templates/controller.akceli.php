@@ -29,7 +29,8 @@ class <?=$table->ModelName?>Controller extends Controller
      */
     public function store(Store<?=$table->ModelName?>Request $request)
     {
-        $<?=$table->modelName?> = <?=$table->ModelName?>::create($request->validated());
+        $<?=$table->modelName?> = new <?=$table->ModelName?>($request->validated());
+        $<?=$table->modelName?>->save();
 
         return redirect("/<?=$table->modelNamesKabob?>/{$<?=$table->modelName?>->id}/edit");
     }
