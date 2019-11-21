@@ -29,6 +29,7 @@ use Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder;
 use Akceli\Modifiers\Builders\Relationships\HasManyBuilder;
 use Akceli\Modifiers\Builders\Relationships\HasOneBuilder;
 use Akceli\Modifiers\Builders\Relationships\MorphOneBuilder;
+use Akceli\Modifiers\Builders\Relationships\MorphManyBuilder;
 use Akceli\Modifiers\Builders\Relationships\MorphToBuilder;
 use Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder;
 
@@ -142,7 +143,7 @@ return [
         'belongsTo' => BelongsToBuilder::class,
         'hasOne' => HasOneBuilder::class,
         'hasMany' => HasManyBuilder::class,
-        'morphMany' => MorphToManyBuilder::class,
+        'morphMany' => MorphManyBuilder::class,
         'morphOne' => MorphOneBuilder::class,
         'morphTo' => MorphToBuilder::class,
 //        'morphToMany' => MorphToManyBuilder::class,
