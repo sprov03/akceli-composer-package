@@ -70,15 +70,6 @@ class <?=$table->ModelName?>Factory
      */
     public static function createDefaults(int $number, array $data = [])
     {
-<?php if ($table->hasField('user_id')): ?>
-        if (!$<?=$table->modelName?>->user && !Auth::user()) {
-            /**
-             * Creating User for the Collection to share
-             */
-            UserFactory::createDefault();
-        }
-
-<?php endif; ?>
         /** @var <?=$table->ModelName?>[]|Collection <?=$table->modelNames?> */
         $<?=$table->modelNames?> = new Collection();
         for($i = 0; $i < $number; $i++) {
