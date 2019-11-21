@@ -34,12 +34,12 @@ class MorphOneBuilder extends Builder implements BuilderInterface
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
-            Str::camel(Str::singular($otherModel)),
+            $reverseRelationshipName,
             $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel', 'reverseRelationshipName'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
-            Str::camel(Str::singular($otherModel)),
+            $reverseRelationshipName,
             $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel', 'reverseRelationshipName'))
         );
 
