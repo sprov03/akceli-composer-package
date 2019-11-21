@@ -44,7 +44,10 @@ class MorphToBuilder extends Builder implements BuilderInterface
         }
 
         $relationships = Cache::get($cacheKey);
-        foreach ($relationships as $relationship => $reverse) {
+        foreach ($relationships as $data) {
+            $relationship = $data['relationshipName'];
+            $reverseRelationshipName = $data['reverseRelationshipName'];
+            $relationshipType = $data['relationshipType'];
             $interface = Str::studly($relationship) . 'Interface';
             $trait = Str::studly($relationship) . 'Trait';
             $fileInfo = FileService::findByTableName($this->schema->getTable());
@@ -63,8 +66,7 @@ class MorphToBuilder extends Builder implements BuilderInterface
             }
 
             $this->updateFiles($fileInfo, $interfaceFileInfo, $interface, $relationship);
-
-            $this->getBuilder($reverse)->buildRelated($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship);
+            $this->getBuilder($relationshipType)->buildRelated($fileInfo, $interfaceFileInfo, $traitFileInfo, $interface, $relationship, $reverseRelationshipName);
         }
     }
 

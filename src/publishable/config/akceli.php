@@ -142,9 +142,9 @@ return [
         'belongsTo' => BelongsToBuilder::class,
         'hasOne' => HasOneBuilder::class,
         'hasMany' => HasManyBuilder::class,
-//        'morphMany' => MorphToManyBuilder::class,
-//        'morphOne' => MorphOneBuilder::class,
-//        'morphTo' => MorphToBuilder::class,
+        'morphMany' => MorphToManyBuilder::class,
+        'morphOne' => MorphOneBuilder::class,
+        'morphTo' => MorphToBuilder::class,
 //        'morphToMany' => MorphToManyBuilder::class,
     ]
 ];

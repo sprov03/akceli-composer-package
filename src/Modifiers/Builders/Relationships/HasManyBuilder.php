@@ -32,7 +32,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
         /**
          * Update Files
          */
-        $this->addMethodToFile($fileInfo, Str::camel(Str::plural($otherModel)), $this->parser->render('hasMany', $templateData)
+        $this->addMethodToFile($fileInfo, ($relationshipName) ?? Str::camel(Str::plural($otherModel)), $this->parser->render('hasMany', $templateData)
         );
         $this->addUseStatementToFile($fileInfo, $otherFileInfo);
         $this->addClassPropertyDocToFile(

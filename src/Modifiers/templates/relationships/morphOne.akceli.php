@@ -1,10 +1,10 @@
 
     /**
-     * Relationship to a [[OtherModel]]
+     * Relationship to a <?=$OtherModel . PHP_EOL?>
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne|[[OtherModel]]
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne|<?=$OtherModel . PHP_EOL?>
      */
-    public function [[otherModels]]()
+    public function <?=$reverseRelationshipName?>()
     {
-        return $this->morphOne([[OtherModel]]::class, '[[relationship]]');
+        return $this->morphOne(<?=$OtherModel?>::class, '<?=$relationship?>');
     }

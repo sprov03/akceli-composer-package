@@ -33,7 +33,7 @@ class HasOneBuilder extends Builder implements BuilderInterface
         /**
          * Update File
          */
-        $this->addMethodToFile($fileInfo, Str::camel(Str::singular($otherModel)), $this->parser->render('hasOne', $templateData));
+        $this->addMethodToFile($fileInfo, ($relationshipName) ?? Str::camel(Str::singular($otherModel)), $this->parser->render('hasOne', $templateData));
         $this->addUseStatementToFile($fileInfo, $otherFileInfo);
         $this->addClassPropertyDocToFile($fileInfo, $otherModel, ($relationshipName) ?? Str::camel($otherModel));
     }

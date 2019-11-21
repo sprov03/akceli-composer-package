@@ -26,28 +26,30 @@ class MorphManyBuilder extends Builder implements BuilderInterface
         \SplFileInfo $interfaceFileInfo,
         \SplFileInfo $traitFileInfo,
         $interface,
-        $relationship
+        $relationship,
+        $reverseRelationshipName
     ) {
         $OtherModel = FileService::getClassNameOfFile($fileInfo);
         $otherModel = Str::camel($OtherModel);
         $otherModels = Str::plural($otherModel);
+        $reverseRelationshipName = ($reverseRelationshipName) ?? Str::plural(Str::camel($otherModel));
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
-            $otherModels,
-            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel'))
+            $reverseRelationshipName,
+            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel', 'reverseRelationshipName'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
-            $otherModels,
-            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel'))
+            $reverseRelationshipName,
+            $this->parser->render('morphMany', compact('relationship', 'otherModels', 'OtherModel', 'reverseRelationshipName'))
         );
 
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
         $docType = "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection";
-        $variable = Str::plural(Str::camel($otherModel));
+        $variable = $reverseRelationshipName;
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
     }

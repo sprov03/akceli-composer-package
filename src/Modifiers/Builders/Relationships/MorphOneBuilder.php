@@ -25,27 +25,29 @@ class MorphOneBuilder extends Builder implements BuilderInterface
         \SplFileInfo $interfaceFileInfo,
         \SplFileInfo $traitFileInfo,
         $interface,
-        $relationship
+        $relationship,
+        $reverseRelationshipName
     ) {
         $OtherModel = FileService::getClassNameOfFile($fileInfo);
         $otherModel = Str::camel($OtherModel);
+        $reverseRelationshipName = ($reverseRelationshipName) ?? Str::singular(Str::camel($otherModel));
 
         $this->addAbstractMethodToFile(
             $interfaceFileInfo,
             Str::camel(Str::singular($otherModel)),
-            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel'))
+            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel', 'reverseRelationshipName'))
         );
         $this->addMethodToFile(
             $traitFileInfo,
             Str::camel(Str::singular($otherModel)),
-            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel'))
+            $this->parser->render('morphOne', compact('relationship', 'otherModel', 'OtherModel', 'reverseRelationshipName'))
         );
 
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
         $docType = $otherModel;
-        $variable = Str::singular(Str::camel($otherModel));
+        $variable = $reverseRelationshipName;
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
     }
