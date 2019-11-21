@@ -16,7 +16,7 @@ class HasOneBuilder extends Builder implements BuilderInterface
         return;
     }
 
-    public function buildRelated($relationship)
+    public function buildRelated($relationship, string $relationshipName = null)
     {
         /**
          * Initalize Data
@@ -27,7 +27,7 @@ class HasOneBuilder extends Builder implements BuilderInterface
         $templateData = [
             'relationship' => $relationship,
             'otherModel' => $otherModel,
-            'hasOneMethodName' => Str::singular(Str::camel($otherModel))
+            'hasOneMethodName' => ($relationshipName) ?? Str::singular(Str::camel($otherModel))
         ];
 
         /**
@@ -35,6 +35,6 @@ class HasOneBuilder extends Builder implements BuilderInterface
          */
         $this->addMethodToFile($fileInfo, Str::camel(Str::singular($otherModel)), $this->parser->render('hasOne', $templateData));
         $this->addUseStatementToFile($fileInfo, $otherFileInfo);
-        $this->addClassPropertyDocToFile($fileInfo, $otherModel, Str::camel($otherModel));
+        $this->addClassPropertyDocToFile($fileInfo, $otherModel, ($relationshipName) ?? Str::camel($otherModel));
     }
 }

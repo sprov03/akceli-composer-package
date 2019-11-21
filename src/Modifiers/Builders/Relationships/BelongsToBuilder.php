@@ -29,7 +29,7 @@ class BelongsToBuilder extends Builder implements BuilderInterface
             $templateData = [
                 'relationship' => $relationship,
                 'otherModel' => $otherModel,
-                'belongsToMethodName' => Str::camel($otherModel)
+                'belongsToMethodName' => Str::camel(str_replace('_id', '', $relationship->COLUMN_NAME)),
             ];
 
             /**
@@ -43,7 +43,7 @@ class BelongsToBuilder extends Builder implements BuilderInterface
             if (Cache::has($cacheKey)) {
                 $cache = Cache::get($cacheKey);
                 if ($builder = $cache[$this->schema->getTable()] ?? null) {
-                    $this->getBuilder($builder)->buildRelated($relationship);
+                    $this->getBuilder($builder)->buildRelated($relationship, $cache['relationshipName']);
                     continue;
                 }
             } elseif ($noInteraction) {

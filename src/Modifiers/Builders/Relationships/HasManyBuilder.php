@@ -15,7 +15,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
         return;
     }
 
-    public function buildRelated($relationship)
+    public function buildRelated($relationship, string $relationshipName = null)
     {
         /**
          * Initalize Data
@@ -26,7 +26,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
         $templateData = [
             'relationship' => $relationship,
             'otherModel' => $otherModel,
-            'hasManyMethodName' => Str::plural(Str::camel($otherModel))
+            'hasManyMethodName' => ($relationshipName) ?? Str::plural(Str::camel($otherModel))
         ];
 
         /**
@@ -38,7 +38,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
         $this->addClassPropertyDocToFile(
             $fileInfo,
             "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection",
-            Str::plural(Str::camel($otherModel))
+            ($relationshipName) ?? Str::plural(Str::camel($otherModel))
         );
     }
 }
