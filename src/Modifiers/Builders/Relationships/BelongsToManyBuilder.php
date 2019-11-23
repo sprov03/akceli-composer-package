@@ -43,7 +43,7 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         }
 
         $modelOne = FileService::getClassNameOfFile($fileInfoOne);
-        $modelTwo = FileService::getClassNameOfFile($fileInfoOne);
+        $modelTwo = FileService::getClassNameOfFile($fileInfoTwo);
 
         /**
          * Update Files
