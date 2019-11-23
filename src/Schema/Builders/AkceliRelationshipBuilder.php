@@ -98,8 +98,8 @@ class AkceliRelationshipBuilder
     {
         if ($this->relationship === 'morphTo') {
             $cache = $this->getCache();
-            $cache[$this->temp] = [
-                'relationshipName' => $this->type,
+            $cache[] = [
+                'relationshipName' => $this->temp,
                 'reverseRelationshipName' => $relationshipName,
                 'relationshipType' => 'morphMany',
             ];
@@ -116,8 +116,8 @@ class AkceliRelationshipBuilder
     {
         if ($this->relationship === 'morphTo') {
             $cache = $this->getCache();
-            $cache[$this->temp] = [
-                'relationshipName' => $this->type,
+            $cache[] = [
+                'relationshipName' => $this->temp,
                 'reverseRelationshipName' => $relationshipName,
                 'relationshipType' => 'morphOne',
             ];
