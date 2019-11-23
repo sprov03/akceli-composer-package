@@ -48,7 +48,7 @@ class MorphManyBuilder extends Builder implements BuilderInterface
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
-        $docType = "{$otherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection";
+        $docType = "{$OtherModel}[]|\\Illuminate\\Database\\Eloquent\\Collection";
         $variable = $reverseRelationshipName;
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
