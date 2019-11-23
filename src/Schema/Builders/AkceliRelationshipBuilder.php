@@ -36,7 +36,7 @@ class AkceliRelationshipBuilder
     {
         return new AkceliRelationshipBuilder($table);
     }
-    
+
     public function belongsTo(string $related_table, string $onDelete = 'restrict', bool $nullable = false, string $relationship_name = null)
     {
         $related_table = Str::snake($related_table);
@@ -54,7 +54,7 @@ class AkceliRelationshipBuilder
 
         return $this;
     }
-    
+
     public function belongsToMany(string $table_a, string $table_b, $onDelete = 'restrict')
     {
         $a = Str::singular($table_a);
@@ -91,10 +91,6 @@ class AkceliRelationshipBuilder
         $this->relationship = 'morphTo';
         $this->relatedTable = null;
 
-        $cache = $this->getCache();
-        $cache[$this->temp] = '';
-        $this->setCache($cache);
-
         return $this;
     }
 
@@ -102,7 +98,11 @@ class AkceliRelationshipBuilder
     {
         if ($this->relationship === 'morphTo') {
             $cache = $this->getCache();
-            $cache[$this->temp] = 'morphMany';
+            $cache[$this->temp] = [
+                'relationshipName' => $this->type,
+                'reverseRelationshipName' => $relationshipName,
+                'relationshipType' => 'morphMany',
+            ];
             $this->setCache($cache);
         } elseif ($this->relationship === 'belongsTo') {
             $this->setBelongsToRelationshipCache($this->table->getTable(), $this->relatedTable, 'hasMany', $relationshipName);
@@ -111,12 +111,16 @@ class AkceliRelationshipBuilder
 
         return $this;
     }
-    
+
     public function whichHasOneOfThese(string $relationshipName = null)
     {
         if ($this->relationship === 'morphTo') {
             $cache = $this->getCache();
-            $cache[$this->temp] = 'morphOne';
+            $cache[$this->temp] = [
+                'relationshipName' => $this->type,
+                'reverseRelationshipName' => $relationshipName,
+                'relationshipType' => 'morphOne',
+            ];
             $this->setCache($cache);
         } elseif ($this->relationship === 'belongsTo') {
             $this->setBelongsToRelationshipCache($this->table->getTable(), $this->relatedTable, 'hasOne', $relationshipName);
