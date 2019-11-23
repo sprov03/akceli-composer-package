@@ -46,7 +46,7 @@ class MorphOneBuilder extends Builder implements BuilderInterface
         $this->addUseStatementToFile($interfaceFileInfo, $fileInfo);
         $this->addUseStatementToFile($traitFileInfo, $fileInfo);
 
-        $docType = $otherModel;
+        $docType = $OtherModel;
         $variable = $reverseRelationshipName;
         $this->addClassPropertyDocToFile($interfaceFileInfo, $docType, $variable);
         $this->addClassPropertyDocToFile($traitFileInfo, $docType, $variable);
