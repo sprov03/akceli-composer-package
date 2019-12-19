@@ -55,18 +55,20 @@ class AkceliRelationshipBuilder
         return $this;
     }
 
-    public function belongsToMany(string $table_a, string $table_b, $onDelete = 'restrict')
+    public function belongsToMany(string $table_a, string $table_b, $onDelete = 'restrict', $columnA = null, $columnB = null)
     {
         $a = Str::singular($table_a);
         $b = Str::singular($table_b);
+        $columnA = ($columnA) ?: $a . '_id';
+        $columnB = ($columnB) ?: $b . '_id';
 
-        $this->table->unsignedBigInteger($a . '_id')->index();
-        $this->table->foreign($a . '_id')->references('id')->on($a . 's')->onDelete($onDelete);
+        $this->table->unsignedBigInteger($columnA)->index();
+        $this->table->foreign($columnA)->references('id')->on($a . 's')->onDelete($onDelete);
 
-        $this->table->unsignedBigInteger($b . '_id')->index();
-        $this->table->foreign($b . '_id')->references('id')->on($b . 's')->onDelete($onDelete);
+        $this->table->unsignedBigInteger($columnB)->index();
+        $this->table->foreign($columnB)->references('id')->on($b . 's')->onDelete($onDelete);
 
-        $this->table->primary([$a . '_id', $b . '_id']);
+        $this->table->primary([$columnA, $columnB]);
 
         $this->cacheKey = null;
         $this->temp = null;
