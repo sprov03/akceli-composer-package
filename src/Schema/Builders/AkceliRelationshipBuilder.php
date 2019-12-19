@@ -45,7 +45,7 @@ class AkceliRelationshipBuilder
         if ($nullable) {
             $ref->nullable();
         }
-        $this->table->foreign($relationship_name . '_id')->references('id')->on(Str::plural($related_table))->onDelete($onDelete);
+        $this->table->foreign($relationship_name . '_id')->references('id')->on($related_table)->onDelete($onDelete);
 
         $this->cacheKey = null;
         $this->temp = null;
