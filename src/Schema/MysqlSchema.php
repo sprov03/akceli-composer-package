@@ -46,7 +46,7 @@ class MysqlSchema implements SchemaInterface
         if (isset($this->columns)) {
             return $this->columns;
         }
-        
+
         $columns = $this->getTableColumns($this->table);
         $columns = $this->addRules($columns);
         return $columns;
@@ -89,7 +89,7 @@ class MysqlSchema implements SchemaInterface
 
     /**
      * Belongs to Relationship Consits of a Primary Key of two Coulumns that have Relationships to two other tables.
-     * 
+     *
      * @return Collection
      */
     public function getBelongsToManyRelationships(): Collection
@@ -100,8 +100,8 @@ class MysqlSchema implements SchemaInterface
 
             return new Collection();
         }
-        
-        
+
+
         $relationships = $primaryKey->map(function ($key) {
             return $this->getForeignKeys()
                 ->first(function ($foreignKey) use ($key) {
@@ -110,11 +110,11 @@ class MysqlSchema implements SchemaInterface
         })->filter(function($relationship) {
             return !!$relationship;
         });
-        
+
         if ($relationships->count() !== 2) {
             return new Collection();
         }
-        
+
         return $relationships;
     }
 
@@ -129,7 +129,7 @@ class MysqlSchema implements SchemaInterface
         $columns = $this->getColumns()->filter(function ($column) {
             return !$this->getBelongsToManyRelationships()->contains('COLUMN_NAME', '=', $column->Field);
         });
-        
+
         $columns_that_have_relationships =  $columns->filter(function ($key) {
             return (boolean) $this->getForeignKeys()
                 ->filter(function ($foreign) use ($key) {
@@ -191,7 +191,12 @@ class MysqlSchema implements SchemaInterface
      */
     public function getTableColumns($table): Collection
     {
-        return collect(DB::select("show columns from " . $table))->map(function ($column) {
+        $schemInfo = $this->getSchemaInfo($table);
+        return collect(DB::select("show columns from " . $table))->map(function ($column) use ($schemInfo) {
+            $columnInfo = $schemInfo->firstWhere('COLUMN_NAME', '=', $column->Field);
+            if ($columnInfo) {
+                $column = (object) array_merge((array) $column, (array) $columnInfo);
+            }
             return new MysqlColumn($column);
         });
     }
@@ -202,10 +207,15 @@ class MysqlSchema implements SchemaInterface
             return $this->compositeKeys;
         }
 
+        return $this->getSchemaInfo($this->table);
+    }
+
+    private function getSchemaInfo($table): Collection
+    {
         return collect(DB::select(<<<EOF
-            SELECT * 
-            FROM   information_schema.KEY_COLUMN_USAGE     
-            WHERE  table_name ='$this->table';
+            SELECT *
+            FROM   information_schema.KEY_COLUMN_USAGE
+            WHERE  table_name ='{$table}';
 EOF
         ));
     }
@@ -264,7 +274,11 @@ EOF
                 }
             }
 
-            $column->rules = 'required|';
+            if ($column->isNullable()) {
+                $column->rules = 'required|';
+            } else {
+                $column->rules = 'nullable|';
+            }
 
             if ($column->isTimeStamp()) {
                 $column->rules .= "date|";
@@ -287,8 +301,10 @@ EOF
                 $column->rules .= "boolean|";
             }
 
-            if (preg_match('/varchar\((\d*)\)/', $column->Type, $max)) {
-                $column->rules .= "max:{$max[1]}|";
+            if ($column->isString()) {
+                if (preg_match('/(var)?char\((\d*)\)/', $column->Type, $max)) {
+                    $column->rules .= "max:{$max[2]}|";
+                }
             }
 
             if ($this->isUnique($column)) {

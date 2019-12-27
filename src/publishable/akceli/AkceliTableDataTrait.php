@@ -20,4 +20,11 @@ trait AkceliTableDataTrait
             return !$column->isTimeStamp();
         });
     }
+
+    public function hasAutoIncrementingPrimaryKey(): bool
+    {
+        return $this->columns->contains(function (ColumnInterface $column) {
+           return $column->isIncrementing();
+        });
+    }
 }

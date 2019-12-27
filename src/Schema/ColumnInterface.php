@@ -45,6 +45,16 @@ interface ColumnInterface
     /**
      * @return bool
      */
+    public function isIncrementing(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isNullable(): bool;
+
+    /**
+     * @return bool
+     */
     public function isInteger(): bool;
 
     /**

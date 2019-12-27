@@ -18,6 +18,22 @@ class MysqlColumn implements ColumnInterface
     public $Default;
     public $Extra;
 
+    /**
+     * Schema Info
+     */
+    public $CONSTRAINT_CATALOG;
+    public $CONSTRAINT_SCHEMA;
+    public $CONSTRAINT_NAME;
+    public $TABLE_CATALOG;
+    public $TABLE_SCHEMA;
+    public $TABLE_NAME;
+    public $COLUMN_NAME;
+    public $ORDINAL_POSITION;
+    public $POSITION_IN_UNIQUE_CONSTRAINT;
+    public $REFERENCED_TABLE_SCHEMA;
+    public $REFERENCED_TABLE_NAME;
+    public $REFERENCED_COLUMN_NAME;
+
     public $rules;
 
     public function __construct($column)
@@ -28,6 +44,18 @@ class MysqlColumn implements ColumnInterface
         $this->Key = $column->Key;
         $this->Default = $column->Default;
         $this->Extra = $column->Extra;
+        $this->CONSTRAINT_CATALOG = $column->CONSTRAINT_CATALOG ?? null;
+        $this->CONSTRAINT_SCHEMA = $column->CONSTRAINT_SCHEMA ?? null;
+        $this->CONSTRAINT_NAME = $column->CONSTRAINT_NAME ?? null;
+        $this->TABLE_CATALOG = $column->TABLE_CATALOG ?? null;
+        $this->TABLE_SCHEMA = $column->TABLE_SCHEMA ?? null;
+        $this->TABLE_NAME = $column->TABLE_NAME ?? null;
+        $this->COLUMN_NAME = $column->COLUMN_NAME ?? null;
+        $this->ORDINAL_POSITION = $column->ORDINAL_POSITION ?? null;
+        $this->POSITION_IN_UNIQUE_CONSTRAINT = $column->POSITION_IN_UNIQUE_CONSTRAINT ?? null;
+        $this->REFERENCED_TABLE_SCHEMA = $column->REFERENCED_TABLE_SCHEMA ?? null;
+        $this->REFERENCED_TABLE_NAME = $column->REFERENCED_TABLE_NAME ?? null;
+        $this->REFERENCED_COLUMN_NAME = $column->REFERENCED_COLUMN_NAME ?? null;
     }
 
     /**
@@ -103,6 +131,16 @@ class MysqlColumn implements ColumnInterface
         return $default;
     }
 
+    public function isIncrementing(): bool
+    {
+        return $this->Extra === 'auto_increment';
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->Null === 'YES';
+    }
+
     public function isInteger(): bool
     {
         return preg_match('/^(big)?int\((\d*)\)/', $this->Type);
@@ -125,7 +163,7 @@ class MysqlColumn implements ColumnInterface
 
     public function isString(): bool
     {
-        return preg_match('/^varchar\((\d*)\)$|^text$/', $this->Type);
+        return preg_match('/^(var)?char\((\d*)\)$|^text$/', $this->Type);
     }
 
 }
