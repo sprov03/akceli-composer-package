@@ -37,11 +37,11 @@ class AkceliRelationshipBuilder
         return new AkceliRelationshipBuilder($table);
     }
 
-    public function belongsTo(string $related_table, string $onDelete = 'restrict', bool $nullable = false, string $relationship_name = null)
+    public function belongsTo(string $related_table, string $onDelete = 'restrict', bool $nullable = false, string $relationship_name = null, string $columnType = 'unsignedBigInteger')
     {
         $related_table = Str::snake($related_table);
         $relationship_name = ($relationship_name) ?? Str::singular($related_table);
-        $ref = $this->table->unsignedBigInteger($relationship_name . '_id')->index();
+        $ref = $this->table->{$columnType}($relationship_name . '_id')->index();
         if ($nullable) {
             $ref->nullable();
         }
