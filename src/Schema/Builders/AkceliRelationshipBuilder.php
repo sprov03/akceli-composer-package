@@ -41,11 +41,11 @@ class AkceliRelationshipBuilder
     {
         $related_table = Str::snake($related_table);
         $relationship_name = ($relationship_name) ?? Str::singular($related_table);
-        $ref = $this->table->{$columnType}($relationship_name . '_id')->index();
+        $ref = $this->table->{$columnType}(Str::snake($relationship_name) . '_id')->index();
         if ($nullable) {
             $ref->nullable();
         }
-        $this->table->foreign($relationship_name . '_id')->references('id')->on($related_table)->onDelete($onDelete);
+        $this->table->foreign(Str::snake($relationship_name) . '_id')->references('id')->on($related_table)->onDelete($onDelete);
 
         $this->cacheKey = null;
         $this->temp = null;
