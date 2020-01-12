@@ -73,6 +73,9 @@ class AkceliPublishCommand extends Command
         FileService::setRootDirectory(base_path('vendor/akceli/laravel-code-generator/src/Generators/DefaultGenerators'));
         $files = FileService::getAppFiles();
         foreach ($files as $file) {
+            if (!Str::contains($file->getFilename(), 'Generator.php')) {
+                continue;
+            }
             $content = file_get_contents($file->getPathname());
             $content = str_replace('namespace Akceli\Generators\DefaultGenerators;', 'namespace Akceli\Generators;', $content);
             $content = str_replace('class Default', 'class ', $content);
