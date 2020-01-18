@@ -106,7 +106,7 @@ class MysqlSchema implements SchemaInterface
             return $this->getForeignKeys()
                 ->first(function ($foreignKey) use ($key) {
                     return $foreignKey->COLUMN_NAME == $key->Field;
-            });
+                });
         })->filter(function($relationship) {
             return !!$relationship;
         });
@@ -192,7 +192,7 @@ class MysqlSchema implements SchemaInterface
     public function getTableColumns($table): Collection
     {
         $schemInfo = $this->getSchemaInfo($table);
-        return collect(DB::select("show columns from " . $table))->map(function ($column) use ($schemInfo) {
+        return collect(DB::select("show columns from `{$table}`"))->map(function ($column) use ($schemInfo) {
             $columnInfo = $schemInfo->firstWhere('COLUMN_NAME', '=', $column->Field);
             if ($columnInfo) {
                 $column = (object) array_merge((array) $column, (array) $columnInfo);
