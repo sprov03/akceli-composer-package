@@ -32,7 +32,7 @@ class <?=$table->ModelName?>Controller extends Controller
         $<?=$table->modelName?> = new <?=$table->ModelName?>($request->validated());
         $<?=$table->modelName?>->save();
 
-        return redirect("/<?=$table->modelNamesKabob?>/{$<?=$table->modelName?>->id}/edit");
+        return redirect("/<?=$table->model_names?>/{$<?=$table->modelName?>->id}/edit");
     }
 
     /**
@@ -67,7 +67,7 @@ class <?=$table->ModelName?>Controller extends Controller
     {
         $<?=$table->modelName?>->update($request->validated());
 
-        return redirect('/<?=$table->modelNamesKabob?>');
+        return redirect('/<?=$table->model_names?>');
     }
 
     /**
@@ -81,7 +81,7 @@ class <?=$table->ModelName?>Controller extends Controller
     {
         $<?=$table->modelName?>->delete();
 
-        return redirect('/<?=$table->modelNamesKabob?>');
+        return redirect('/<?=$table->model_names?>');
     }
 
     /**
