@@ -15,20 +15,43 @@ use Illuminate\Support\Str; ?>
 
     <body class="container">
         <h1><?=$table->ModelNames?> Edit Page</h1>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <br>
         <form action="/<?=$table->model_names?>" method="POST" class="form-horizontal">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <?php foreach ($table->filterDates($table->columns) as $column): ?>
 <?php if (($column->getField() === 'id')): ?>
-<?php elseif ($column->isString() || $column->isEnum() || $column->isBoolean() || $column->isInteger()): ?>
+<?php elseif ($column->isString() || $column->isEnum() || $column->isInteger()): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" class="form-control">
+                <input type="text" name="<?=$column->getField()?>" class="form-control" value="{{ old('<?=$column->getField()?>') }}">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+<?php elseif ($column->isBoolean()): ?>
+            <div class="form-group">
+                <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
+                <input type="checkbox" name="<?=$column->getField()?>" @if(old('<?=$column->getField()?>'))checked @endif value="1">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 <?php elseif ($column->isTimeStamp()): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" readonly class="form-control">
+                <input type="text" name="<?=$column->getField()?>" readonly class="form-control" value="{{ old('<?=$column->getField()?>') }}">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 <?php endif ?>
 <?php endforeach; ?>

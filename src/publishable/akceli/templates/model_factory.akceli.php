@@ -2,11 +2,11 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
+
 namespace Factories;
 
 use App\Models\<?=$table->ModelName?>;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Faker\Generator as Faker;
 
 /**
@@ -21,7 +21,6 @@ class <?=$table->ModelName?>Factory
      */
     public static function makeDefault(array $data = [])
     {
-        $authUser = Auth::user();
         /** @var Faker $faker */
         $faker = app(Faker::class);
 
@@ -31,22 +30,6 @@ class <?=$table->ModelName?>Factory
 <?php endforeach; ?>
         $<?=$table->modelName?>->forceFill($data);
 
-<?php if ($table->hasField('account_id')): ?>
-        if (!$<?=$table->modelName?>->account) {
-            /** @var Account $account */
-            $account = ($authUser) ? $authUser->account : AccountFactory::createDefault();
-            $<?=$table->modelName?>->account()->associate($account);
-        }
-
-<?php endif; ?>
-<?php if ($table->hasField('user_id')): ?>
-        if (!$<?=$table->modelName?>->user) {
-            /** @var User $user */
-            $user = $authUser ?: UserFactory::createDefault();
-            $<?=$table->modelName?>->user()->associate($user);
-        }
-
-<?php endif; ?>
         return $<?=$table->modelName?>;
     }
 

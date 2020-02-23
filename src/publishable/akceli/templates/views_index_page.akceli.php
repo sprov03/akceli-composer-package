@@ -25,7 +25,7 @@ use Akceli\TemplateData;?>
                 </tr>
             </thead>
             <tbody>
-                @foreach($<?=$table->model_names?> as $<?=$table->model_name?>)
+                @foreach($<?=$table->modelNames?> as $<?=$table->model_name?>)
                     <tr>
 <?php foreach ($table->columns as $column): ?>
                         <td>{{$<?=$table->model_name?>-><?=$column->getField()?>}}</td>

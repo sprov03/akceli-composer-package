@@ -15,8 +15,17 @@ use Illuminate\Support\Str; ?>
 
     <body class="container">
         <h1><?=$table->ModelNames?> Edit Page</h1>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <br>
-        <form action="/<?=$table->model_names?>/{{$<?=$table->model_name?>->id}}" method="POST" class="form-horizontal">
+        <form action="/<?=$table->model_names?>/{{$<?=$table->modelName?>->id}}" method="POST" class="form-horizontal">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -24,17 +33,35 @@ use Illuminate\Support\Str; ?>
 <?php if (($column->getField() === 'id')): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" readonly class="form-control">
+                <input type="text" name="<?=$column->getField()?>"  value="{{ old('<?=$column->getField()?>', $<?=$table->modelName?>-><?=$column->getField()?>) }}" readonly class="form-control">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
-<?php elseif ($column->isString() || $column->isEnum() || $column->isBoolean() || $column->isInteger()): ?>
+<?php elseif ($column->isString() || $column->isEnum() || $column->isInteger()): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" class="form-control">
+                <input type="text" name="<?=$column->getField()?>" class="form-control" value="{{ old('<?=$column->getField()?>', $<?=$table->modelName?>-><?=$column->getField()?>) }}">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+<?php elseif ($column->isBoolean()): ?>
+            <div class="form-group">
+                <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
+<!--                <input type="text" name="<?=$column->getField()?>" class="form-control" value="{{ old('<?=$column->getField()?>', $<?=$table->modelName?>-><?=$column->getField()?>) }}">-->
+                <input type="checkbox" name="<?=$column->getField()?>" @if(old('<?=$column->getField()?>', $<?=$table->modelName?>-><?=$column->getField()?>))checked @endif value="1">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 <?php elseif ($column->isTimeStamp()): ?>
             <div class="form-group">
                 <label for="<?=$column->getField()?>"><?=Str::studly($column->getField())?>:</label>
-                <input type="text" name="<?=$column->getField()?>" value="{{$<?=$table->model_name?>-><?=$column->getField()?>}}" readonly class="form-control">
+                <input type="text" name="<?=$column->getField()?>"  value="{{ old('<?=$column->getField()?>', $<?=$table->modelName?>-><?=$column->getField()?>) }}" readonly class="form-control">
+                @error('<?=$column->getField()?>')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 <?php endif ?>
 <?php endforeach; ?>
@@ -44,7 +71,7 @@ use Illuminate\Support\Str; ?>
             </div>
         </form>
 
-        <form action="/<?=$table->model_names?>/{{$<?=$table->model_name?>->id}}" method="POST" class="form-horizontal margin-top-minus-50px">
+        <form action="/<?=$table->model_names?>/{{$<?=$table->modelName?>->id}}" method="POST" class="form-horizontal margin-top-minus-50px">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
