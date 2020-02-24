@@ -15,7 +15,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function index()
     {
-        $response = $this->get("/<?=$table->modelNames?>");
+        $response = $this->get("/<?=$table->model_names?>");
         $response->assertOk();
     }
 
@@ -30,12 +30,12 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
 <?php endforeach; ?>
         ];
 
-        $response = $this->post("/<?=$table->modelNames?>", $data_request);
+        $response = $this->post("/<?=$table->model_names?>", $data_request);
         $response->assertStatus(302);
         /** @var <?=$table->ModelName?> $<?=$table->modelName?> */
         $<?=$table->modelName?> = <?=$table->ModelName?>::all()->last();
 
-        $this->assertDatabaseHas('<?=$table->modelNames?>', [
+        $this->assertDatabaseHas('<?=$table->model_names?>', [
             'id' => $<?=$table->modelName?>->id,
 <?php foreach ($table->columns as $column): ?>
             '<?=$column->getField()?>' => '999999',
@@ -48,7 +48,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
      */
     public function create()
     {
-        $response = $this->get("/<?=$table->modelNames?>/create");
+        $response = $this->get("/<?=$table->model_names?>/create");
         $response->assertOk();
     }
 
@@ -60,7 +60,7 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
 
-        $response = $this->get("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}");
+        $response = $this->get("/<?=$table->model_names?>/{$<?=$table->modelName?>->id}");
         $response->assertOk();
     }
 
@@ -77,10 +77,10 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
 <?php endforeach; ?>
         ];
 
-        $response = $this->put("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}", $request_data);
+        $response = $this->put("/<?=$table->model_names?>/{$<?=$table->modelName?>->id}", $request_data);
         $response->assertStatus(302);
 
-        $this->assertDatabaseHas('<?=$table->modelNames?>', [
+        $this->assertDatabaseHas('<?=$table->model_names?>', [
             'id' => $<?=$table->modelName?>->id,
 <?php foreach ($table->columns as $column): ?>
             '<?=$column->getField()?>' => '999999',
@@ -95,13 +95,13 @@ class <?=$table->ModelName?>ControllerTest extends TestCase
     {
         $<?=$table->modelName?> = <?=$table->ModelName?>Factory::createDefault();
 
-        $response = $this->delete("/<?=$table->modelNames?>/{$<?=$table->modelName?>->id}");
+        $response = $this->delete("/<?=$table->model_names?>/{$<?=$table->modelName?>->id}");
         $response->assertStatus(302);
 
 <?php if ($table->hasField('deleted_at')): ?>
         $this->assertSoftDeleted($<?=$table->modelName?>);
 <?php else: ?>
-        $this->assertDatabaseMissing('<?=$table->modelNames?>', [
+        $this->assertDatabaseMissing('<?=$table->model_names?>', [
             'id' => $<?=$table->modelName?>->id
         ]);
 <?php endif; ?>
