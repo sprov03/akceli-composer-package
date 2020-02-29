@@ -123,10 +123,12 @@ class MysqlColumn implements ColumnInterface
         if ($this->isTimeStamp()) return $config->timestamp;
         if ($this->isBoolean()) return $config->boolean;
 
-        Console::info(
-            "Column info not identified for: {$this->Type} " .
-            json_encode($this, JSON_PRETTY_PRINT)
-        );
+        if (config("akceli.debugging")) {
+            Console::info(
+                "Column info not identified for: {$this->Type} " .
+                json_encode($this, JSON_PRETTY_PRINT)
+            );
+        }
 
         return $default;
     }
@@ -143,7 +145,7 @@ class MysqlColumn implements ColumnInterface
 
     public function isInteger(): bool
     {
-        return preg_match('/^(big)?int\((\d*)\)/', $this->Type);
+        return preg_match('/^(big)?int\((\d*)\)( unsigned)?/', $this->Type);
     }
 
     public function isBoolean(): bool
