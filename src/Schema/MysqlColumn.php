@@ -145,12 +145,12 @@ class MysqlColumn implements ColumnInterface
 
     public function isInteger(): bool
     {
-        return preg_match('/^(big)?int\((\d*)\)( unsigned)?/', $this->Type);
+        return preg_match('/^(big)?int(\((\d*)\))?(\sunsigned)?|tinyint unsinged/', $this->Type);
     }
 
     public function isBoolean(): bool
     {
-        return preg_match('/^tinyint\((\d*)\)/', $this->Type);
+        return preg_match('/^tinyint/', $this->Type);
     }
 
     public function isTimeStamp(): bool
