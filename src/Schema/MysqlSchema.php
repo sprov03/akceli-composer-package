@@ -275,9 +275,9 @@ EOF
             }
 
             if ($column->isNullable()) {
-                $column->rules = 'required|';
-            } else {
                 $column->rules = 'nullable|';
+            } else {
+                $column->rules = 'required|';
             }
 
             if ($column->isTimeStamp()) {
