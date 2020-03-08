@@ -1,7 +1,6 @@
 <?php echo '<?php' . PHP_EOL;
 /**
  * @var $Job
- * @var $Queue
  */
 ?>
 
@@ -16,8 +15,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 class <?=$Job?>Job implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $queue = '<?=$Queue?>';
 
     /**
      * Create a new job instance.
