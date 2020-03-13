@@ -44,6 +44,24 @@ if (env('APP_ENV') !== 'local') {
 
 return [
     /**
+     * Model Directory
+     *
+     *      Akceli has two way that it can find a file Model
+     *
+     *          First:  Akceli will try to find a file with the $table attribute set to the same as your model.
+     *                  If that property is set, you will have no issues finding the correct file for your model.
+     *
+     *          Second: If the first lookup fails, Akceli will try to find a file with the Laravel naming conventions for the table,
+     *                  This can cause it to find a file that is not a model.  If all of your files are in a model directory
+     *                  Or you do not have Mulitple Classes that are the same name as the Expected Model, then there will be no issues
+     *                  finding the correct file.
+     *
+     *          Note:  The possible failures of the second lookup is why Akceli models get generated with the $table property set.
+     *          Note:  If your app uses the Models directory, I suggest you set it here.  It will speed up the Model lookups.
+     */
+    'model_directory' =>  'Models',
+
+    /**
      * Options: 'auto-complete' or 'multiple-choice'
      * will default to 'multiple-choice' if this is missing or set to an invalid option
      *
@@ -67,7 +85,7 @@ return [
     /**
      * Generators that generate relationships
      *
-     * If you have a generator that generates relationships, then add i here so that the all generator will flesh out the belongs to many
+     * If you have a generator that generates relationships, then add it here so that the all generator will flesh out the belongs to many
      * Relationships during the process, example models.  So all relationships are added to the models.
      */
     'generators_that_generate_relationships' => ['model'],
@@ -104,11 +122,11 @@ return [
     /**
      * This is where all the magic happens!!
      *
-     * To make a new command: php artisan akceli new-command
-     * It will register the command in the following list for you and build out the boiler plate of the command class.
+     * To create a new Generator: php artisan akceli:generate generator
+     * It will register the Generator in the following list for you and build out the boiler plate of the Generator class.
      */
     'generators' => [
-        'new-command' => DefaultNewAkceliGenerator::class,
+        'generator' => DefaultNewAkceliGenerator::class,
         'all' => AllGenerator::class,
         'channel' => ChannelGenerator::class,
         'command' => CommandGenerator::class,
