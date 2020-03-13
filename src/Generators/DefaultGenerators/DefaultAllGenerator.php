@@ -33,7 +33,6 @@ class DefaultAllGenerator extends AkceliGenerator
     public function completionMessage(array $data)
     {
         Console::info('Only Generators that require Database tables are available for this command');
-        Console::info('This command can take up to 2 seconds per model');
 
         $tables = DB::select('SHOW TABLES');
         $tableKey = 'Tables_in_' . env('DB_DATABASE');
