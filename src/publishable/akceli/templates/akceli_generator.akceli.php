@@ -34,7 +34,9 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        return [];
+        return [
+            // Akceli::insertInline('routes/web.php', '/** All Web controllers will go here */', "Route::resource('[[model_names]]', '[[ModelName]]Controller');"),
+        ];
     }
 
     public function completionMessage(array $data)

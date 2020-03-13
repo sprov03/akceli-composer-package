@@ -42,6 +42,16 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
             $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME, true);
         }
 
+        if (is_null($fileInfoOne)) {
+            dump('Model not found for table: ' . $relationshipOne->REFERENCED_TABLE_NAME);
+            return;
+        }
+
+        if (is_null($fileInfoTwo)) {
+            dump('Model not found for table: ' . $relationshipTwo->REFERENCED_TABLE_NAME);
+            return;
+        }
+
         $modelOne = FileService::getClassNameOfFile($fileInfoOne);
         $modelTwo = FileService::getClassNameOfFile($fileInfoTwo);
 

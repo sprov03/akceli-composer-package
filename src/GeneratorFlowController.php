@@ -63,7 +63,6 @@ class GeneratorFlowController
         }
 
         foreach ($this->schema->getPolymorphicRelationships() as $relationship) {
-            dd($relationship);
             $this->setPolymorphicRelationships($relationship);
         }
 

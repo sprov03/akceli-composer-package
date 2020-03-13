@@ -38,24 +38,21 @@ class AkceliGenerateCommand extends Command
      */
     public function handle()
     {
-        /**
-         * Setup Global Classes
-         */
         Console::setLogger($this);
-        FileService::setRootDirectory(app_path());
-
         Console::info('    ****************************************');
         Console::info('    *                                      *');
         Console::info('    *                Akceli                *');
         Console::info('    *                                      *');
         Console::info('    ****************************************');
 
-        $template_set = $this->argument('template-set');
         $config = config('akceli');
         $config['generators'] = $config['template-groups'] ?? $config['generators'];
 
+        FileService::setRootDirectory(app_path(config('akceli.model_directory', null)));
+        $template_set = $this->argument('template-set');
+
         /**
-         * If config file has not been published then publish it, makeing sure not to force
+         * If config file has not been published then publish it, making sure not to force
          */
         if (is_null($config)) {
             Artisan::call('akceli:publish');
@@ -96,7 +93,7 @@ class AkceliGenerateCommand extends Command
         }
 
         /**
-         * Initalizing Template Data
+         * Initializing Template Data
          */
         $template_data = [
             'arg1' => $this->argument('arg1'),

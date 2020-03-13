@@ -18,7 +18,7 @@ class HasManyBuilder extends Builder implements BuilderInterface
     public function buildRelated($relationship, string $relationshipName = null)
     {
         /**
-         * Initalize Data
+         * Initialize Data
          */
         $fileInfo = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
         $otherFileInfo = $this->fileInfo;

@@ -17,13 +17,18 @@ class BelongsToBuilder extends Builder implements BuilderInterface
     {
         foreach ($this->schema->getBelongsToRelationships() as $relationship) {
             /**
-             * Initalize Data
+             * Initialize Data
              */
             $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME);
             if (!$otherFile) {
                 Artisan::call('akceli:generate model ' . $relationship->REFERENCED_TABLE_NAME);
                 $otherFile = FileService::findByTableName($relationship->REFERENCED_TABLE_NAME, true);
             }
+            if (!$otherFile) {
+                dump('Model not found for table: ' . $relationship->REFERENCED_TABLE_NAME . ' so the relationship was not added');
+                continue;
+            }
+
             $otherModel = FileService::getClassNameOfFile($otherFile);
             $thisModel = FileService::getClassNameOfFile($this->fileInfo);
             $templateData = [

@@ -5,6 +5,7 @@ namespace Akceli\Schema;
 use Akceli\Config\ColumnSettingsConfig;
 use Akceli\Console;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class MysqlSchema implements SchemaInterface
@@ -192,6 +193,15 @@ class MysqlSchema implements SchemaInterface
     public function getTableColumns($table): Collection
     {
         $schemInfo = $this->getSchemaInfo($table);
+        if ($schemInfo->count() === 0) {
+            $wants_to_migrate = Console::choice("The '{$table}' table is not in the database:  Would you like to migrate?", ['yes', 'no'], 'yes');
+            if ($wants_to_migrate === 'yes') {
+                Artisan::call('migrate');
+            } else {
+                Console::info('No Files Where Changed');
+                die();
+            }
+        }
         return collect(DB::select("show columns from `{$table}`"))->map(function ($column) use ($schemInfo) {
             $columnInfo = $schemInfo->firstWhere('COLUMN_NAME', '=', $column->Field);
             if ($columnInfo) {
