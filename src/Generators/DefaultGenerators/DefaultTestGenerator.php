@@ -14,21 +14,23 @@ class DefaultTestGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            'Test' => function (array $data) {
+                return $data['arg1'] ?? Str::studly(Console::ask('What is the name of the Test you want to create?'));
+            },
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/TestGenerator.php'),
+            Akceli::fileTemplate('test', 'tests/Feature/[[Test]].php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
-        return [
-            // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)
