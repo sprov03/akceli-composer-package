@@ -35,7 +35,8 @@ class DefaultChannelGenerator extends AkceliGenerator
     public function inlineTemplates(array $data): array
     {
         return [
-            Akceli::insertInline('routes/channels.php', '/** register channels here */', 'Broadcast::channel(\'[[Channel]].{[[Channel]]}\', [[Channel]]Channel::class);')
+            Akceli::insertInline('routes/channels.php', '/** Auto Import */', 'use App\Broadcasting\[[Channel]]Channel;'),
+            Akceli::insertInline('routes/channels.php', '/** register channels here */', 'Broadcast::channel(\'[[Channel]].{[[Channel]]}\', [[Channel]]Channel::class);'),
         ];
     }
 
