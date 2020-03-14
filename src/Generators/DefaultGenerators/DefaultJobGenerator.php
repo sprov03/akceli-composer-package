@@ -18,7 +18,7 @@ class DefaultJobGenerator extends AkceliGenerator
     {
         return [
             'Job' => function () {
-                return Console::ask("What is the Class Name of the Job?\n Example: File will create a FileJob Class");
+                return $data['arg1'] ?? Console::ask("What is the Class Name of the Job?\n Example: File will create a FileJob Class");
             },
         ];
     }

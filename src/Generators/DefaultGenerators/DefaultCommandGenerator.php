@@ -18,10 +18,10 @@ class DefaultCommandGenerator extends AkceliGenerator
     {
         return [
             'Command' => function() {
-                return Console::ask('What is the name of the Command?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Command?');
             },
             'Signature' => function() {
-                return Console::ask('What is the signature for the command?');
+                return $data['arg2'] ?? Console::ask('What is the signature for the command?');
             }
         ];
     }

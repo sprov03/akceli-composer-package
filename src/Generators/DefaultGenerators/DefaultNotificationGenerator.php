@@ -18,7 +18,7 @@ class DefaultNotificationGenerator extends AkceliGenerator
     {
         return [
             "Notification" => function (array $data) {
-                return Console::ask('What is the name of the Notification');
+                return $data['arg1'] ?? Console::ask('What is the name of the Notification');
             }
         ];
     }

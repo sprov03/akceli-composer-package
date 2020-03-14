@@ -18,7 +18,7 @@ class DefaultObserverGenerator extends AkceliGenerator
     {
         return [
             "Observer" => function(array $data) {
-                return Console::ask('What is the name of the Observer?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Observer?');
             }
         ];
     }

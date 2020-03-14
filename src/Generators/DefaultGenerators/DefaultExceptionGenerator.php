@@ -18,7 +18,7 @@ class DefaultExceptionGenerator extends AkceliGenerator
     {
         return [
             'Exception' => function() {
-                return Console::ask('What is the name of the Exception?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Exception?');
             }
         ];
     }

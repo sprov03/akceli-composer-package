@@ -18,7 +18,7 @@ class DefaultListenerGenerator extends AkceliGenerator
     {
         return [
             'Listener' => function() {
-                return Console::ask('What is the name of the Listener?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Listener?');
             }
         ];
     }

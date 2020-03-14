@@ -18,7 +18,7 @@ class DefaultPolicyGenerator extends AkceliGenerator
     {
         return [
             "Policy" => function(array $data) {
-                return Console::ask('What is the name of the Policy?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Policy?');
             }
         ];
     }

@@ -22,10 +22,10 @@ class DefaultMigrationGenerator extends AkceliGenerator
                 return now()->format('Y_m_d_His');
             },
             'migration_type' => function() {
-                return Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
+                return $data['arg1'] ?? Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
             },
             'table_name' => function() {
-                return Console::ask('What is the name of the table being used in the migration?');
+                return $data['arg2'] ?? Console::ask('What is the name of the table being used in the migration?');
             },
             'migration_name' => function($data) {
                 if ($data['migration_type'] === 'update') {
