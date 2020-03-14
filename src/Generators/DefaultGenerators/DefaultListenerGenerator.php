@@ -34,7 +34,6 @@ class DefaultListenerGenerator extends AkceliGenerator
     public function inlineTemplates(array $data): array
     {
         return [
-            // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
         ];
     }
 

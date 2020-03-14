@@ -31,8 +31,8 @@ class DefaultSeederGenerator extends AkceliGenerator
         return [
             Akceli::insertInline(
                 'database/seeds/DatabaseSeeder.php',
-                '        /** Dont forget to add the Seeder to database/seeds/DatabaseSeeder.php */',
-                '        $this->call([[ModelName]]Seeder::class);'
+                '/** Dont forget to add the Seeder to database/seeds/DatabaseSeeder.php */',
+                '$this->call([[ModelName]]Seeder::class);'
             ),
         ];
     }

@@ -28,9 +28,7 @@ class DefaultRuleGenerator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        return [
-            // Akceli::inlineTemplate('template_name', 'destination_path', 'identifier string')
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)
