@@ -19,8 +19,8 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'GeneratorName' => function() {
-                return Console::ask('What is the name of the new Generator?');
+            'GeneratorName' => function(array $data) {
+                return $data['arg1'] ?? Console::ask('What is the name of the new Generator?');
             }
         ];
     }
