@@ -58,7 +58,7 @@ class GeneratorService
         $this->processFileTemplates($templateParser, $force);
         $this->processInlineTemplates($templateParser);
     }
-    
+
     private function processFileTemplates(Parser $parser, bool $force)
     {
         foreach (self::$file_templates as $template) {
@@ -78,10 +78,11 @@ class GeneratorService
     {
         foreach (self::$inline_templates as $inlineTemplate) {
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
+            $rendered_template = trim($rendered_template);
+
             $file_contents = file_get_contents(base_path($inlineTemplate['path']));
             if (! Str::contains($file_contents, $inlineTemplate['identifier'])) {
-                Console::error("File {$inlineTemplate['path']} is missing the identifier: " .
-                    "{$inlineTemplate['identifier']}");
+                Console::error("File {$inlineTemplate['path']} is missing the identifier: " . "{$inlineTemplate['identifier']}");
 
                 continue;
             }
@@ -91,9 +92,21 @@ class GeneratorService
                 continue;
             }
 
+            $escapedIdentifyer = preg_quote($inlineTemplate['identifier']);
+            if ($escapedIdentifyer[0] === '/') {
+                $escapedIdentifyer = '\\' . $escapedIdentifyer;
+            }
+            if (substr($escapedIdentifyer, -1) === '/') {
+                $escapedIdentifyer = substr_replace($escapedIdentifyer, '\\/', -1);
+            }
+
+            $regex = '/([ \t]*)?(' . $escapedIdentifyer . ')/s';
+            preg_match_all($regex, $file_contents, $matches, PREG_SET_ORDER, 0);
+            $indent = $matches[0][1];
+
             $file_contents = str_replace(
                 $inlineTemplate['identifier'],
-                $rendered_template . $inlineTemplate['identifier'],
+                $rendered_template . PHP_EOL . $indent . $inlineTemplate['identifier'],
                 $file_contents
             );
 
