@@ -7,7 +7,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * https://laravel.com/docs/5.8/validation#available-validation-rules
+ * Documentation: https://laravel.com/docs/6.x/validation#available-validation-rules
  */
 class Store[[ModelName]]Request extends FormRequest
 {

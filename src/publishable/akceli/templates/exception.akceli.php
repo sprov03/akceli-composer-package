@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
  * Class <?=$Exception?>Exception
  * @package App\Exceptions
  *
- * Documentation: https://laravel.com/docs/5.8/errors#renderable-exceptions
+ * Documentation: https://laravel.com/docs/6.x/errors#renderable-exceptions
  */
 class <?=$Exception?>Exception extends Exception
 {

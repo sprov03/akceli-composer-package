@@ -13,6 +13,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/events#introduction
+ */
 class <?=$Event?>Event
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

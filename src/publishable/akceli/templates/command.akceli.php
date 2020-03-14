@@ -9,6 +9,9 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/artisan#writing-commands
+ */
 class <?=$Command?>Command extends Command
 {
     /**

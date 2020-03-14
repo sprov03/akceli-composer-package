@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/testing#introduction
+ */
 class [[Test]] extends TestCase
 {
     /**

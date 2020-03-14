@@ -10,6 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/notifications#introduction
+ */
 class [[Notification]]Notification extends Notification
 {
     use Queueable;

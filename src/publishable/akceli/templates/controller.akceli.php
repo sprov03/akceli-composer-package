@@ -9,6 +9,9 @@ use App\Http\Requests\Store<?=$table->ModelName?>Request;
 use App\Http\Requests\Update<?=$table->ModelName?>Request;
 use Illuminate\Support\Facades\View;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/controllers#introduction
+ */
 class <?=$table->ModelName?>Controller extends Controller
 {
     /**

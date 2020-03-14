@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class <?=$Middleware?>Middleware
  *
- * Documentation: https://laravel.com/docs/5.8/middleware#defining-middleware
+ * Documentation: https://laravel.com/docs/6.x/middleware#defining-middleware
  *
  * @package App\Http\Middleware
  */
