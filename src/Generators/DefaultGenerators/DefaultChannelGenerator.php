@@ -41,7 +41,6 @@ class DefaultChannelGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::alert('Dont forget to register the Channel in routes/channels.php');
         Console::warn('Documentation: https://laravel.com/docs/6.x/broadcasting#defining-channel-classes');
     }
 }
