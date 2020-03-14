@@ -11,7 +11,7 @@ use Tests\TestCase;
 /**
  * Documentation: https://laravel.com/docs/6.x/testing#introduction
  */
-class [[Test]] extends TestCase
+class [[Test]]Test extends TestCase
 {
     /**
      * A basic feature test example.
