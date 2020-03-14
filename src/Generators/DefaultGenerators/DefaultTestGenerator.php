@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\Akceli;
 use Akceli\Console;
 use Akceli\Generators\AkceliGenerator;
 
