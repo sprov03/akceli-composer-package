@@ -18,7 +18,7 @@ class DefaultChannelGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Channel' => function () {
+            'Channel' => function (array $data) {
                 return $data['arg1'] ?? Str::studly(Console::ask('What is the name of the Channel you want to create?'));
             },
         ];

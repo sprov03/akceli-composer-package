@@ -17,7 +17,7 @@ class DefaultEventGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Event' => function () {
+            'Event' => function (array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the event?');
             }
         ];

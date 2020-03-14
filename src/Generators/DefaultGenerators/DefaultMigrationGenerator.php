@@ -18,13 +18,13 @@ class DefaultMigrationGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'migration_timestamp' => function() {
+            'migration_timestamp' => function (array $data) {
                 return now()->format('Y_m_d_His');
             },
-            'migration_type' => function() {
+            'migration_type' => function (array $data) {
                 return $data['arg1'] ?? Console::choice('Is this a create or update migration?', ['create', 'update'], 'create');
             },
-            'table_name' => function() {
+            'table_name' => function (array $data) {
                 return $data['arg2'] ?? Console::ask('What is the name of the table being used in the migration?');
             },
             'migration_name' => function($data) {

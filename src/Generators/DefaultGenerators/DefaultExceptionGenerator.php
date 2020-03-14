@@ -17,7 +17,7 @@ class DefaultExceptionGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Exception' => function() {
+            'Exception' => function (array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the Exception?');
             }
         ];

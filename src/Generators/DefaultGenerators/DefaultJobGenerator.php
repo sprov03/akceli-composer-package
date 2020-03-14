@@ -17,7 +17,7 @@ class DefaultJobGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Job' => function () {
+            'Job' => function (array $data) {
                 return $data['arg1'] ?? Console::ask("What is the Class Name of the Job?\n Example: File will create a FileJob Class");
             },
         ];

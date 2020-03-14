@@ -17,10 +17,10 @@ class DefaultCommandGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Command' => function() {
+            'Command' => function (array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the Command?');
             },
-            'Signature' => function() {
+            'Signature' => function (array $data) {
                 return $data['arg2'] ?? Console::ask('What is the signature for the command?');
             }
         ];

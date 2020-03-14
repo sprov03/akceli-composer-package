@@ -17,7 +17,7 @@ class DefaultMiddlewareGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Middleware' => function() {
+            'Middleware' => function (array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the Middleware?');
             }
         ];

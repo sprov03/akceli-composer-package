@@ -17,7 +17,7 @@ class DefaultListenerGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'Listener' => function() {
+            'Listener' => function (array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the Listener?');
             }
         ];
