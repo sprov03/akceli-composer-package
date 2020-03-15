@@ -15,7 +15,7 @@ class <?=$Command?>Test extends TestCase
     /**
      * @test
      *
-     * Documentation: https://laravel.com/docs/5.8/console-tests
+     * Documentation: https://laravel.com/docs/6.x/console-tests
      */
     public function command()
     {

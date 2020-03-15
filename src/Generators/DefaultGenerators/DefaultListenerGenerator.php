@@ -40,6 +40,6 @@ class DefaultListenerGenerator extends AkceliGenerator
     public function completionMessage(array $data)
     {
         Console::alert('Dont forget to register the Listener in app/Providers/EventServiceProvider.php');
-        Console::warn('Documentation: https://laravel.com/docs/5.8/events#registering-events-and-listeners');
+        Console::warn('Documentation: https://laravel.com/docs/6.x/events#registering-events-and-listeners');
     }
 }

@@ -10,7 +10,7 @@ namespace App\Broadcasting;
 use App\Models\User;
 
 /**
- * Documentation: https://laravel.com/docs/5.8/broadcasting#defining-channel-classes
+ * Documentation: https://laravel.com/docs/6.x/broadcasting#defining-channel-classes
  */
 class [[Channel]]
 {

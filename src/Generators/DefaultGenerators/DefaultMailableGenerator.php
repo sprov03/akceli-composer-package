@@ -18,7 +18,7 @@ class DefaultMailableGenerator extends AkceliGenerator
     {
         return [
             'Mailable' => function (array $data) {
-                Console::info('Markdown Messages Documentation: https://laravel.com/docs/5.8/mail#writing-markdown-messages');
+                Console::info('Markdown Messages Documentation: https://laravel.com/docs/6.x/mail#writing-markdown-messages');
                 return $data['arg1'] ?? Console::ask('What is the name of the Mailable?');
             },
             'mailable_type' => function (array $data) {

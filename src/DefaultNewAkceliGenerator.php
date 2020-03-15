@@ -53,6 +53,6 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('You have successfully created the new Akceli Migration');
+        Console::info('Success');
     }
 }
