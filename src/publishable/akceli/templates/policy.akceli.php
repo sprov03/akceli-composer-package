@@ -12,6 +12,9 @@ use App\Models\[[Model]];
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/authorization
+ */
 class [[Model]]Policy
 {
     use HandlesAuthorization;
