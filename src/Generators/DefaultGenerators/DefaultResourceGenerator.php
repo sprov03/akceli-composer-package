@@ -11,18 +11,22 @@ class DefaultResourceGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return false;
+        return true;
     }
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Resource" => function (array $data) {
+                return $data['arg2'] ?: Console::ask('What is the name of the Resource?', $data['ModelName'] . 'Resource');
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/ResourceGenerator.php'),
+            Akceli::fileTemplate('resource', 'app/Http/Resources/[[Resource]].php'),
         ];
     }
 
