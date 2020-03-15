@@ -22,6 +22,9 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
             'Generator' => function(array $data) {
                 return $data['arg1'] ?? Console::ask('What is the name of the new Generator?', 'ExampleGenerator');
             },
+            'Command' => function (array $data) {
+                return $data['arg2'] ?? Console::ask('What is the command you want to user for the Generator?', 'example');
+            }
         ];
     }
 
@@ -34,12 +37,11 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        $command = Str::snake(GeneratorService::getData()['GeneratorName']);
         return [
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** New Generators Get Inserted Here */',
-                "'{$command}' => [[Generator]]::class,"
+                "'[[Command]]' => [[Generator]]::class,"
             ),
             Akceli::insertInline(
                 'config/akceli.php',
