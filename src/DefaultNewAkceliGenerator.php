@@ -19,8 +19,8 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'GeneratorName' => function(array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the new Generator?');
+            'Generator' => function(array $data) {
+                return $data['arg1'] ?? Console::ask('What is the name of the new Generator?', 'ExampleGenerator');
             },
         ];
     }
@@ -28,7 +28,7 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[GeneratorName]]Generator.php'),
+            Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[Generator]].php'),
         ];
     }
 
@@ -38,13 +38,13 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
         return [
             Akceli::insertInline(
                 'config/akceli.php',
-                '        /** New Generators Get Inserted Here */',
-                "        '{$command}' => [[GeneratorName]]Generator::class,\n"
+                '/** New Generators Get Inserted Here */',
+                "'{$command}' => [[GeneratorName]]Generator::class,"
             ),
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** auto import new commands */',
-                'use Akceli\Generators\[[GeneratorName]]Generator;' . PHP_EOL
+                'use Akceli\Generators\[[GeneratorName]]Generator;'
             )
         ];
     }

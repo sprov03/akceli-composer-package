@@ -1,6 +1,6 @@
 <?php echo '<?php' . PHP_EOL;
 /**
- * @var $GeneratorName
+ * @var $Generator
  */
 ?>
 
@@ -9,7 +9,7 @@ namespace Akceli\Generators;
 use Akceli\Akceli;
 use Akceli\Console;
 
-class <?=$GeneratorName?>Generator extends AkceliGenerator
+class [[Generator]] extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
@@ -19,8 +19,8 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
-            'GeneratorName' => function(array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the new Generator?');
+            'Generator' => function(array $data) {
+                return $data['arg1'] ?? Console::ask('What is the name of the new Generator?', 'ExampleGenerator');
             }
         ];
     }
@@ -28,15 +28,13 @@ class <?=$GeneratorName?>Generator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[GeneratorName]]Generator.php'),
+            Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[Generator]].php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
-        return [
-            // Akceli::insertInline('routes/web.php', '/** All Web controllers will go here */', "Route::resource('[[model_names]]', '[[ModelName]]Controller');"),
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)
