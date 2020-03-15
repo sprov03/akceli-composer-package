@@ -18,7 +18,7 @@ class DefaultJobGenerator extends AkceliGenerator
     {
         return [
             'Job' => function (array $data) {
-                return $data['arg1'] ?? Console::ask("What is the Class Name of the Job?\n Example: File will create a FileJob Class");
+                return $data['arg1'] ?? Console::ask('What is the name of the Job?', 'ExampleJob');
             },
         ];
     }
@@ -26,7 +26,7 @@ class DefaultJobGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('job', 'app/Jobs/[[Job]]Job.php'),
+            Akceli::fileTemplate('job', 'app/Jobs/[[Job]].php'),
         ];
     }
 

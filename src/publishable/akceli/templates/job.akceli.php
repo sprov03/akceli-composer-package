@@ -1,8 +1,9 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Job
  */
 ?>
+
 
 namespace App\Jobs;
 
@@ -15,7 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 /**
  * Documentation: https://laravel.com/docs/6.x/queues#creating-jobs
  */
-class <?=$Job?>Job implements ShouldQueue
+class [[Job]] implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

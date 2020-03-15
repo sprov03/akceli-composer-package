@@ -19,7 +19,7 @@ class DefaultChannelGenerator extends AkceliGenerator
     {
         return [
             'Channel' => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Channel you want to create?', 'ExampleChannel');
+                return $data['arg1'] ?? Console::ask('What is the name of the Channel?', 'ExampleChannel');
             },
         ];
     }

@@ -1,9 +1,10 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Job
  * @var $Queue
  */
 ?>
+
 
 namespace App\Jobs;
 
@@ -13,11 +14,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class <?=$Job?>Job implements ShouldQueue
+class [[Job]]Test implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $queue = '<?=$Queue?>';
 
     /**
      * Create a new job instance.
