@@ -39,12 +39,12 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** New Generators Get Inserted Here */',
-                "'{$command}' => [[GeneratorName]]Generator::class,"
+                "'{$command}' => [[Generator]]::class,"
             ),
             Akceli::insertInline(
                 'config/akceli.php',
                 '/** auto import new commands */',
-                'use Akceli\Generators\[[GeneratorName]]Generator;'
+                'use Akceli\Generators\[[Generator]];'
             )
         ];
     }
