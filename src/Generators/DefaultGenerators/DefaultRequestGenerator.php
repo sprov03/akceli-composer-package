@@ -44,6 +44,6 @@ class DefaultRequestGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('success');
     }
 }

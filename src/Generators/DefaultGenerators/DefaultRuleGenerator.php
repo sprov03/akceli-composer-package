@@ -37,6 +37,6 @@ class DefaultRuleGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Documentation: https://laravel.com/docs/6.x/validation#custom-validation-rules');
     }
 }

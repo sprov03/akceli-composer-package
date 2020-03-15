@@ -7,6 +7,9 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
+/**
+ * Documentation: https://laravel.com/docs/6.x/validation#custom-validation-rules
+ */
 class [[Rule]] implements Rule
 {
     /**
