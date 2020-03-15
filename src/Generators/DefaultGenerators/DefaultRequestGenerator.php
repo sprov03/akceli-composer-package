@@ -22,8 +22,7 @@ class DefaultRequestGenerator extends AkceliGenerator
             "Request" => function (array $data) {
                 $request = (isset($data['table_name'])) ? $data['arg2'] : $data['arg1'];
 
-                $request = $request ?: Console::ask('What is the name of the Request?');
-                return $request . 'Request';
+                return $request ?? Console::ask('What is the name of the Request?', 'ExampleRequest');
             }
         ];
     }
