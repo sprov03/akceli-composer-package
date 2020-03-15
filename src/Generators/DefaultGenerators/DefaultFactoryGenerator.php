@@ -17,20 +17,22 @@ class DefaultFactoryGenerator extends AkceliGenerator
     public function dataPrompter(): array
     {
         return [
+            "Factory" => function (array $data) {
+                return $data['arg2'] ?: Console::ask('What is the name of the Factory?', $data['ModelName'] . 'Factory');
+            }
         ];
     }
 
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[Factory]].php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

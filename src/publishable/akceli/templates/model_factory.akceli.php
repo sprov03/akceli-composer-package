@@ -12,7 +12,7 @@ use Faker\Generator as Faker;
 /**
  *  Documentation:  TODO add link to documentation about how to best use these factories setup
  */
-class <?=$table->ModelName?>Factory
+class [[Factory]]
 {
     /**
      * @param array $data
