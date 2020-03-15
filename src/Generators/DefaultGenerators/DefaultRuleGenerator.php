@@ -16,13 +16,17 @@ class DefaultRuleGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Rule" => function (array $data) {
+                return $data['arg1'] ?: Console::ask('What is the name of the Rule?', 'ExampleRule');
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/RuleGenerator.php'),
+            Akceli::fileTemplate('rule', 'app/Rules/[[Rule]].php'),
         ];
     }
 
