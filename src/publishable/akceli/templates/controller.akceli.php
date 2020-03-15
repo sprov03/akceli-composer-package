@@ -2,6 +2,7 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
+
 namespace App\Http\Controllers;
 
 use App\Models\<?=$table->ModelName?>;

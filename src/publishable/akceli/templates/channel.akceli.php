@@ -1,4 +1,4 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Channel
  */
