@@ -22,7 +22,7 @@ class DefaultCommandGenerator extends AkceliGenerator
                 return $data['arg1'] ?? Console::ask('What is the name of the Command?', 'ExampleCommand');
             },
             'Signature' => function (array $data) {
-                $command = Str::kebob($data['Command']);
+                $command = Str::kebab($data['Command']);
                 return $data['arg2'] ?? Console::ask('What is the signature for the command?', 'acme:' . $command);
             }
         ];
