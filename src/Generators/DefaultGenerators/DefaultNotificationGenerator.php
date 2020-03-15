@@ -37,7 +37,6 @@ class DefaultNotificationGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::alert('Register the Observers in the boot method.');
         Console::info('Documentation: https://laravel.com/docs/6.x/notifications#introduction');
 
     }
