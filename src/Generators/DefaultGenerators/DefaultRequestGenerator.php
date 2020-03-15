@@ -44,6 +44,6 @@ class DefaultRequestGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Documentation: https://laravel.com/docs/6.x/validation#available-validation-rules');
+        Console::info('success');
     }
 }
