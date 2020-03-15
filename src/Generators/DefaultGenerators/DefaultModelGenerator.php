@@ -17,7 +17,11 @@ class DefaultModelGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Factory" => function (array $data) {
+                return $data['ModelName'] . 'Factory';
+            }
+        ];
     }
 
     public function templates(array $data): array
@@ -25,7 +29,7 @@ class DefaultModelGenerator extends AkceliGenerator
         return [
             Akceli::fileTemplate('model', 'app/Models/[[ModelName]].php'),
             Akceli::fileTemplate('model_test', 'tests/Models/[[ModelName]]Test.php'),
-            Akceli::fileTemplate('model_factory', 'database/factories/[[ModelName]]Factory.php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[Factory]].php'),
         ];
     }
 
