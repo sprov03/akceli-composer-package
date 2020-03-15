@@ -18,7 +18,7 @@ class DefaultExceptionGenerator extends AkceliGenerator
     {
         return [
             'Exception' => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Exception?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Exception?', 'ExampleException');
             }
         ];
     }
@@ -26,7 +26,7 @@ class DefaultExceptionGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]]Exception.php')
+            Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]].php')
         ];
     }
 
@@ -38,6 +38,6 @@ class DefaultExceptionGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Documentation: https://laravel.com/docs/6.x/errors#renderable-exceptions');
     }
 }

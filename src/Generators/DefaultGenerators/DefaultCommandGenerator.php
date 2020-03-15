@@ -36,12 +36,11 @@ class DefaultCommandGenerator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Documentation: https://laravel.com/docs/6.x/artisan#writing-commands');
     }
 }

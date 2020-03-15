@@ -11,12 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
- * Class <?=$Exception?>Exception
+ * Class [[Exception]]
  * @package App\Exceptions
  *
  * Documentation: https://laravel.com/docs/6.x/errors#renderable-exceptions
  */
-class <?=$Exception?>Exception extends Exception
+class [[Exception]] extends Exception
 {
     /**
      * Report the exception.

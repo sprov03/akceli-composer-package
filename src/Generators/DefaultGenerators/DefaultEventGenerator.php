@@ -39,6 +39,6 @@ class DefaultEventGenerator extends AkceliGenerator
     public function completionMessage(array $data)
     {
         Console::alert('Dont forget to register the Event in app/Providers/EventServiceProvider.php');
-        Console::warn('Documentation: https://laravel.com/docs/6.x/events#registering-events-and-listeners');
+        Console::info('Documentation: https://laravel.com/docs/6.x/events#registering-events-and-listeners');
     }
 }
