@@ -18,16 +18,20 @@ class DefaultListenerGenerator extends AkceliGenerator
     {
         return [
             'Listener' => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Listener?');
-            }
+                return $data['arg1'] ?? Console::ask('What is the name of the Listener?', 'ExampleListener');
+            },
+            'Event' => function (array $data) {
+                $event = str_replace('Listener', 'Event', $data['Listener']);
+                return $data['arg2'] ?? Console::ask('What is the name of the Event you are listening to??', $event);
+            },
         ];
     }
 
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('listener', 'app/Listeners/[[Listener]]Listener.php'),
-            Akceli::fileTemplate('listener_test', 'tests/Listeners/[[Listener]]ListenerTest.php'),
+            Akceli::fileTemplate('listener', 'app/Listeners/[[Listener]].php'),
+            Akceli::fileTemplate('listener_test', 'tests/Listeners/[[Listener]]Test.php'),
         ];
     }
 
@@ -40,6 +44,7 @@ class DefaultListenerGenerator extends AkceliGenerator
     public function completionMessage(array $data)
     {
         Console::alert('Dont forget to register the Listener in app/Providers/EventServiceProvider.php');
-        Console::warn('Documentation: https://laravel.com/docs/6.x/events#registering-events-and-listeners');
+
+        Console::info('Documentation: https://laravel.com/docs/6.x/events#registering-events-and-listeners');
     }
 }

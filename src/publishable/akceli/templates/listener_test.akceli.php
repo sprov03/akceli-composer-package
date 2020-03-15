@@ -1,21 +1,22 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Listener
  */
 ?>
 
+
 namespace Tests\Listeners;
 
 use Tests\TestCase;
 
-class <?=$Listener?>ListenerTest extends TestCase
+class [[Listener]]Test extends TestCase
 {
     /**
      * @test
      */
     public function exampleListener()
     {
-        event(new <?=$Listener?>Event());
+        event(new [[Event]]());
     }
 }
 

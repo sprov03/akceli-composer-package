@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 /**
  * Documentation: https://laravel.com/docs/6.x/events#defining-listeners
  */
-class <?=$Listener?>Listener implements ShouldQueue
+class [[Listener]] implements ShouldQueue
 {
     use InteractsWithQueue;
 
