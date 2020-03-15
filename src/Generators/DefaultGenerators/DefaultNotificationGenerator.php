@@ -18,7 +18,7 @@ class DefaultNotificationGenerator extends AkceliGenerator
     {
         return [
             "Notification" => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Notification');
+                return $data['arg1'] ?? Console::ask('What is the name of the Notification', 'ExampleNotification');
             }
         ];
     }
@@ -26,14 +26,13 @@ class DefaultNotificationGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('notification', 'app/Notifications/[[Notification]]Notification.php'),
+            Akceli::fileTemplate('notification', 'app/Notifications/[[Notification]].php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

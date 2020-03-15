@@ -3,6 +3,7 @@
 use Akceli\TemplateData;
 use Illuminate\Support\Str; ?>
 
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -13,7 +14,7 @@ use Illuminate\Notifications\Notification;
 /**
  * Documentation: https://laravel.com/docs/6.x/notifications#introduction
  */
-class [[Notification]]Notification extends Notification
+class [[Notification]] extends Notification
 {
     use Queueable;
 
