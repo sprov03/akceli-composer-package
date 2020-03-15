@@ -6,6 +6,7 @@ use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
+use Illuminate\Support\Str;
 
 class DefaultRequestGenerator extends AkceliGenerator
 {
@@ -21,8 +22,9 @@ class DefaultRequestGenerator extends AkceliGenerator
         return [
             "Request" => function (array $data) {
                 $request = (isset($data['table_name'])) ? $data['arg2'] : $data['arg1'];
+                $example = (isset($data['table_name'])) ? Str::studly($data['table_name']) : 'Example';
 
-                return $request ?? Console::ask('What is the name of the Request?', 'ExampleRequest');
+                return $request ?? Console::ask('What is the name of the Request?', $example . 'Request');
             }
         ];
     }
