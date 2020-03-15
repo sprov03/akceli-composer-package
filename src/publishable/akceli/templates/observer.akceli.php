@@ -13,7 +13,7 @@ use App\Models\[[Model]];
 /**
  * Documentation: https://laravel.com/docs/6.x/eloquent#observers
  */
-class [[Observer]]Observer
+class [[Observer]]
 {
     /**
      * Handle the [[Model]] "created" event.
