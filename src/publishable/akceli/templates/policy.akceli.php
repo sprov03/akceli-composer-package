@@ -1,21 +1,25 @@
 <?php echo '<?php';
 /**
  * @var string $Model
+ * @var TemplateData $table
  */
+use Akceli\TemplateData;
 use Illuminate\Support\Str;
 ?>
 
 
 namespace App\Policies;
 
-use App\Models\[[Model]];
+<?php if ($table->ModelName !== 'User'): ?>
+use App\Models\[[ModelName]];
+<?php endif; ?>
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 /**
  * Documentation: https://laravel.com/docs/6.x/authorization
  */
-class [[Model]]Policy
+class [[ModelName]]Policy
 {
     use HandlesAuthorization;
 
@@ -34,10 +38,10 @@ class [[Model]]Policy
      * Determine whether the user can view the dog.
      *
      * @param  User $authUser
-     * @param  [[Model]] $<?=Str::snake($Model) . PHP_EOL?>
+     * @param  [[ModelName]] $[[modelName]]
      * @return mixed
      */
-    public function view(User $authUser, [[Model]] $<?=Str::snake($Model)?>)
+    public function view(User $authUser, [[ModelName]] $[[modelName]])
     {
         //
     }
@@ -57,10 +61,10 @@ class [[Model]]Policy
      * Determine whether the user can update the dog.
      *
      * @param  User $authUser
-     * @param  [[Model]] $<?=Str::snake($Model) . PHP_EOL?>
+     * @param  [[ModelName]] $[[modelName]]
      * @return mixed
      */
-    public function update(User $authUser, [[Model]] $<?=Str::snake($Model)?>)
+    public function update(User $authUser, [[ModelName]] $[[modelName]])
     {
         //
     }
@@ -69,10 +73,10 @@ class [[Model]]Policy
      * Determine whether the user can delete the dog.
      *
      * @param  User $authUser
-     * @param  [[Model]] $<?=Str::snake($Model) . PHP_EOL?>
+     * @param  [[ModelName]] $[[modelName]]
      * @return mixed
      */
-    public function delete(User $authUser, [[Model]] $<?=Str::snake($Model)?>)
+    public function delete(User $authUser, [[ModelName]] $[[modelName]])
     {
         //
     }
@@ -81,10 +85,10 @@ class [[Model]]Policy
      * Determine whether the user can restore the dog.
      *
      * @param  User $authUser
-     * @param  [[Model]] $<?=Str::snake($Model) . PHP_EOL?>
+     * @param  [[ModelName]] $[[modelName]]
      * @return mixed
      */
-    public function restore(User $authUser, [[Model]] $<?=Str::snake($Model)?>)
+    public function restore(User $authUser, [[ModelName]] $[[modelName]])
     {
         //
     }
@@ -93,10 +97,10 @@ class [[Model]]Policy
      * Determine whether the user can permanently delete the dog.
      *
      * @param  User $authUser
-     * @param  [[Model]] $<?=Str::snake($Model) . PHP_EOL?>
+     * @param  [[ModelName]] $[[modelName]]
      * @return mixed
      */
-    public function forceDelete(User $authUser, [[Model]] $<?=Str::snake($Model)?>)
+    public function forceDelete(User $authUser, [[ModelName]] $[[modelName]])
     {
         //
     }
