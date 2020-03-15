@@ -24,10 +24,17 @@ class DefaultMailableGenerator extends AkceliGenerator
             'mailable_type' => function (array $data) {
                 return Console::choice('Is [[Mailable]] using view or markdown?', ['markdown', 'view'], 'markdown');
             },
-            'markdown_path' => function (array $data) {
+            'mailable_path' => function (array $data) {
                 $path = Str::kebob(str_replace('Mailable', '', $data['Mailable']));
                 return Console::ask('What is the path for the markdown file? (' . $path . ' will be create in resources/views/email/' . $path . '.blade.php)', $path);
             },
+            'mailable_dot_syntax' => function (array $data) {
+                $parts = explode('/', $data['mailable_path']);
+                $parts = array_map(function (string $part) {
+                    return Str::kebob($part);
+                }, $parts);
+                return implode('.', $parts);
+            }
         ];
     }
 
@@ -35,7 +42,7 @@ class DefaultMailableGenerator extends AkceliGenerator
     {
         return [
             Akceli::fileTemplate('mailable', 'app/Mail/[[Mailable]]Mailable.php'),
-            Akceli::fileTemplate('mailable_markdown', 'resources/views/emails/[[markdown_path]].blade.php'),
+            Akceli::fileTemplate('mailable_markdown', 'resources/views/emails/[[mailable_path]].blade.php'),
         ];
     }
 

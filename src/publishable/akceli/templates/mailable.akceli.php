@@ -1,10 +1,11 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Mailable
  * @var $markdown_path
  * @var $mailable_type
  */
 ?>
+
 
 namespace App\Mail;
 
@@ -16,7 +17,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 /**
  * Documentation: https://laravel.com/docs/6.x/mail#generating-mailables
  */
-class <?=$Mailable?> extends Mailable
+class [[Mailable]] extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,7 +38,7 @@ class <?=$Mailable?> extends Mailable
      */
     public function build()
     {
-        return $this-><?=$mailable_type?>('emails.<?=$markdown_path?>');
+        return $this->[[mailable_type]]('emails.[[mailable_dot_syntax]]');
     }
 }
 
