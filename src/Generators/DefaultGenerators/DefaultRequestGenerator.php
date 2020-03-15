@@ -11,18 +11,27 @@ class DefaultRequestGenerator extends AkceliGenerator
 {
     public function requiresTable(): bool
     {
-        return false;
+        $choice = Console::choice('Is this going to be based off of a model?', ['yes', 'no'], 'yes');
+
+        return $choice === 'yes';
     }
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Request" => function (array $data) {
+                $request = (isset($data['table_name'])) ? $data['arg2'] : $data['arg1'];
+
+                $request = $request ?: Console::ask('What is the name of the Request?');
+                return $request . 'Request';
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            // Akceli::fileTemplate('akceli_generator', 'akceli/generators/RequestGenerator.php'),
+            Akceli::fileTemplate('form_request', "app/Http/Requests/[[Request]].php"),
         ];
     }
 
