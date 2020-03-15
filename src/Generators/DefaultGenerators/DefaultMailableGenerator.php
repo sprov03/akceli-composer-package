@@ -6,6 +6,7 @@ use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
 use Akceli\Console;
+use Illuminate\Support\Str;
 
 class DefaultMailableGenerator extends AkceliGenerator
 {
@@ -18,14 +19,14 @@ class DefaultMailableGenerator extends AkceliGenerator
     {
         return [
             'Mailable' => function (array $data) {
-                Console::info('Markdown Messages Documentation: https://laravel.com/docs/6.x/mail#writing-markdown-messages');
-                return $data['arg1'] ?? Console::ask('What is the name of the Mailable?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Mailable?', 'ExampleMailable');
             },
             'mailable_type' => function (array $data) {
-                return Console::choice('Is [[Mailable]]Mailable using view or markdown?', ['markdown', 'view'], 'markdown');
+                return Console::choice('Is [[Mailable]] using view or markdown?', ['markdown', 'view'], 'markdown');
             },
             'markdown_path' => function (array $data) {
-                return Console::ask('What is the path for the markdown file? example (example will be placed in resources/views/email/example)');
+                $path = Str::kebob(str_replace('Mailable', '', $data['Mailable']));
+                return Console::ask('What is the path for the markdown file? (' . $path . ' will be create in resources/views/email/' . $path . '.blade.php)', $path);
             },
         ];
     }
@@ -46,6 +47,6 @@ class DefaultMailableGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Markdown Messages Documentation: https://laravel.com/docs/6.x/mail#writing-markdown-messages');
     }
 }

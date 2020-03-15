@@ -16,7 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 /**
  * Documentation: https://laravel.com/docs/6.x/mail#generating-mailables
  */
-class <?=$Mailable?>Mailable extends Mailable
+class <?=$Mailable?> extends Mailable
 {
     use Queueable, SerializesModels;
 
