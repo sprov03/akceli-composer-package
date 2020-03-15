@@ -6,7 +6,7 @@
 
 namespace Tests\Events;
 
-use App\Events\[[Event]]Event;
+use App\Events\[[Event]];
 use Tests\TestCase;
 
 class [[Event]]Test extends TestCase
@@ -14,8 +14,8 @@ class [[Event]]Test extends TestCase
     /**
      * @test
      */
-    public function when[[Event]]EventFired()
+    public function when[[Event]]Fired()
     {
-        event(new [[Event]]Event());
+        event(new [[Event]]());
     }
 }

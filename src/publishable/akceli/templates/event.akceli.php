@@ -1,9 +1,10 @@
-<?php echo '<?php' . PHP_EOL;
+<?php echo '<?php';
 /**
  * @var $Event
  */
+use Illuminate\Support\Str;
+?>
 
-use Illuminate\Support\Str; ?>
 
 namespace App\Events;
 
@@ -16,7 +17,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 /**
  * Documentation: https://laravel.com/docs/6.x/events#introduction
  */
-class <?=$Event?>Event
+class [[Event]]
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
