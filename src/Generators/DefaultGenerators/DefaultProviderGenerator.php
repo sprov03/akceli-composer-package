@@ -34,6 +34,6 @@ class DefaultProviderGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::alert('Not Yet Implemented');
     }
 }
