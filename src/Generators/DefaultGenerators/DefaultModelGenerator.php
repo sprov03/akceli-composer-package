@@ -17,8 +17,7 @@ class DefaultModelGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function templates(array $data): array
