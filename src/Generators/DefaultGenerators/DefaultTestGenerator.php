@@ -17,7 +17,7 @@ class DefaultTestGenerator extends AkceliGenerator
     {
         return [
             'Test' => function (array $data) {
-                return $data['arg1'] ?? Str::studly(Console::ask('What is the name of the Test you want to create?'));
+                return $data['arg1'] ?? Console::ask('What is the name of the Test you want to create?', 'ExampleTest');
             },
         ];
     }
@@ -25,7 +25,7 @@ class DefaultTestGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('test', 'tests/Feature/[[Test]]Test.php'),
+            Akceli::fileTemplate('test', 'tests/Feature/[[Test]].php'),
         ];
     }
 
