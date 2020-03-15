@@ -19,7 +19,7 @@ class DefaultChannelGenerator extends AkceliGenerator
     {
         return [
             'Channel' => function (array $data) {
-                return $data['arg1'] ?? Str::studly(Console::ask('What is the name of the Channel you want to create?'));
+                return $data['arg1'] ?? Console::ask('What is the name of the Channel you want to create?', 'ExampleChannel');
             },
         ];
     }
@@ -27,16 +27,16 @@ class DefaultChannelGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('channel', 'app/Broadcasting/[[Channel]]Channel.php'),
-            Akceli::fileTemplate('channel_test', 'tests/Broadcasting/[[Channel]]ChannelTest.php'),
+            Akceli::fileTemplate('channel', 'app/Broadcasting/[[Channel]].php'),
+            Akceli::fileTemplate('channel_test', 'tests/Broadcasting/[[Channel]]Test.php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
         return [
-            Akceli::insertInline('routes/channels.php', '/** Auto Import */', 'use App\Broadcasting\[[Channel]]Channel;'),
-            Akceli::insertInline('routes/channels.php', '/** register channels here */', 'Broadcast::channel(\'[[Channel]].{[[Channel]]}\', [[Channel]]Channel::class);'),
+            Akceli::insertInline('routes/channels.php', '/** Auto Import */', 'use App\Broadcasting\[[Channel]];'),
+            Akceli::insertInline('routes/channels.php', '/** register channels here */', 'Broadcast::channel(\'[[Channel]].{[[Channel]]}\', [[Channel]]::class);'),
         ];
     }
 

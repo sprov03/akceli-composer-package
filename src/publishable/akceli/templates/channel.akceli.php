@@ -4,6 +4,7 @@
  */
 ?>
 
+
 namespace App\Broadcasting;
 
 use App\Models\User;
@@ -11,7 +12,7 @@ use App\Models\User;
 /**
  * Documentation: https://laravel.com/docs/5.8/broadcasting#defining-channel-classes
  */
-class <?=$Channel?>Channel
+class [[Channel]]
 {
     /**
      * Create a new channel instance.

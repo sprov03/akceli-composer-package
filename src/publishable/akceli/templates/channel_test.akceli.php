@@ -7,11 +7,11 @@ use Illuminate\Support\Str;
 
 namespace Tests\Broadcasting;
 
-use App\Broadcasting\<?=$Channel?>Channel;
+use App\Broadcasting\[[Channel]];
 use Factories\UserFactory;
 use Tests\TestCase;
 
-class <?=$Channel?>ChannelTest extends TestCase
+class [[Channel]]Test extends TestCase
 {
     /**
      * @test
@@ -19,8 +19,8 @@ class <?=$Channel?>ChannelTest extends TestCase
     public function canJoinChannel()
     {
         $user = UserFactory::createDefault();
-        /** @var <?=$Channel?>Channel $<?=Str::snake($Channel)?>Channel */
-        $<?=Str::snake($Channel)?>Channel = app(<?=$Channel?>Channel::class);
+        /** @var [[Channel]] $<?=Str::snake($Channel)?> */
+        $<?=Str::snake($Channel)?>Channel = app([[Channel]]::class);
 
         $this->assertTrue($<?=Str::snake($Channel)?>Channel->join($user));
     }
