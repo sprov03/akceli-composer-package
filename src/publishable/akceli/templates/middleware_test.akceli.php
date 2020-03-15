@@ -15,7 +15,7 @@ use Tests\TestCase;
  *
  * @package Tests\Http\Middleware
  */
-class <?=$Middleware?>MiddlewareTest extends TestCase
+class <?=$Middleware?>Test extends TestCase
 {
     /**
      * @test

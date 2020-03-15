@@ -10,13 +10,13 @@ use Closure;
 use Illuminate\Http\Request;
 
 /**
- * Class <?=$Middleware?>Middleware
+ * Class [[Middleware]]
  *
  * Documentation: https://laravel.com/docs/6.x/middleware#defining-middleware
  *
  * @package App\Http\Middleware
  */
-class <?=$Middleware?>Middleware
+class [[Middleware]]
 {
     /**
      * Handle an incoming request.

@@ -18,7 +18,7 @@ class DefaultMiddlewareGenerator extends AkceliGenerator
     {
         return [
             'Middleware' => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Middleware?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Middleware?', 'ExampleMiddleware');
             }
         ];
     }
@@ -26,19 +26,18 @@ class DefaultMiddlewareGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]]Middleware.php'),
-            Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]MiddlewareTest.php'),
+            Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]].php'),
+            Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]Test.php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Documentation: https://laravel.com/docs/6.x/middleware#defining-middleware');
     }
 }
