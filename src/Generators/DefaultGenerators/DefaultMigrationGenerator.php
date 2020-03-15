@@ -29,7 +29,7 @@ class DefaultMigrationGenerator extends AkceliGenerator
             },
             'migration_name' => function($data) {
                 if ($data['migration_type'] === 'update') {
-                    $name = Console::ask('What is the name of the migration?');
+                    $name = Console::ask('Describe the migration?', 'adding some data to the example table');
                 } else {
                     $name = 'create_' . $data['table_name'] . '_table';
                 }

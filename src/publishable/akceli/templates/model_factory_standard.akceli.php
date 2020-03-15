@@ -3,7 +3,7 @@
 use Akceli\TemplateData;?>
 
 /**
- *  Documentation: https://laravel.com/docs/5.8/database-testing#writing-factories
+ *  Documentation: https://laravel.com/docs/6.x/database-testing#writing-factories
  *
  *  @var \Illuminate\Database\Eloquent\Factory $factory
  */

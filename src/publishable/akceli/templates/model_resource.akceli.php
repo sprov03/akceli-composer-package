@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @package App\Http\Resources
  *
- * @example https://laravel.com/docs/5.8/eloquent-resources#concept-overview
+ * @example https://laravel.com/docs/6.x/eloquent-resources#concept-overview
  */
 class [[ModelName]]Resource extends JsonResource
 {

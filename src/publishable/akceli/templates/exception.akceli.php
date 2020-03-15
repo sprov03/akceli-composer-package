@@ -21,7 +21,7 @@ class [[Exception]] extends Exception
     /**
      * Report the exception.
      *
-     * Documentation: https://laravel.com/docs/5.8/errors#renderable-exceptions
+     * Documentation: https://laravel.com/docs/6.x/errors#renderable-exceptions
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class [[Exception]] extends Exception
     /**
      * Render the exception as an HTTP response.
      *
-     * Documentation: https://laravel.com/docs/5.8/errors#render-method
+     * Documentation: https://laravel.com/docs/6.x/errors#render-method
      *
      * @param  Request  $request
      * @return Response

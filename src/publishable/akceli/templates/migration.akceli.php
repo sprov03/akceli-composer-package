@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- *  Documentation: https://laravel.com/docs/5.8/migrations#creating-columns
+ *  Documentation: https://laravel.com/docs/6.x/migrations#creating-columns
  */
 class <?=Str::studly($migration_name)?> extends Migration
 {
