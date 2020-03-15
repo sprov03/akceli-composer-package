@@ -1,15 +1,16 @@
 <?php echo '<?php' . PHP_EOL;
 /**
- * @var $Command
- * @var $Signature
+ * @var string $Command
+ * @var string $Signature
  */
 ?>
+
 
 namespace Tests\Console\Commands;
 
 use Tests\TestCase;
 
-class <?=$Command?>CommandTest extends TestCase
+class <?=$Command?>Test extends TestCase
 {
     /**
      * @test

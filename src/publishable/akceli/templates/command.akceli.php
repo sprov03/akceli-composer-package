@@ -1,7 +1,7 @@
 <?php echo '<?php' . PHP_EOL;
 /**
- * @var $Command
- * @var $Signature
+ * @var string $Command
+ * @var string $Signature
  */
 ?>
 
@@ -12,14 +12,14 @@ use Illuminate\Console\Command;
 /**
  * Documentation: https://laravel.com/docs/6.x/artisan#writing-commands
  */
-class <?=$Command?>Command extends Command
+class [[Command]] extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = '<?=$Signature?>';
+    protected $signature = '[[Signature]]';
 
     /**
      * The console command description.

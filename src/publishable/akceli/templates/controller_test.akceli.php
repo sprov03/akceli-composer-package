@@ -2,13 +2,14 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
+
 namespace Tests\App\Http\Controllers;
 
 use App\Models\<?=$table->ModelName?>;
 use Factories\<?=$table->ModelName?>Factory;
 use Tests\TestCase;
 
-class <?=$table->ModelName?>ControllerTest extends TestCase
+class [[Controller]]Test extends TestCase
 {
     /**
      * @test

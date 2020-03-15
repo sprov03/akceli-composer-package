@@ -18,10 +18,10 @@ class DefaultCommandGenerator extends AkceliGenerator
     {
         return [
             'Command' => function (array $data) {
-                return $data['arg1'] ?? Console::ask('What is the name of the Command?');
+                return $data['arg1'] ?? Console::ask('What is the name of the Command?', 'ExampleCommand');
             },
             'Signature' => function (array $data) {
-                return $data['arg2'] ?? Console::ask('What is the signature for the command?');
+                return $data['arg2'] ?? Console::ask('What is the signature for the command?', 'acme:example-command');
             }
         ];
     }
@@ -29,8 +29,8 @@ class DefaultCommandGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]]Command.php'),
-            Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]CommandTest.php'),
+            Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]].php'),
+            Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
         ];
     }
 

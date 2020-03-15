@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\View;
 /**
  * Documentation: https://laravel.com/docs/6.x/controllers#introduction
  */
-class <?=$table->ModelName?>Controller extends Controller
+class [[Controller]] extends Controller
 {
     /**
      * Display a listing of the resource.
