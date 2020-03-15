@@ -36,6 +36,6 @@ class DefaultTestGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        Console::info('Success');
+        Console::info('Documentation: https://laravel.com/docs/6.x/testing#introduction');
     }
 }
