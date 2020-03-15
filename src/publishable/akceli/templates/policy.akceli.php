@@ -19,7 +19,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 /**
  * Documentation: https://laravel.com/docs/6.x/authorization
  */
-class [[ModelName]]Policy
+class [[Policy]]
 {
     use HandlesAuthorization;
 

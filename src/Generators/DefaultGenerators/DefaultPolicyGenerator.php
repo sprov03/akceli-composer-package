@@ -16,22 +16,26 @@ class DefaultPolicyGenerator extends AkceliGenerator
 
     public function dataPrompter(): array
     {
-        return [];
+        return [
+            "Policy" => function (array $data) {
+                return $data['arg2'] ?: Console::ask('What is the name of the Policy?', $data['ModelName'] . 'Policy');
+            }
+        ];
     }
 
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('policy', 'app/Policies/[[ModelName]]Policy.php'),
+            Akceli::fileTemplate('policy', 'app/Policies/[[Policy]].php'),
         ];
     }
 
     public function inlineTemplates(array $data): array
     {
         return [
-            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Register Policies Here */', '[[ModelName]]::class => [[ModelName]]Policy::class,'),
+            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Register Policies Here */', '[[ModelName]]::class => [[Policy]]::class,'),
             Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Auto Import */', 'use App\\Models\\[[ModelName]];'),
-            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Auto Import */', 'use App\\Policies\\[[ModelName]]Policy;'),
+            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Auto Import */', 'use App\\Policies\\[[Policy]];'),
         ];
     }
 
