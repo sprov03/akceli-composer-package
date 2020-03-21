@@ -53,11 +53,12 @@ return [
      *
      *          Second: If the first lookup fails, Akceli will try to find a file with the Laravel naming conventions for the table,
      *                  This can cause it to find a file that is not a model.  If all of your files are in a model directory
-     *                  Or you do not have Mulitple Classes that are the same name as the Expected Model, then there will be no issues
+     *                  Or you do not have Multiple Classes that are the same name as the Expected Model, then there will be no issues
      *                  finding the correct file.
      *
      *          Note:  The possible failures of the second lookup is why Akceli models get generated with the $table property set.
-     *          Note:  If your app uses the Models directory, I suggest you set it here.  It will speed up the Model lookups.
+     *                 If your app uses the Models directory, I suggest you set it here.  It will speed up the Model lookups.
+     *                 To Insure that the model lookups always resolve correctly simply add the $table attribute to the models.
      */
     'model_directory' =>  'Models',
 
