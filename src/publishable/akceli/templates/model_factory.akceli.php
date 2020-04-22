@@ -1,6 +1,7 @@
 <?php echo '<?php';
 /** @var  TemplateData $table */
-use Akceli\TemplateData;?>
+use Akceli\TemplateData;
+use Illuminate\Support\Str; ?>
 
 
 namespace Factories;
@@ -26,9 +27,20 @@ class [[Factory]]
 
         $<?=$table->modelName?> = new <?=$table->ModelName?>();
 <?php foreach ($table->columns as $column): ?>
+<?php if (!$column->endsWith('_id')): ?>
         $<?=$table->modelName?>-><?=$column->getField()?> = $faker-><?=$column->getField()?>;
+<?php endif; ?>
 <?php endforeach; ?>
         $<?=$table->modelName?>->forceFill($data);
+
+<?php foreach ($table->columns as $column): ?>
+<?php if ($column->endsWith('_id')): ?>
+        if (!$<?=$table->modelName?>-><?=Str::camel(str_replace('_id', '', $column->getField()))?>) {
+            $<?=$table->modelName?>-><?=Str::camel(str_replace('_id', '', $column->getField()))?>()->associate(<?=Str::studly(str_replace('_id', '', $column->getField()))?>Factory::createDefault());
+        }
+
+<?php endif; ?>
+<?php endforeach; ?>
 
         return $<?=$table->modelName?>;
     }
