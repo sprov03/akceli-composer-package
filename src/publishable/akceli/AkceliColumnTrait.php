@@ -18,8 +18,8 @@ trait AkceliColumnTrait
         return !$this->isIn($column_names);
     }
 
-    public function getSpaceizedField() {
-        return str_replace('-', ' ', Str::kebab(Str::studly($this->getField())));
+    public function getSpacedField() {
+        return str_replace('-', ' ', Str::kebab($this->getField()));
     }
 
     function startsWith($needle)
@@ -31,4 +31,8 @@ trait AkceliColumnTrait
     {
         return Str::endsWith($this->getField(), $needle);
     }
-}
+
+    public function getClientLabel()
+    {
+        return ucwords($this->getSpacedField()) . ':';
+    }}
