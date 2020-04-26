@@ -1,8 +1,7 @@
 <?php
 
 use Akceli\Akceli;
-use Akceli\DefaultNewAkceliGenerator;
-use Akceli\DefaultBootstrapGenerator;
+use Akceli\Generators\DefaultGenerators\DefaultNewAkceliGenerator;
 use Akceli\Generators\AllGenerator;
 use Akceli\Generators\ChannelGenerator;
 use Akceli\Generators\CommandGenerator;
@@ -25,7 +24,6 @@ use Akceli\Generators\ResourceGenerator;
 use Akceli\Generators\RuleGenerator;
 use Akceli\Generators\TestGenerator;
 use Akceli\Generators\SeederGenerator;
-use Akceli\Generators\ApiControllerGenerator;
 use Akceli\Modifiers\Builders\Relationships\BelongsToBuilder;
 use Akceli\Modifiers\Builders\Relationships\BelongsToManyBuilder;
 use Akceli\Modifiers\Builders\Relationships\HasManyBuilder;
@@ -35,6 +33,8 @@ use Akceli\Modifiers\Builders\Relationships\MorphManyBuilder;
 use Akceli\Modifiers\Builders\Relationships\MorphToBuilder;
 use Akceli\Modifiers\Builders\Relationships\MorphToManyBuilder;
 
+use Akceli\Generators\CronJobGenerator;
+use Akceli\Generators\ApiControllerGenerator;
 /** auto import new commands */
 
 /**
@@ -62,7 +62,7 @@ return [
      *                 If your app uses the Models directory, I suggest you set it here.  It will speed up the Model lookups.
      *                 To Insure that the model lookups always resolve correctly simply add the $table attribute to the models.
      */
-    'model_directory' =>  'Models',
+    'model_directory' =>  '',
 
     /**
      * Options: 'auto-complete' or 'multiple-choice'
@@ -110,6 +110,18 @@ return [
         'php_class_doc_type' => Akceli::columnSetting('string', 'integer', 'string', 'string', 'Carbon', 'boolean'),
 
         /**
+         * Usage: <?=$column->getColumnSetting('php_method_doc_type', 'string')?>
+         *
+         * Outputs based on column analysis:
+         *    Integer: 'int'
+         *    String: 'string'
+         *    Enum: 'string'
+         *    Timestamp: 'Carbon'
+         *    Boolean: 'bool'
+         */
+        'php_method_doc_type' => Akceli::columnSetting('string', 'int', 'string', 'string', 'Carbon', 'bool'),
+
+        /**
          * Usage: <?=$column->getColumnSetting('casts', 'string')?>
          *
          * Outputs based on column analysis:
@@ -152,8 +164,8 @@ return [
         'rule' => RuleGenerator::class,
         'test' => TestGenerator::class,
         'seeder' => SeederGenerator::class,
+        'cron' => CronJobGenerator::class,
         'api_controller' => ApiControllerGenerator::class,
-        'bootstrap' => DefaultBootstrapGenerator::class,
         /** New Generators Get Inserted Here */
     ],
 

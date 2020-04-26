@@ -41,7 +41,6 @@ class [[Factory]]
 
 <?php endif; ?>
 <?php endforeach; ?>
-
         return $<?=$table->modelName?>;
     }
 

@@ -19,7 +19,7 @@ class <?=$Command?>Test extends TestCase
      */
     public function command()
     {
-        $this->artisan(<?=$Command?>::class)
+        $this->artisan('<?=$Signature?>')
             //->expectsQuestion('What is your name?', 'Taylor Otwell')
             //->expectsOutput('Your name is Taylor Otwell and you program in PHP.')
             ->assertExitCode(0);

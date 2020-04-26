@@ -86,7 +86,6 @@ class AkceliPublishCommand extends Command
             file_put_contents(base_path('akceli/generators/' . $className . '.php'), $content);
         }
 
-
         if ($exitCode) {
             Console::error('');
             Console::error('There was an error publishing the config file: Try running the following command for more details:');

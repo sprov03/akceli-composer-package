@@ -38,8 +38,7 @@ class DefaultRequestGenerator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

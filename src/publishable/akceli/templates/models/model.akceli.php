@@ -6,6 +6,7 @@ use Akceli\TemplateData;
 namespace App\Models;
 
 use \Illuminate\Database\Eloquent\Model;
+use App\Models\Services\[[ModelName]]Service;
 <?php if ($table->hasField('deleted_at')): ?>
 use Illuminate\Database\Eloquent\SoftDeletes;
 <?php endif; ?>
@@ -52,4 +53,9 @@ class <?=$table->ModelName?> extends Model
         //'<?=$column->getField()?>',
 <?php endforeach; ?>
     ];
+
+    public function Service(): [[ModelName]]Service
+    {
+        return new [[ModelName]]Service($this);
+    }
 }

@@ -33,7 +33,7 @@ class [[Request]] extends FormRequest
 <?php if ($table->columns): ?>
 <?php foreach ($table->columns as $column): ?>
 <?php if ($column->hasValidationRules()): ?>
-            '<?=$column->getField()?>' => '<?=$column->getValidationRulesAsString()?>',
+            '<?=$column->getField()?>' => ['<?=str_replace('|', "', '", $column->getValidationRulesAsString())?>'],
 <?php endif; ?>
 <?php endforeach; ?>
 <?php endif; ?>

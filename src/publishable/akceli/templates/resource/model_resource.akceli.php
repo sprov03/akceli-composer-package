@@ -2,6 +2,7 @@
 /** @var  TemplateData $table */
 use Akceli\TemplateData;?>
 
+
 namespace App\Resources;
 
 use App\Models\[[ModelName]];
@@ -31,7 +32,7 @@ class [[ModelName]]Resource extends JsonResource
         return [
 <?php foreach ($table->columns as $column): ?>
 <?php if ($table->columns->last() === $column): ?>
-            '<?=$column->Field?>' => $this->resource-><?=$column->Field?>
+            '<?=$column->Field?>' => $this->resource-><?=$column->Field . PHP_EOL?>
 <?php else:?>
             '<?=$column->Field?>' => $this->resource-><?=$column->Field?>,
 <?php endif;?>

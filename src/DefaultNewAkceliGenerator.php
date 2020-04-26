@@ -1,12 +1,10 @@
 <?php
 
-namespace Akceli\Generators\DefaultGenerators;
-
-use Akceli\Generators\AkceliGenerator;
+namespace Akceli;
 
 use Akceli\Akceli;
 use Akceli\Console;
-use Akceli\GeneratorService;
+use Akceli\Generators\AkceliGenerator;
 use Illuminate\Support\Str;
 
 class DefaultNewAkceliGenerator extends AkceliGenerator

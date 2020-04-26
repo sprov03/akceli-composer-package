@@ -39,17 +39,17 @@ use Illuminate\Support\Str; ?>
 <?php endif ?>
 <?php endforeach; ?>
         <div>
-            <app-button rounded :async="save">Save</app-button>
+            <app-button :async="save">Save</app-button>
         </div>
     </div>
 </template>
 
 <script>
-  import AppButton from "../components/AppButton";
-  import AppField from "../components/AppField";
+  import AppButton from "../components/common/AppButton";
+  import AppFieldText from "../components/fields/AppFieldText";
   export default {
     name: "[[ModelName]]Form",
-    components: {AppField, AppButton},
+    components: {AppFieldText, AppButton},
     props: {
       <?=$table->modelName?>: {
         type: Object,
