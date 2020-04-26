@@ -53,9 +53,19 @@ class DefaultBootstrapGenerator extends AkceliGenerator
     {
         $config = require(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
 
+        $this->runComposerCommands($config['commands'] ?? []);
         File::copyDirectory(base_path("akceli/bootstrap/{$data['Bootstrap']}/files"), $data['BasePath']);
         $this->replaceStrings($config['string_replacements'] ?? [], $data['BasePath']);
         $this->removeFiles($config['files_to_remove'] ?? [], $data['BasePath']);
+        
+        /**
+         * Process each of the file modifiers
+         * 
+         * @var AkceliFileModifier $fileModifier 
+         */
+        foreach ($config['file_modifiers'] ?? [] as $fileModifier) {
+            $fileModifier->saveChanges();
+        }
 
         Console::info('Success');
     }
@@ -111,6 +121,13 @@ class DefaultBootstrapGenerator extends AkceliGenerator
             } catch (\Throwable $throwable) {
                 dump($throwable->getMessage());
             }
+        }
+    }
+    
+    private function runComposerCommands(array $commands)
+    {
+        foreach ($commands as $command) {
+            shell_exec(escapeshellcmd($command));
         }
     }
 }

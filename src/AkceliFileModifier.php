@@ -19,7 +19,6 @@ class AkceliFileModifier
 
     /**
      * @param \SplFileInfo|string $file
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public static function file($file)
     {
