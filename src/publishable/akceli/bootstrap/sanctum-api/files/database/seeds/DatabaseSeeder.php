@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         $user->email = 'testUser@example.com';
         $user->password = 'password';
         $user->save();
+
+        // $this->call(UserSeeder::class);
     }
 }
