@@ -63,7 +63,8 @@ class DefaultBootstrapGenerator extends AkceliGenerator
          * 
          * @var AkceliFileModifier $fileModifier 
          */
-        foreach ($config['file_modifiers'] ?? [] as $fileModifier) {
+        $modifiers = $config['file_modifiers'] ?? function () {return [];};
+        foreach ($modifiers() as $fileModifier) {
             $fileModifier->saveChanges();
         }
 

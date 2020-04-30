@@ -74,13 +74,29 @@ class AkceliFileModifier
 
         $content_parts = explode('}', $this->content);
         array_pop($content_parts);
-        $content_parts[count($content_parts) - 1] .= $content;
+        $content_parts[count($content_parts) - 1] .= PHP_EOL . $content .PHP_EOL;
         array_push($content_parts, '');
-        $this->content = implode('}', $content_parts);
+        $this->content = implode('}', $content_parts) . PHP_EOL;
+
+        return $this;
+    }
+
+    public function addToTopOfMethod($method, $content)
+    {
+        if (!$this->classHasMethod($method)) {
+            Console::warn("The {$method} method dose not exists in {$this->fileInfo->getRealPath()}");
+
+            return;
+        }
+
+        $pattern = "/function ({$method})\(([^\)])*\)([^{])*{/";
+        return $this->regexAppend($pattern, PHP_EOL . '        ' . $content);
     }
 
     /**
      * Add use statement to class file
+     *
+     * Requires a namespace in the file to work.
      *
      * @param string $namespace
      */
@@ -90,8 +106,7 @@ class AkceliFileModifier
             !$this->classHasUseStatement($namespace) &&
             $this->getNamespaceOfFile() !== $namespace
         ) {
-            $pattern = '/' . preg_quote('use', '/') . '/';
-            $this->content = preg_replace($pattern, "use {$namespace};\nuse", $this->content, 1);
+            $this->regexAppend("/namespace([^\n])*\s*/", "use {$namespace};" . PHP_EOL);
         }
 
         return $this;
@@ -105,13 +120,21 @@ class AkceliFileModifier
             ->regexReplace("\n{\n", "\n{\n    use {$className};\n");
     }
 
-    public function addLineAbove(string $search, string $new_content)
+    public function addLineAbove(string $search, string $new_content, $is_raw_pattern = false)
     {
+        if (!$is_raw_pattern) {
+            $search = preg_quote($search);
+        }
+
         return $this->regexPrepend("/([^\n])*{$search}([^\n])*/", $new_content . PHP_EOL);
     }
 
-    public function addLineBelow(string $search, string $new_content)
+    public function addLineBelow(string $search, string $new_content, $is_raw_pattern = false)
     {
+        if (!$is_raw_pattern) {
+            $search = preg_quote($search);
+        }
+
         return $this->regexAppend("/([^\n])*{$search}([^\n])*/", PHP_EOL . $new_content);
     }
 
@@ -186,7 +209,6 @@ class AkceliFileModifier
             $replacement = $matches[0] . $new_content;
             $this->content = preg_replace($pattern, $replacement, $this->content, 1);
         }
-
         return $this;
     }
 
