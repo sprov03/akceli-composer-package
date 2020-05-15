@@ -31,12 +31,12 @@ class DefaultCommandGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]].php'),
-            Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
+            Akceli::template('command', 'app/Console/Commands/[[Command]].php'),
+            Akceli::template('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [];
     }

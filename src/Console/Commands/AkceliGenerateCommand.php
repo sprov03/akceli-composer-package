@@ -153,6 +153,7 @@ class AkceliGenerateCommand extends Command
 
         GeneratorService::setData($template_data);
         GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
+        GeneratorService::setFileModifiers($templateSet['file_modifiers'] ?? []);
         GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
 
         $templateData = new TemplateData($template_data, $columns);

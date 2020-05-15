@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\AkceliFileModifier;
 use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
@@ -22,18 +23,18 @@ class DefaultSeederGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
+            Akceli::template('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
-            Akceli::insertInline(
-                'database/seeds/DatabaseSeeder.php',
-                '/** Register Seeders Here */',
-                '$this->call([[ModelName]]Seeder::class);'
-            ),
+            AkceliFileModifier::phpFile(base_path('database/seeds/DatabaseSeeder.php'))
+                ->addToTopOfMethod('run', "\$this->call({$data['ModelName']}Seeder::class);"),
+
+//            AkceliFileModifier::phpFile(base_path('database/seeds/DatabaseSeeder.php'))
+//                ->addLineAbove('/** Register Seeders Here */', "\$this->call({$data['ModelName']}Seeder::class);"),
         ];
     }
 

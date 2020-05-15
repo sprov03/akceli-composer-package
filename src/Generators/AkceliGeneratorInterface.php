@@ -15,5 +15,7 @@ interface AkceliGeneratorInterface
 
     public function inlineTemplates(array $data): array;
 
+    public function fileModifiers(array $data): array;
+
     public function completionMessage(array $data);
 }

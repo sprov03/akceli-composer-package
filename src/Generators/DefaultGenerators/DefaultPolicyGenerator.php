@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\AkceliFileModifier;
 use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
@@ -26,16 +27,17 @@ class DefaultPolicyGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('policy', 'app/Policies/[[Policy]].php'),
+            Akceli::template('policy', 'app/Policies/[[Policy]].php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
-            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Register Policies Here */', '[[ModelName]]::class => [[Policy]]::class,'),
-            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Auto Import */', 'use App\\Models\\[[ModelName]];'),
-            Akceli::insertInline('app/Providers/AuthServiceProvider.php', '/** Auto Import */', 'use App\\Policies\\[[Policy]];'),
+            AkceliFileModifier::phpFile(app_path('Providers/AuthServiceProvider.php'))
+                ->addUseStatementToFile("App\Models\\{$data['ModelName']}")
+                ->addUseStatementToFile("App\Policies\\{$data['Policy']}")
+                ->addToTopOfMethod('boot', "{$data['ModelName']}::class => {$data['Policy']}::class,"),
         ];
     }
 

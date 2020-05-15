@@ -15,7 +15,7 @@ return [
         'php artisan migrate',
     ],
     'string_replacements' => [
-        'App\Models\User' => 'App\Models\User'
+        'App\User' => 'App\Models\User'
     ],
     'files_to_remove' => [
         'app/User.php'
@@ -49,10 +49,14 @@ EOF
                 ->addUseStatementToFile('Laravel\Sanctum\Sanctum'),
 
             AkceliFileModifier::file('.env.example')
+                ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
+                ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
                 ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
                 ->addLineBelow('APP_URL', 'CLIENT_STORE_URL=api/client-store'),
 
             AkceliFileModifier::file('.env')
+                ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
+                ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
                 ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
                 ->addLineBelow('APP_URL', 'CLIENT_STORE_URL=api/client-store'),
         ];

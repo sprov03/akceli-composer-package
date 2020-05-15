@@ -41,15 +41,14 @@ class DefaultMailableGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('mailable', 'app/Mail/[[Mailable]]Mailable.php'),
-            Akceli::fileTemplate('mailable_markdown', 'resources/views/emails/[[mailable_path]].blade.php'),
+            Akceli::template('mailable', 'app/Mail/[[Mailable]]Mailable.php'),
+            Akceli::template('mailable_markdown', 'resources/views/emails/[[mailable_path]].blade.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

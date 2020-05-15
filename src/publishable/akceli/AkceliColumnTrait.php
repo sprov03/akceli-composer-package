@@ -35,4 +35,5 @@ trait AkceliColumnTrait
     public function getClientLabel()
     {
         return ucwords($this->getSpacedField()) . ':';
-    }}
+    }
+}

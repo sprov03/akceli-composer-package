@@ -13,14 +13,29 @@ abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
 
     public function data()
     {
-        return $this->dataPrompter(GeneratorService::getData());
+        return $this->dataPrompter();
     }
 
     public function inline_templates()
     {
         return $this->inlineTemplates(GeneratorService::getData());
     }
-    
+
+    public function inlineTemplates(array $data): array
+    {
+        return [];
+    }
+
+    public function file_modifiers()
+    {
+        return $this->fileModifiers(GeneratorService::getData());
+    }
+
+    public function fileModifiers(array $data): array
+    {
+        return [];
+    }
+
     public function completion_message()
     {
         $this->completionMessage(GeneratorService::getData());
@@ -45,6 +60,7 @@ abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
             'requires_table_name',
             'data',
             'inline_templates',
+            'file_modifiers',
             'completion_message'
         ]);
     }

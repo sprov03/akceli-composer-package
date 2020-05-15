@@ -30,15 +30,14 @@ class DefaultListenerGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('listener', 'app/Listeners/[[Listener]].php'),
-            Akceli::fileTemplate('listener_test', 'tests/Listeners/[[Listener]]Test.php'),
+            Akceli::template('listener', 'app/Listeners/[[Listener]].php'),
+            Akceli::template('listener_test', 'tests/Listeners/[[Listener]]Test.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

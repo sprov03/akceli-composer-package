@@ -13,6 +13,7 @@ class GeneratorService
     private static $data = [];
     private static $file_templates = [];
     private static $inline_templates = [];
+    private static $file_modifiers = [];
 
     /**
      * @var TemplateData
@@ -43,6 +44,11 @@ class GeneratorService
         self::$file_templates = $file_templates;
     }
 
+    public static function setFileModifiers(array $file_modifiers)
+    {
+        self::$file_modifiers = $file_modifiers;
+    }
+
     public static function setInlineTemplates(array $inline_templates)
     {
         self::$inline_templates = $inline_templates;
@@ -57,6 +63,7 @@ class GeneratorService
 
         $this->processFileTemplates($templateParser, $force);
         $this->processInlineTemplates($templateParser);
+        $this->processFileModifiers();
     }
 
     private function processFileTemplates(Parser $parser, bool $force)
@@ -71,6 +78,13 @@ class GeneratorService
 
             FileService::putFile($template_path, $parser->render($template['name']));
             Console::info("File {$template_path} (Created)");
+        }
+    }
+
+    private function processFileModifiers()
+    {
+        foreach (self::$file_modifiers as $file_modifier) {
+            $file_modifier->saveChanges();
         }
     }
 

@@ -22,7 +22,7 @@ class Akceli
         ];
     }
 
-    public static function fileTemplate(string $template, string $destination_path) {
+    public static function template(string $template, string $destination_path) {
         return [
             'name' => $template,
             'path' => $destination_path,

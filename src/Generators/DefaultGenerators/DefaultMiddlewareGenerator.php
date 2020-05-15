@@ -26,12 +26,12 @@ class DefaultMiddlewareGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('middleware', 'app/Http/Middleware/[[Middleware]].php'),
-            Akceli::fileTemplate('middleware_test', 'tests/Http/Middleware/[[Middleware]]Test.php'),
+            Akceli::template('middleware', 'app/Http/Middleware/[[Middleware]].php'),
+            Akceli::template('middleware_test', 'tests/Http/Middleware/[[Middleware]]Test.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [];
     }

@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\AkceliFileModifier;
 use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
@@ -27,16 +28,17 @@ class DefaultChannelGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('channel', 'app/Broadcasting/[[Channel]].php'),
-            Akceli::fileTemplate('channel_test', 'tests/Broadcasting/[[Channel]]Test.php'),
+            Akceli::template('channel', 'app/Broadcasting/[[Channel]].php'),
+            Akceli::template('channel_test', 'tests/Broadcasting/[[Channel]]Test.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
-            Akceli::insertInline('routes/channels.php', '/** Auto Import */', 'use App\Broadcasting\[[Channel]];'),
-            Akceli::insertInline('routes/channels.php', '/** register channels here */', 'Broadcast::channel(\'[[Channel]].{[[Channel]]}\', [[Channel]]::class);'),
+            AkceliFileModifier::phpFile(base_path('routes/channels.php'))
+                ->addUseStatementToFile("App\Broadcasting\\{$data['Channel']}")
+                ->addLineAbove('Broadcast::channel', "Broadcast::channel('{$data['Channel']}.{{$data['Channel']}}', {$data['Channel']}::class);")
         ];
     }
 

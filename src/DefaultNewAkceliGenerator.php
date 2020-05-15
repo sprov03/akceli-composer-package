@@ -29,7 +29,7 @@ class DefaultNewAkceliGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('akceli_generator', 'akceli/generators/[[Generator]].php'),
+            Akceli::template('akceli_generator', 'akceli/generators/[[Generator]].php'),
         ];
     }
 

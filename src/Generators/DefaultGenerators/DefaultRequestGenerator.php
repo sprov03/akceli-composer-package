@@ -32,11 +32,11 @@ class DefaultRequestGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('form_request', "app/Http/Requests/[[Request]].php"),
+            Akceli::template('form_request', "app/Http/Requests/[[Request]].php"),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [];
     }

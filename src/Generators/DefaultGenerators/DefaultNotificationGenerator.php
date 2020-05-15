@@ -26,11 +26,11 @@ class DefaultNotificationGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('notification', 'app/Notifications/[[Notification]].php'),
+            Akceli::template('notification', 'app/Notifications/[[Notification]].php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [];
     }

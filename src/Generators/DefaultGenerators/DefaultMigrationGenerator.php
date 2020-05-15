@@ -41,14 +41,13 @@ class DefaultMigrationGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
+            Akceli::template('migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function completionMessage(array $data)

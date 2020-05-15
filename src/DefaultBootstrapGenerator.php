@@ -46,29 +46,36 @@ class DefaultBootstrapGenerator extends AkceliGenerator
 
     public function inlineTemplates(array $data): array
     {
-        return [];
+        return [
+            Akceli::insertInline('app/')
+        ];
     }
 
     public function completionMessage(array $data)
     {
-        $config = require(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
+        $backup = file_get_contents(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
+        try {
+            $config = require(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
 
-        $this->runComposerCommands($config['commands'] ?? []);
-        File::copyDirectory(base_path("akceli/bootstrap/{$data['Bootstrap']}/files"), $data['BasePath']);
-        $this->replaceStrings($config['string_replacements'] ?? [], $data['BasePath']);
-        $this->removeFiles($config['files_to_remove'] ?? [], $data['BasePath']);
-        
-        /**
-         * Process each of the file modifiers
-         * 
-         * @var AkceliFileModifier $fileModifier 
-         */
-        $modifiers = $config['file_modifiers'] ?? function () {return [];};
-        foreach ($modifiers() as $fileModifier) {
-            $fileModifier->saveChanges();
+            $this->runComposerCommands($config['commands'] ?? []);
+            File::copyDirectory(base_path("akceli/bootstrap/{$data['Bootstrap']}/files"), $data['BasePath']);
+            $this->replaceStrings($config['string_replacements'] ?? [], $data['BasePath']);
+            $this->removeFiles($config['files_to_remove'] ?? [], $data['BasePath']);
+
+            /**
+             * Process each of the file modifiers
+             *
+             * @var AkceliFileModifier $fileModifier
+             */
+            $modifiers = $config['file_modifiers'] ?? function () {return [];};
+            foreach ($modifiers() as $fileModifier) {
+                $fileModifier->saveChanges();
+            }
+
+            Console::info('Success');
+        } finally {
+            file_put_contents(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"), $backup);
         }
-
-        Console::info('Success');
     }
 
     private function replaceStrings(array $strings, $path)

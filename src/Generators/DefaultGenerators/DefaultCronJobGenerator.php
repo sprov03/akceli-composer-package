@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\AkceliFileModifier;
 use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
@@ -57,15 +58,17 @@ class DefaultCronJobGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]].php'),
-            Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
+            Akceli::template('command', 'app/Console/Commands/[[Command]].php'),
+            Akceli::template('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
-            Akceli::insertInline('app/Console/Kernel.php', '/** Register Commands Here */', '$schedule->command(\'[[Signature]]\')->[[Schedule]];'),
+            AkceliFileModifier::phpFile(app_path('Console/Kernel.php'))
+                ->addUseStatementToFile("App\Console\Commands\\{$data['Command']}")
+                ->addToTopOfMethod('schedule', "\$schedule->command({$data['Command']}::class)->{$data['Schedule']};"),
         ];
     }
 

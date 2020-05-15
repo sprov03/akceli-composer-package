@@ -26,7 +26,7 @@ class DefaultProviderGenerator extends AkceliGenerator
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
         ];

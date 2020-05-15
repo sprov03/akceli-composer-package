@@ -26,11 +26,11 @@ class DefaultRuleGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('rule', 'app/Rules/[[Rule]].php'),
+            Akceli::template('rule', 'app/Rules/[[Rule]].php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [];
     }

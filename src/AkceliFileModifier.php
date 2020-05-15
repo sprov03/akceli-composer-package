@@ -3,6 +3,7 @@
 namespace Akceli;
 
 use Akceli\Console;
+use Akceli\FileModifiers\AkceliPhpFileModifier;
 use SplFileInfo;
 
 class AkceliFileModifier
@@ -10,114 +11,47 @@ class AkceliFileModifier
     /**
      * @var SplFileInfo
      */
-    private $fileInfo;
+    protected $fileInfo;
 
     /**
      * @var string
      */
-    private $content;
+    protected $content;
 
     /**
-     * @param \SplFileInfo|string $file
+     * @param SplFileInfo|string $file
+     * @return static
      */
     public static function file($file)
     {
         if (is_string($file)) {
-            $file = new \SplFileInfo($file);
+            $file = new SplFileInfo($file);
         }
 
-        if (!$file instanceof \SplFileInfo) {
+        if (!$file instanceof SplFileInfo) {
             throw new \Illuminate\Contracts\Filesystem\FileNotFoundException('File Not Found');
         }
 
-        return new AkceliFileModifier($file);
+        return new static($file);
     }
 
     /**
-     * AkceliFileModifier constructor.
+     * @param SplFileInfo|string $file
+     * @return AkceliPhpFileModifier
+     */
+    public static function phpFile($file)
+    {
+        return AkceliPhpFileModifier::file($file);
+    }
+
+    /**
+     * static constructor.
      * @param SplFileInfo $fileInfo
      */
     public function __construct(SplFileInfo $fileInfo)
     {
         $this->fileInfo = $fileInfo;
         $this->content = file_get_contents($fileInfo->getRealPath());
-    }
-
-    public function getNamespaceOfFile()
-    {
-        preg_match('/namespace (.[^;]*);/', $this->content, $matches);
-
-        return $matches[1];
-    }
-
-    protected function addAbstractMethodToFile($method_name, $method_content)
-    {
-        $method_content = rtrim(explode('{', $method_content)[0]) . ";\n";
-
-        $this->addMethodToFile($method_name, $method_content);
-    }
-
-    /**
-     * Add Content to a class file
-     *
-     * @param SplFileInfo $fileInfo
-     * @param $method
-     * @param string $content
-     */
-    public function addMethodToFile($method, $content)
-    {
-        if ($this->classHasMethod($method)) {
-            Console::warn("The {$method} method exists on {$this->fileInfo->getRealPath()}");
-
-            return;
-        }
-
-        $content_parts = explode('}', $this->content);
-        array_pop($content_parts);
-        $content_parts[count($content_parts) - 1] .= PHP_EOL . $content .PHP_EOL;
-        array_push($content_parts, '');
-        $this->content = implode('}', $content_parts) . PHP_EOL;
-
-        return $this;
-    }
-
-    public function addToTopOfMethod($method, $content)
-    {
-        if (!$this->classHasMethod($method)) {
-            Console::warn("The {$method} method dose not exists in {$this->fileInfo->getRealPath()}");
-
-            return;
-        }
-
-        $pattern = "/function ({$method})\(([^\)])*\)([^{])*{/";
-        return $this->regexAppend($pattern, PHP_EOL . '        ' . $content);
-    }
-
-    /**
-     * Add use statement to class file
-     *
-     * Requires a namespace in the file to work.
-     *
-     * @param string $namespace
-     */
-    public function addUseStatementToFile(string $namespace)
-    {
-        if (
-            !$this->classHasUseStatement($namespace) &&
-            $this->getNamespaceOfFile() !== $namespace
-        ) {
-            $this->regexAppend("/namespace([^\n])*\s*/", "use {$namespace};" . PHP_EOL);
-        }
-
-        return $this;
-    }
-
-    public function shouldUseTrait(string $namespace)
-    {
-        $parts = explode('\\', $namespace);
-        $className = array_pop($parts);
-        return $this->addUseStatementToFile($namespace)
-            ->regexReplace("\n{\n", "\n{\n    use {$className};\n");
     }
 
     public function addLineAbove(string $search, string $new_content, $is_raw_pattern = false)
@@ -138,44 +72,10 @@ class AkceliFileModifier
         return $this->regexAppend("/([^\n])*{$search}([^\n])*/", PHP_EOL . $new_content);
     }
 
-    public function addClassPropertyDocToFile($doc_type, $variable)
-    {
-        if ($this->classHasClassDoc($variable)) {
-            Console::warn("The {$variable} variable exists on {$this->fileInfo->getRealPath()}");
-
-            return;
-        }
-
-        $file_contents = $this->content;
-        $relationships = '/' . preg_quote(' * Relationships', '/') . '/';
-
-        $file_contents = preg_replace(
-            $relationships,
-            " * Relationships\n * @property {$doc_type} \${$variable}",
-            $file_contents
-        );
-
-        $this->content = $file_contents;
-    }
-
-    public function classHasClassDoc(string $variable): bool
-    {
-        return (bool) preg_match('/\* @property (.*) \$' . $variable . '\n/', $this->content);
-    }
-
-    public function classHasMethod(string $method): bool
-    {
-        return (bool) preg_match('/function ' . $method . '( |\()/', $this->content);
-    }
-
-    public function classHasUseStatement($namespace)
-    {
-        $escaped_namespace = str_replace('\\', '\\\\', $namespace);
-        return (bool) preg_match("/use {$escaped_namespace};/", $this->content);
-    }
-
     public function saveChanges()
     {
+        $pathFromProjectRoot = str_replace(base_path(), '', $this->fileInfo->getRealPath());
+        \Akceli\Console::info($pathFromProjectRoot . '    (Modified)');
         file_put_contents($this->fileInfo->getRealPath(), $this->content);
     }
 
@@ -194,7 +94,7 @@ class AkceliFileModifier
         dd($this->content);
     }
 
-    private function regexReplace(string $pattern, string $replacement)
+    protected function regexReplace(string $pattern, string $replacement)
     {
         $pattern = '/' . preg_quote($pattern, '/') . '/';
         $this->content = preg_replace($pattern, $replacement, $this->content, 1);
@@ -202,7 +102,7 @@ class AkceliFileModifier
         return $this;
     }
 
-    private function regexAppend($pattern, string $new_content)
+    protected function regexAppend($pattern, string $new_content)
     {
         preg_match($pattern, $this->content, $matches);
         if (isset($matches[0])) {
@@ -212,7 +112,7 @@ class AkceliFileModifier
         return $this;
     }
 
-    private function regexPrepend($pattern, string $new_content)
+    protected function regexPrepend($pattern, string $new_content)
     {
         preg_match($pattern, $this->content, $matches);
         if (isset($matches[0])) {

@@ -2,6 +2,7 @@
 
 namespace Akceli\Generators\DefaultGenerators;
 
+use Akceli\AkceliFileModifier;
 use Akceli\Generators\AkceliGenerator;
 
 use Akceli\Akceli;
@@ -29,16 +30,17 @@ class DefaultObserverGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::fileTemplate('observer', 'app/Observers/[[Observer]].php'),
+            Akceli::template('observer', 'app/Observers/[[Observer]].php'),
         ];
     }
 
-    public function inlineTemplates(array $data): array
+    public function fileModifiers(array $data): array
     {
         return [
-            Akceli::insertInline('app/Providers/AppServiceProvider.php', '/** register observers here */', '[[Model]]::observe([[Observer]]::class);'),
-            Akceli::insertInline('app/Providers/AppServiceProvider.php', '/** Auto Import */', 'use App\Models\[[Model]];'),
-            Akceli::insertInline('app/Providers/AppServiceProvider.php', '/** Auto Import */', 'use App\Observers\[[Observer]];'),
+            AkceliFileModifier::phpFile(app_path('Providers/AppServiceProvider.php'))
+                ->addUseStatementToFile("App\Models\\{$data['Model']}")
+                ->addUseStatementToFile("App\Observers\\{$data['Observer']}")
+                ->addToTopOfMethod('boot', "{$data['Model']}::observe({$data['Observer']}::class);"),
         ];
     }
 
