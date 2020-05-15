@@ -26,7 +26,7 @@ class DefaultResourceGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('resource', 'app/Http/Resources/[[Resource]].php'),
+            Akceli::fileTemplate('resource', 'app/Http/Resources/[[Resource]].php'),
         ];
     }
 

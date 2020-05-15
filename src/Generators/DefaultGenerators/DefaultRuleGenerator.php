@@ -26,7 +26,7 @@ class DefaultRuleGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('rule', 'app/Rules/[[Rule]].php'),
+            Akceli::fileTemplate('rule', 'app/Rules/[[Rule]].php'),
         ];
     }
 

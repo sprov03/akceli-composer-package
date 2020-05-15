@@ -27,9 +27,9 @@ class DefaultModelGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('model', 'app/Models/[[ModelName]].php'),
-            Akceli::template('model_test', 'tests/Models/[[ModelName]]Test.php'),
-            Akceli::template('model_factory', 'database/factories/[[Factory]].php'),
+            Akceli::fileTemplate('model', 'app/Models/[[ModelName]].php'),
+            Akceli::fileTemplate('model_test', 'tests/Models/[[ModelName]]Test.php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[Factory]].php'),
         ];
     }
 

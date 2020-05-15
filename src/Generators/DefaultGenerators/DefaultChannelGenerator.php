@@ -28,8 +28,8 @@ class DefaultChannelGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('channel', 'app/Broadcasting/[[Channel]].php'),
-            Akceli::template('channel_test', 'tests/Broadcasting/[[Channel]]Test.php'),
+            Akceli::fileTemplate('channel', 'app/Broadcasting/[[Channel]].php'),
+            Akceli::fileTemplate('channel_test', 'tests/Broadcasting/[[Channel]]Test.php'),
         ];
     }
 

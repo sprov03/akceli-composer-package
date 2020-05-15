@@ -25,7 +25,7 @@ class DefaultTestGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('test', 'tests/Feature/[[Test]].php'),
+            Akceli::fileTemplate('test', 'tests/Feature/[[Test]].php'),
         ];
     }
 

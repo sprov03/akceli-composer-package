@@ -26,7 +26,7 @@ class DefaultFactoryGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('model_factory', 'database/factories/[[Factory]].php'),
+            Akceli::fileTemplate('model_factory', 'database/factories/[[Factory]].php'),
         ];
     }
 

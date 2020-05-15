@@ -30,7 +30,7 @@ class DefaultObserverGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('observer', 'app/Observers/[[Observer]].php'),
+            Akceli::fileTemplate('observer', 'app/Observers/[[Observer]].php'),
         ];
     }
 

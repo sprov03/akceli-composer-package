@@ -27,7 +27,7 @@ class DefaultPolicyGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('policy', 'app/Policies/[[Policy]].php'),
+            Akceli::fileTemplate('policy', 'app/Policies/[[Policy]].php'),
         ];
     }
 

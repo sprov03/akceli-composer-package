@@ -23,13 +23,13 @@ class DefaultApiControllerGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('api_with_service/controller', "app/Http/Controllers/Api/[[ModelName]]Controller.php"),
-            Akceli::template('api_with_service/controller_test', "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"),
-            Akceli::template('api_with_service/form_request_create', "app/Http/Requests/Create[[ModelName]]Request.php"),
-            Akceli::template('api_with_service/form_request_update', "app/Http/Requests/Update[[ModelName]]Request.php"),
-            Akceli::template('resource/model_resource', "app/Resources/[[ModelName]]Resource.php"),
-            Akceli::template('api_with_service/client_apis', "../gittask-client/src/api/[[modelNames]].js"),
-            Akceli::template('api_with_service/client_form', "../gittask-client/src/forms/[[ModelName]]Form.vue"),
+            Akceli::fileTemplate('api_with_service/controller', "app/Http/Controllers/Api/[[ModelName]]Controller.php"),
+            Akceli::fileTemplate('api_with_service/controller_test', "tests/Http/Controllers/Api/[[ModelName]]ControllerTest.php"),
+            Akceli::fileTemplate('api_with_service/form_request_create', "app/Http/Requests/Create[[ModelName]]Request.php"),
+            Akceli::fileTemplate('api_with_service/form_request_update', "app/Http/Requests/Update[[ModelName]]Request.php"),
+            Akceli::fileTemplate('resource/model_resource', "app/Resources/[[ModelName]]Resource.php"),
+            Akceli::fileTemplate('api_with_service/client_apis', "../gittask-client/src/api/[[modelNames]].js"),
+            Akceli::fileTemplate('api_with_service/client_form', "../gittask-client/src/forms/[[ModelName]]Form.vue"),
         ];
     }
 

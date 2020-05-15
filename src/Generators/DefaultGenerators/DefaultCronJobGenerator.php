@@ -58,8 +58,8 @@ class DefaultCronJobGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('command', 'app/Console/Commands/[[Command]].php'),
-            Akceli::template('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
+            Akceli::fileTemplate('command', 'app/Console/Commands/[[Command]].php'),
+            Akceli::fileTemplate('command_test', 'tests/Console/Commands/[[Command]]Test.php'),
         ];
     }
 

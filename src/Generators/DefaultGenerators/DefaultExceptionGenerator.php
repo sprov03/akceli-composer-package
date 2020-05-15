@@ -27,7 +27,7 @@ class DefaultExceptionGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('exception', 'app/Exceptions/[[Exception]].php')
+            Akceli::fileTemplate('exception', 'app/Exceptions/[[Exception]].php')
         ];
     }
 

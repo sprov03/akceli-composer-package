@@ -23,7 +23,7 @@ class DefaultSeederGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         return [
-            Akceli::template('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
+            Akceli::fileTemplate('model_seeder', 'database/seeds/[[ModelName]]Seeder.php'),
         ];
     }
 
