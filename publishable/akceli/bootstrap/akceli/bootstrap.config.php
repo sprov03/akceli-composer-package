@@ -12,8 +12,5 @@ return [
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="DB_DATABASE" value=":memory:"/>', ''),
     Bootstrap::deleteFile('app/User.php'),
-//    Bootstrap::fileModifier(fn() =>
-//        AkceliFileModifier::phpFile('')
-//    ),
     Bootstrap::terminalCommand('php artisan akceli:generate model users'),
 ];

@@ -25,7 +25,7 @@ class Bootstrap
      * @param Closure $modifierCallback Closure is required in order to not execute the modifier until its time to be executed
      * @return FileModifier
      */
-    public static function fileModifier(Closure $modifierCallback)
+    public static function fileModifiers(Closure $modifierCallback)
     {
         return new FileModifier($modifierCallback);
     }

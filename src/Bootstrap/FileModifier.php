@@ -23,11 +23,13 @@ class FileModifier extends AkceliBootstrap
         $closure = $this->modifierClosure;
 
         /**
-         * @var AkceliFileModifier $fileModifier
+         * @var AkceliFileModifier[] $fileModifiers
          *
          * Getting the File Modifier from the Closure
          */
-        $fileModifier = $closure();
-        $fileModifier->saveChanges();
+        $fileModifiers = $closure();
+        foreach ($fileModifiers as $modifier) {
+            $modifier->saveChanges();
+        }
     }
 }
