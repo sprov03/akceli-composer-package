@@ -8,6 +8,8 @@ use SplFileInfo;
 
 class AkceliFileModifier
 {
+    private static string $basePath;
+
     /**
      * @var SplFileInfo
      */
@@ -25,6 +27,10 @@ class AkceliFileModifier
     public static function file($file)
     {
         if (is_string($file)) {
+            if (isset(self::$basePath)) {
+                $file = self::getBasePath($file);
+            }
+
             $file = new SplFileInfo($file);
         }
 
@@ -52,6 +58,23 @@ class AkceliFileModifier
     {
         $this->fileInfo = $fileInfo;
         $this->content = file_get_contents($fileInfo->getRealPath());
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function getBasePath(string $path = ''): string
+    {
+        return rtrim(self::$basePath, '/') . '/' . $path;
+    }
+
+    /**
+     * @param string $basePath
+     */
+    public static function setBasePath(string $basePath): void
+    {
+        self::$basePath = $basePath;
     }
 
     public function addLineAbove(string $search, string $new_content, $is_raw_pattern = false)

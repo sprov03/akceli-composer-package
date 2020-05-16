@@ -21,8 +21,8 @@ class AkceliServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/publishable/config' => base_path('config'),
-            __DIR__ . '/publishable/akceli' => base_path('akceli'),
+            __DIR__ . '/../publishable/config' => base_path('config'),
+            __DIR__ . '/../publishable/akceli' => base_path('akceli'),
 	    ]);
     }
 }
