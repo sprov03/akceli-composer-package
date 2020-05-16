@@ -26,6 +26,11 @@ abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
         return [];
     }
 
+    public function templates(array $data): array
+    {
+        return [];
+    }
+
     public function file_modifiers()
     {
         return $this->fileModifiers(GeneratorService::getData());

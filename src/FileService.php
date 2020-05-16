@@ -14,12 +14,13 @@ class FileService
      */
     private static $root_path;
 
-    /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[] */
+    /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[]|null */
     private static $appFiles;
 
     public static function setRootDirectory(string $root_path)
     {
         self::$root_path = $root_path;
+        self::$appFiles = null;
     }
 
     /**
@@ -118,7 +119,7 @@ class FileService
      */
     public static function getAppFiles($reload = false)
     {
-        if (isset(self::$appFiles) && ! $reload) {
+        if (isset(self::$appFiles) && self::$appFiles !== null && ! $reload) {
             return self::$appFiles;
         }
 

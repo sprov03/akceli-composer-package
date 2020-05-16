@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 use Akceli\TemplateData;?>
 
-namespace Tests\App\Http\Controllers;
+namespace Tests\Http\Controllers;
 
 use Tests\TestCase;
 use Factories\UserFactory;

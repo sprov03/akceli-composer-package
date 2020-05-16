@@ -24,6 +24,11 @@ class DefaultBootstrapGenerator extends AkceliGenerator
                 $bootstrapOptions = scandir(base_path('akceli/bootstrap'));
                 array_shift($bootstrapOptions);
                 array_shift($bootstrapOptions);
+
+                if (isset($data['arg1']) && array_flip($bootstrapOptions)[$data['arg1']]) {
+                    return $data['arg1'];
+                }
+
                 $choice = $data['arg1'] ?? Console::choice('What would you like to bootstrap?', $bootstrapOptions);
 
                 if (!in_array($choice, $bootstrapOptions)) {
@@ -39,37 +44,36 @@ class DefaultBootstrapGenerator extends AkceliGenerator
         ];
     }
 
-    public function templates(array $data): array
-    {
-        return [];
-    }
-
-    public function inlineTemplates(array $data): array
-    {
-        return [
-            Akceli::insertInline('app/')
-        ];
-    }
-
     public function completionMessage(array $data)
     {
         $backup = file_get_contents(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
         try {
             $config = require(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
-
-            $this->runComposerCommands($config['commands'] ?? []);
             File::copyDirectory(base_path("akceli/bootstrap/{$data['Bootstrap']}/files"), $data['BasePath']);
-            $this->replaceStrings($config['string_replacements'] ?? [], $data['BasePath']);
-            $this->removeFiles($config['files_to_remove'] ?? [], $data['BasePath']);
 
-            /**
-             * Process each of the file modifiers
-             *
-             * @var AkceliFileModifier $fileModifier
-             */
-            $modifiers = $config['file_modifiers'] ?? function () {return [];};
-            foreach ($modifiers() as $fileModifier) {
-                $fileModifier->saveChanges();
+            foreach ($config as $command_set) {
+                switch ($command_set['type']) {
+                    case 'commands': {
+                        $this->runComposerCommands($command_set['actions'] ?? []);
+                        break;
+                    }
+                    case 'string_replacements': {
+                        $this->replaceStrings($command_set['actions'] ?? [], $data['BasePath']);
+                        break;
+                    }
+                    case 'files_to_remove': {
+                        $this->removeFiles($command_set['actions'] ?? [], $data['BasePath']);
+                        break;
+                    }
+                    case 'file_modifiers': {
+                        $modifiers = $command_set['actions'] ?? function () {return [];};
+                        foreach ($modifiers() as $fileModifier) {
+                            $fileModifier->saveChanges();
+                        }
+                        break;
+                    }
+                }
+
             }
 
             Console::info('Success');

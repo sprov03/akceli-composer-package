@@ -3,7 +3,8 @@
 use Akceli\TemplateData;
 use Illuminate\Support\Str; ?>
 
-namespace Tests\App\Models;
+
+namespace Tests\Models;
 
 use Tests\TestCase;
 use Factories\<?=$table->ModelName?>Factory;

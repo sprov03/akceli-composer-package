@@ -120,6 +120,32 @@ return [
          *    Boolean: 'boolean'
          */
         'casts' => Akceli::columnSetting(null, null, null, null, 'datetime', 'boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('php_method_doc_type', 'string')?>
+         */
+        'php_method_doc_type' => Akceli::columnSetting('string', 'int', 'string', 'string', 'Carbon', 'bool'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('nova_field_type', 'Text')?>
+         */
+        'nova_field_type' => Akceli::columnSetting('Text', 'Number', 'Text', 'Text', 'DateTime', 'Boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_example', 'string')?>
+         */
+        'apid_example' => Akceli::columnSetting('examples string', '123', 'example string', 'example string', '2016-07-01T15:11:09.553Z', 'true'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_type', 'string')?>
+         */
+        'apid_type' => Akceli::columnSetting('string', 'number', 'string', 'string', 'string', 'boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_default_description', 'string')?>
+         */
+        'apid_default_description' => Akceli::columnSetting('Is a String', 'Is a Number', 'Is A String', 'Is an Enum', 'ISO Date/time string', 'Is a Boolean'),
+
     ],
 
     /**

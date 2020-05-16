@@ -8,7 +8,7 @@ echo '<?php' . PHP_EOL;
  */
 ?>
 
-namespace Tests\App\Http\Controllers;
+namespace Tests\Http\Controllers;
 
 use Tests\TestCase;
 use Factories\UserFactory;

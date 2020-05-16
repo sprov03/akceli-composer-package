@@ -3,7 +3,7 @@
 use Akceli\TemplateData;?>
 
 
-namespace Tests\App\Http\Controllers;
+namespace Tests\Http\Controllers;
 
 use App\Models\<?=$table->ModelName?>;
 use Factories\<?=$table->ModelName?>Factory;
