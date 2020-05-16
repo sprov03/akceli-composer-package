@@ -22,10 +22,10 @@ return [
     ],
     'file_modifiers' => function () {
         return [
-            AkceliFileModifier::file('tests/TestCase.php')
+            AkceliFileModifier::phpFile('tests/TestCase.php')
                 ->shouldUseTrait('Akceli\RealtimeClientStoreSync\Middleware\ClientStoreTestMiddlewareOverwrites'),
 
-            AkceliFileModifier::file('app/Models/User.php')
+            AkceliFileModifier::phpFile('app/Models/User.php')
                 ->shouldUseTrait('Akceli\RealtimeClientStoreSync\ClientStore\ClientStoreModelTrait')
                 ->shouldUseTrait('App\ClientStores\UsersStore')
                 ->addMethodToFile('getStoreProperties', <<<'EOF'
@@ -38,23 +38,23 @@ return [
 EOF
                 ),
 
-            AkceliFileModifier::file('app/Http/Kernel.php')
+            AkceliFileModifier::phpFile('app/Http/Kernel.php')
                 ->addUseStatementToFile('Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful')
                 ->addUseStatementToFile('Akceli\RealtimeClientStoreSync\Middleware\FlushClientStoreChangesMiddleware')
                 ->addLineBelow("'api' => [", '            EnsureFrontendRequestsAreStateful::class,')
                 ->addLineBelow('protected $routeMiddleware = [', '        \'client-store\' => FlushClientStoreChangesMiddleware::class,'),
 
-            AkceliFileModifier::file('app/Providers/AppServiceProvider.php')
+            AkceliFileModifier::phpFile('app/Providers/AppServiceProvider.php')
                 ->addToTopOfMethod('register', 'Sanctum::ignoreMigrations();')
                 ->addUseStatementToFile('Laravel\Sanctum\Sanctum'),
 
-            AkceliFileModifier::file('.env.example')
+            AkceliFileModifier::phpFile('.env.example')
                 ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
                 ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
                 ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
                 ->addLineBelow('APP_URL', 'CLIENT_STORE_URL=api/client-store'),
 
-            AkceliFileModifier::file('.env')
+            AkceliFileModifier::phpFile('.env')
                 ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
                 ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
                 ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
