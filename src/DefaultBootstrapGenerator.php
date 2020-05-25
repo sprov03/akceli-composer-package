@@ -18,7 +18,8 @@ class DefaultBootstrapGenerator extends AkceliGenerator
     {
         return [
             'Bootstrap' => function(array $data) {
-                $bootstrapOptions = scandir(base_path('akceli/bootstrap'));
+                $bootstrap_path = __DIR__ . "/Bootstrap";
+                $bootstrapOptions = scandir($bootstrap_path);
                 /**
                  * TODO: Better Solution for Windows Compatibility
                  * Removing the files ['.', '..']
@@ -51,26 +52,23 @@ class DefaultBootstrapGenerator extends AkceliGenerator
 
     public function completionMessage(array $data)
     {
-        $backup = file_get_contents(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
-        try {
-            /** @var AkceliBootstrap[]  $config */
-            $config = require(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"));
+        $bootstrap_path = __DIR__ . "/Bootstrap/" . $data['Bootstrap'];
+        /** @var AkceliBootstrap[]  $config */
+        $config = require($bootstrap_path . "/bootstrap.config.php");
 
-            File::copyDirectory(base_path("akceli/bootstrap/{$data['Bootstrap']}/files"), $data['BasePath']);
+        File::copyDirectory($bootstrap_path . "/files", $data['BasePath']);
 
-            /**
-             * Sets the base path for getting the Akceli modifiable Files
-             */
-            AkceliBootstrap::setBasePath($data['BasePath']);
-            AkceliFileModifier::setBasePath($data['BasePath']);
+        /**
+         * Sets the base path for getting the Akceli modifiable Files
+         */
+        chdir($data['BasePath']);
+        AkceliBootstrap::setBasePath($data['BasePath']);
+        AkceliFileModifier::setBasePath($data['BasePath']);
 
-            foreach ($config as $bootstrap) {
-                $bootstrap->process();
-            }
-
-            Console::info('Success');
-        } finally {
-            file_put_contents(base_path("akceli/bootstrap/{$data['Bootstrap']}/bootstrap.config.php"), $backup);
+        foreach ($config as $bootstrap) {
+            $bootstrap->process();
         }
+
+        Console::info('Success');
     }
 }

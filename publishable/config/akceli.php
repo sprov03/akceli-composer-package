@@ -178,7 +178,7 @@ return [
         'rule' => RuleGenerator::class,
         'test' => TestGenerator::class,
         'seeder' => SeederGenerator::class,
-        'api_controller' => ApiControllerGenerator::class,
+        'api-controller' => ApiControllerGenerator::class,
         'bootstrap' => DefaultBootstrapGenerator::class,
         /** New Generators Get Inserted Here */
     ],

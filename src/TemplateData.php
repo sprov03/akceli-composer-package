@@ -1,6 +1,7 @@
 <?php
 
 namespace Akceli;
+
 use Akceli\Schema\ColumnInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

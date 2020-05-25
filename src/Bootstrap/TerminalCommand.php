@@ -17,6 +17,7 @@ class TerminalCommand extends AkceliBootstrap
 
     public function process()
     {
+        chdir(self::getBasePath());
         shell_exec(escapeshellcmd($this->command));
     }
 }

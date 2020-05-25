@@ -11,7 +11,7 @@ class AkceliPhpFileModifier extends AkceliFileModifier
     {
         preg_match('/namespace (.[^;]*);/', $this->content, $matches);
 
-        return $matches[1];
+        return $matches[1] ?? null;
     }
 
     protected function addAbstractMethodToFile($method_name, $method_content)

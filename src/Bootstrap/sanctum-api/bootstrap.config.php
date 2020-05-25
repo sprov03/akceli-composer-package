@@ -22,15 +22,11 @@ return [
         
         AkceliFileModifier::phpFile('.env.example')
             ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
-            ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
-            ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
-            ->addLineBelow('APP_URL', 'CLIENT_STORE_URL=api/client-store'),
+            ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost'),
 
         AkceliFileModifier::phpFile('.env')
             ->addLineBelow('APP_URL', 'SESSION_DOMAIN=localhost')
-            ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost')
-            ->addLineBelow('APP_URL', 'MIX_CLIENT_STORE_URL="${CLIENT_STORE_URL}"')
-            ->addLineBelow('APP_URL', 'CLIENT_STORE_URL=api/client-store'),
+            ->addLineBelow('APP_URL', 'SANCTUM_STATEFUL_DOMAINS=localhost'),
     ]),
     
     Bootstrap::terminalCommand('php artisan migrate'),

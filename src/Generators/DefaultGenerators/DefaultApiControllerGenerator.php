@@ -28,8 +28,8 @@ class DefaultApiControllerGenerator extends AkceliGenerator
             Akceli::fileTemplate('api_with_service/form_request_create', "app/Http/Requests/Create[[ModelName]]Request.php"),
             Akceli::fileTemplate('api_with_service/form_request_update', "app/Http/Requests/Update[[ModelName]]Request.php"),
             Akceli::fileTemplate('resource/model_resource', "app/Resources/[[ModelName]]Resource.php"),
-            Akceli::fileTemplate('api_with_service/client_apis', "../gittask-client/src/api/[[modelNames]].js"),
-            Akceli::fileTemplate('api_with_service/client_form', "../gittask-client/src/forms/[[ModelName]]Form.vue"),
+            Akceli::fileTemplate('api_with_service/client_apis', "resources/client/src/api/[[modelNames]].js"),
+            Akceli::fileTemplate('api_with_service/client_form', "resources/client/src/forms/[[ModelName]]Form.vue"),
         ];
     }
 
@@ -37,7 +37,7 @@ class DefaultApiControllerGenerator extends AkceliGenerator
     {
         return [
             AkceliFileModifier::phpFile(base_path('routes/api.php'))
-                ->addLineAbove('Route::get', "{$data['ModelName']}Controller::apiRoutes();")
+                ->addLineAbove('Route::middleware([\'auth:sanctum\'])->group(function () {', "{$data['ModelName']}Controller::apiRoutes();")
                 ->addUseStatementToFile("App\Http\Controllers\Api\\{$data['ModelName']}Controller"),
         ];
     }
