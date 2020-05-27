@@ -24,5 +24,7 @@ class AkceliServiceProvider extends ServiceProvider
             __DIR__ . '/../publishable/config' => base_path('config'),
             __DIR__ . '/../publishable/akceli' => base_path('akceli'),
 	    ]);
+
+        $this->loadRoutesFrom(__DIR__ . '/akceli-api.php');
     }
 }

@@ -61,10 +61,10 @@ class TemplateData
             'modelNames' => Str::plural(Str::camel($model_name)),
             'model_name' => Str::singular(Str::snake($model_name)),
             'model_names' => Str::plural(Str::snake($model_name)),
-            'model-name' => str_replace('_', '-', Str::singular(Str::snake($model_name))),
-            'model-names' => str_replace('_', '-', Str::plural(Str::snake($model_name))),
-            'modelNameKabob' => str_replace('_', '-', Str::singular(Str::snake($model_name))),
-            'modelNamesKabob' => str_replace('_', '-', Str::plural(Str::snake($model_name))),
+            'model-name' => Str::singular(Str::kebab($model_name)),
+            'model-names' => Str::plural(Str::kebab($model_name)),
+            'modelNameKabob' => Str::singular(Str::kebab($model_name)),
+            'modelNamesKabob' => Str::plural(Str::kebab($model_name)),
         ];
     }
 

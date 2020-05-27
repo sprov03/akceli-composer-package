@@ -24,9 +24,9 @@ class Console
     private static $logger;
 
     /**
-     * @param Command $logger
+     * @param $logger
      */
-    public static function setLogger(Command $logger)
+    public static function setLogger($logger)
     {
         self::$logger = $logger;
     }

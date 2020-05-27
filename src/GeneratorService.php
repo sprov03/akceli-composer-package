@@ -2,10 +2,7 @@
 
 namespace Akceli;
 
-use Akceli\Generators\AkceliGenerator;
-use Akceli\Schema\SchemaFactory;
-use Akceli\GeneratorFlowController;
-use Akceli\Parser;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class GeneratorService
@@ -54,37 +51,59 @@ class GeneratorService
         self::$inline_templates = $inline_templates;
     }
 
+    /**
+     * @param bool $force
+     * @throws \Throwable
+     */
     public function generate($force = false)
     {
-        Console::info('');
         Console::info("Creating Templates:");
-        $templateParser = new Parser(base_path('akceli/templates'), 'akceli.php');
-        $templateParser->addData($this->templateData->toArray());
+        /**
+         * This is here to build out the templates so that the parser can handle process the php
+         * They are deleted at the end of the request
+         */
+        File::makeDirectory(base_path('akceli/temp'), 0777, true, true);
+        foreach (self::$file_templates as $key => $template) {
+            File::put(base_path('akceli/temp/' . $key . '.akceli.php'), $template['template']);
+        }
 
-        $this->processFileTemplates($templateParser, $force);
-        $this->processInlineTemplates($templateParser);
-        $this->processFileModifiers();
+        try {
+            $templateParser = new Parser(base_path('akceli/temp'), 'akceli.php');
+            $templateParser->addData($this->templateData->toArray());
+
+            $this->processFileTemplates($templateParser, $force);
+            $this->processInlineTemplates($templateParser);
+            $this->processFileModifiers();
+        } finally {
+            File::deleteDirectory(base_path('akceli/temp'));
+        }
     }
 
     private function processFileTemplates(Parser $parser, bool $force)
     {
-        foreach (self::$file_templates as $template) {
-            $template_path = $parser->render($template['path']);
-            if(file_exists($template_path) && ! $force) {
-                Console::warn("File {$template_path} (Already Exists)");
+        foreach (self::$file_templates as $key => $template) {
+            $destination_path = $parser->render($template['destination_path']);
+            if(file_exists($destination_path) && ! $force) {
+                Console::warn("File {$destination_path} (Already Exists)");
 
                 continue;
             }
 
-            FileService::putFile($template_path, $parser->render($template['name']));
-            Console::info("File {$template_path} (Created)");
+            FileService::putFile($destination_path, $parser->render($key));
+            Console::info("File {$destination_path} (Created)");
         }
     }
 
     private function processFileModifiers()
     {
         foreach (self::$file_modifiers as $file_modifier) {
-            $file_modifier->saveChanges();
+            /** @var AkceliFileModifier $fileModifier */
+            $fileModifier = call_user_func(AkceliFileModifier::class . '::' . $file_modifier['type'], base_path($file_modifier['file']));
+            foreach ($file_modifier['modifiers'] as $modifier) {
+                [$method, $args] = [...$modifier];
+                call_user_func([$fileModifier, $method], ...$args);
+            }
+            $fileModifier->saveChanges();
         }
     }
 
