@@ -63,10 +63,10 @@ class AkceliRelationshipBuilder
         $columnB = ($columnB) ?: $b . '_id';
 
         $this->table->unsignedBigInteger($columnA)->index();
-        $this->table->foreign($columnA)->references('id')->on($a . 's')->onDelete($onDelete);
+        $this->table->foreign($columnA)->references('id')->on($table_a)->onDelete($onDelete);
 
         $this->table->unsignedBigInteger($columnB)->index();
-        $this->table->foreign($columnB)->references('id')->on($b . 's')->onDelete($onDelete);
+        $this->table->foreign($columnB)->references('id')->on($table_b)->onDelete($onDelete);
 
         $this->table->primary([$columnA, $columnB]);
 
