@@ -29,7 +29,7 @@ class BelongsToManyBuilder extends Builder implements BuilderInterface
         
         $relationshipOne = $relationships[0];
         $relationshipTwo = $relationships[1];
-
+        
         $fileInfoOne = FileService::findByTableName($relationshipOne->REFERENCED_TABLE_NAME);
         $fileInfoTwo = FileService::findByTableName($relationshipTwo->REFERENCED_TABLE_NAME);
 

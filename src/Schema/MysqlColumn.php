@@ -67,6 +67,22 @@ class MysqlColumn implements ColumnInterface
     }
 
     /**
+     * @return string
+     */
+    public function getRelationship(): string
+    {
+        return Str::camel(str_replace('_id', '', $this->getField()));
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedModel(): string
+    {
+        return Str::studly(str_replace('_id', '', $this->getField()));
+    }
+
+    /**
      * @return boolean
      */
     public function hasCastsToAttribute(): bool
@@ -122,6 +138,7 @@ class MysqlColumn implements ColumnInterface
         if ($this->isEnum()) return $config->enum;
         if ($this->isTimeStamp()) return $config->timestamp;
         if ($this->isBoolean()) return $config->boolean;
+        if ($this->isJson()) return $config->json;
 
         if (config("akceli.debugging")) {
             Console::info(
@@ -151,6 +168,11 @@ class MysqlColumn implements ColumnInterface
     public function isBoolean(): bool
     {
         return preg_match('/^tinyint/', $this->Type);
+    }
+    
+    public function isJson(): bool
+    {
+        return preg_match('/^json/', $this->Type);
     }
 
     public function isTimeStamp(): bool

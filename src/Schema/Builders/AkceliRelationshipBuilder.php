@@ -137,7 +137,7 @@ class AkceliRelationshipBuilder
         $cache = Cache::get($cacheKey, []);
         $cache[$table] = $relationshipType;
         $cache['relationshipName'] = $relationshipName;
-        Cache::put($cacheKey, $cache, 60 * 24 * 30 * 2);
+        $this->setCacheWithKey($cacheKey, $cache);
 
         $this->relatedTable = null;
         return $this;
@@ -148,8 +148,17 @@ class AkceliRelationshipBuilder
         return Cache::get($this->cacheKey, []);
     }
 
+    private function setCacheWithKey($cacheKey, $cache)
+    {
+        if (config('akceli.allow_caching')) {
+            Cache::put($cacheKey, $cache);
+        }
+    }
+
     private function setCache($cache)
     {
-        Cache::put($this->cacheKey, $cache, 60 * 24 * 30 * 2);
+        if (config('akceli.allow_caching')) {
+            Cache::put($this->cacheKey, $cache);
+        }
     }
 }

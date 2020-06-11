@@ -29,7 +29,16 @@ class Akceli
         ];
     }
 
-    public static function columnSetting(string $default = null, string $integer = null, string $string = null, string $enum = null, string $timestamp = null, string $boolean = null, array $ingore_patterns = []) {
+    public static function columnSetting(
+        string $default = null,
+        string $integer = null,
+        string $string = null,
+        string $enum = null,
+        string $timestamp = null,
+        string $boolean = null,
+        string $json = null,
+        array $ingore_patterns = []
+    ) {
         return [
             'default' => $default,
             'integer' => $integer,
@@ -37,6 +46,7 @@ class Akceli
             'enum' => $enum,
             'timestamp' => $timestamp,
             'boolean' => $boolean,
+            'json' => $json,
             'ignore_patterns' => $ingore_patterns
         ];
     }

@@ -72,6 +72,16 @@ class AkceliPhpFileModifier extends AkceliFileModifier
             $this->regexAppend("/namespace([^\n])*\s*/", "use {$namespace};" . PHP_EOL);
         }
 
+        /**
+         * This is a fallback in case the class does not have a namespace, like a php script file
+         */
+        if (
+            !$this->classHasUseStatement($namespace) &&
+            $this->getNamespaceOfFile() !== $namespace
+        ) {
+            $this->regexAppend("/<?php([^\n])*\s*/", "use {$namespace};" . PHP_EOL);
+        }
+
         return $this;
     }
 

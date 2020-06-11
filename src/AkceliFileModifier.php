@@ -86,13 +86,13 @@ class AkceliFileModifier
         return $this->regexPrepend("/([^\n])*{$search}([^\n])*/", $new_content . PHP_EOL);
     }
 
-    public function addLineBelow(string $search, string $new_content, $is_raw_pattern = false)
+    public function addLineBelow(string $search, string $new_content, bool $is_raw_pattern = false, string $delimeter = '/')
     {
         if (!$is_raw_pattern) {
-            $search = preg_quote($search);
+            $search = preg_quote($search, $delimeter);
         }
 
-        return $this->regexAppend("/([^\n])*{$search}([^\n])*/", PHP_EOL . $new_content);
+        return $this->regexAppend($delimeter . "([^\n])*{$search}([^\n])*" . $delimeter, PHP_EOL . $new_content);
     }
 
     public function saveChanges()
@@ -117,9 +117,9 @@ class AkceliFileModifier
         dd($this->content);
     }
 
-    protected function regexReplace(string $pattern, string $replacement)
+    protected function regexReplace(string $pattern, string $replacement, string $deleminator = '/')
     {
-        $pattern = '/' . preg_quote($pattern, '/') . '/';
+        $pattern = $deleminator . preg_quote($pattern, $deleminator) . $deleminator;
         $this->content = preg_replace($pattern, $replacement, $this->content, 1);
 
         return $this;

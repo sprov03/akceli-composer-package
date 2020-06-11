@@ -11,6 +11,7 @@ namespace Akceli\Config;
  * @property string $enum
  * @property string $timestamp
  * @property string $boolean
+ * @property string $json
  */
 class ColumnSettingsConfig
 {
@@ -20,6 +21,7 @@ class ColumnSettingsConfig
     public $enum;
     public $timestamp;
     public $boolean;
+    public $json;
 
     public function __construct(array $config)
     {
@@ -29,5 +31,6 @@ class ColumnSettingsConfig
         $this->enum = $config['enum'] ?? null;
         $this->timestamp = $config['timestamp'] ?? '\Carbon\Carbon';
         $this->boolean = $config['boolean'] ?? 'boolean';
+        $this->json = $config['json'] ?? null;
     }
 }

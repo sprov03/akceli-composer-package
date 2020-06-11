@@ -16,6 +16,16 @@ interface ColumnInterface
     public function getField(): string;
 
     /**
+     * @return string
+     */
+    public function getRelationship(): string;
+
+    /**
+     * @return string
+     */
+    public function getRelatedModel(): string;
+
+    /**
      * @return boolean
      */
     public function hasCastsToAttribute(): bool;
