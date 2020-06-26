@@ -80,7 +80,7 @@ class AkceliFileModifier
     public function addLineAbove(string $search, string $new_content, $is_raw_pattern = false)
     {
         if (!$is_raw_pattern) {
-            $search = preg_quote($search);
+            $search = preg_quote($search, '/');
         }
 
         return $this->regexPrepend("/([^\n])*{$search}([^\n])*/", $new_content . PHP_EOL);

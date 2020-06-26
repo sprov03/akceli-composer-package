@@ -7,6 +7,7 @@ use Akceli\FileService;
 use Akceli\Generators\AkceliGenerator;
 use Akceli\GeneratorService;
 use Akceli\Console;
+use Akceli\RemoteGeneratorService;
 use Akceli\Schema\SchemaFactory;
 use Akceli\TemplateData;
 use Illuminate\Console\Command;
@@ -39,11 +40,6 @@ class AkceliGenerateCommand extends Command
     public function handle()
     {
         Console::setLogger($this);
-        Console::info('    ****************************************');
-        Console::info('    *                                      *');
-        Console::info('    *                Akceli                *');
-        Console::info('    *                                      *');
-        Console::info('    ****************************************');
 
         $config = config('akceli');
         $config['generators'] = $config['template-groups'] ?? $config['generators'];
@@ -58,11 +54,21 @@ class AkceliGenerateCommand extends Command
             Artisan::call('akceli:publish');
         }
 
+        $templateSets = array_keys($config['generators']);
+        if (isset($config['project_key'])) {
+            // Merging the remote and local template sets
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', 'http://local.akceli.io/api/generator-sets/' . $config['project_key']);
+            $generators = collect(json_decode($res->getBody()->getContents(), true)['data']);
+            $remoteTemplateSets = $generators->pluck('name')->toArray();
+
+            $templateSets = array_merge($templateSets, $remoteTemplateSets);
+        }
+
         /**
          * Selecting a Template
          */
         if (is_null($this->argument('template-set'))) {
-            $templateSets = array_keys($config['generators']);
             if ($config['select-template-behavior'] ?? 'multiple-choice' === 'auto-complete') {
                 $template_set = Console::anticipate('What template set do you want to use? (Press enter to see list of options)', $templateSets);
             } else {
@@ -73,23 +79,31 @@ class AkceliGenerateCommand extends Command
                 $template_set = Console::choice('What template set do you want to use?', $templateSets);
             }
         }
+        
+        $isRemoteTemplate = false;
 
         /**
          * Validate the the Template is a valid option
          */
-        if (!isset($config['generators'][$template_set])) {
-            Console::error('');
-            Console::error('Invalid Template Set: ' . $template_set . ' dose not exist in your config file.');
-            Console::error('');
-            return;
-        }
+        if (isset($config['generators'][$template_set])) {
+            $templateSet = $config['generators'][$template_set];
+            if (is_string($templateSet)) {
+                $templateSet = new $templateSet();
+            }
+        } else {
+            // This is not a local generator
+            if (!in_array($template_set, $remoteTemplateSets)) {
+                // This is not a remote generator ether so let the user know.
+                Console::error('');
+                Console::error('Invalid Template Set: ' . $template_set . ' dose not exist.');
+                Console::error('');
+                return;
+            }
 
-        /**
-         * Resolving the template Set
-         */
-        $templateSet = $config['generators'][$template_set];
-        if (is_string($templateSet)) {
-            $templateSet = new $templateSet();
+            $isRemoteTemplate = true;
+            $templateSet = $generators->first(function ($generator) use ($template_set) {
+                return $generator['name'] === $template_set;
+            });
         }
 
         /**
@@ -113,7 +127,7 @@ class AkceliGenerateCommand extends Command
         /**
          * Setup Model Data if Required
          */
-        if ($templateSet['requires_table_name'] ?? true) {
+        if (true || $templateSet['requires_table_name'] ?? true) {
             $table_name = $this->argument('arg1');
 
             if (is_null($table_name)) {
@@ -130,17 +144,17 @@ class AkceliGenerateCommand extends Command
             $template_data['columns'] = $columns;
             $template_data['primaryKey'] =  ($columns->firstWhere('Key', '==', 'PRI')) ? $columns->firstWhere('Key', '==', 'PRI')->Field : null;
             $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
-
-            Console::info("Table Name: {$table_name}");
-            Console::info("Model Name: {$model_name}");
         } else {
             $columns = collect([]);
         }
 
+
         /**
          * Process Data Prompts
          */
-        if ($templateSet['data'] ?? false) {
+        if ($isRemoteTemplate) {
+//            dd($templateSet, $templateSet['prompts']);
+        } elseif ($templateSet['data'] ?? false) {
             $template_data = Console\DataPrompter\DataPrompter::prompt($templateSet, $template_data, $this->arguments());
         }
 
@@ -151,17 +165,36 @@ class AkceliGenerateCommand extends Command
             dd($template_data);
         }
 
-        GeneratorService::setData($template_data);
-        GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
-        GeneratorService::setFileModifiers($templateSet['file_modifiers'] ?? []);
-        GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
 
         $templateData = new TemplateData($template_data, $columns);
-        $generator = new GeneratorService($templateData);
-        $generator->generate($this->option('force'));
+        if ($isRemoteTemplate) {
+            try {
+                RemoteGeneratorService::setData($template_data);
+                RemoteGeneratorService::setFileTemplates($templateSet['templates'] ?? []);
+                RemoteGeneratorService::setFileModifiers($templateSet['file_modifiers'] ?? []);
 
-        if ($templateSet['completion_message'] ?? false) {
-            $templateSet['completion_message']($template_data);
+                $generator = new RemoteGeneratorService($templateData);
+                $generator->generate($this->option('force'));
+            } finally {
+                RemoteGeneratorService::removeFileTemplates();
+            }
+        } else {
+            // Is Local Template
+
+            /**
+             * This is set similar to a gobal variable for recursion purposes.
+             */
+            GeneratorService::setData($template_data);
+            GeneratorService::setFileTemplates($templateSet['templates'] ?? []);
+            GeneratorService::setFileModifiers($templateSet['file_modifiers'] ?? []);
+            GeneratorService::setInlineTemplates($templateSet['inline_templates'] ?? []);
+
+            $generator = new GeneratorService($templateData);
+            $generator->generate($this->option('force'));
+
+            if ($templateSet['completion_message'] ?? false) {
+                $templateSet['completion_message']($template_data);
+            }
         }
     }
 }
