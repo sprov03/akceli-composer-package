@@ -3,6 +3,8 @@
 namespace Akceli;
 
 use Akceli\Modifiers\ClassModifier;
+use Illuminate\Http\File;
+use phpDocumentor\Reflection\Types\Self_;
 use RecursiveIteratorIterator;
 use Illuminate\Support\Str;
 use SplFileInfo;
@@ -16,6 +18,7 @@ class FileService
 
     /** @var  $appFiles RecursiveIteratorIterator|SplFileInfo[]|null */
     private static $appFiles;
+    private static array $definedNamespaces;
 
     public static function setRootDirectory(string $root_path)
     {
@@ -159,5 +162,122 @@ class FileService
         $path .= "/{$file_name}";
 
         file_put_contents($path, $content);
+    }
+
+    private static function getDefinedNamespaces()
+    {
+        if (isset(self::$definedNamespaces)) {
+            return self::$definedNamespaces;
+        }
+
+        $composerJsonPath = base_path('composer.json');
+        $composerConfig = json_decode(file_get_contents($composerJsonPath));
+
+        //Apparently PHP doesn't like hyphens, so we use variable variables instead.
+        $psr4 = "psr-4";
+        $autoloadDev = "autoload-dev";
+        $namespaces = $composerConfig->autoload->$psr4;
+        $devNamespaces = $composerConfig->$autoloadDev->$psr4;
+        self::$definedNamespaces = array_merge((array) $namespaces, (array) $devNamespaces);
+
+        return self::$definedNamespaces;
+    }
+
+    public static function getExpectedNamespaceOfFile(SplFileInfo $fileInfo): string
+    {
+        $path_in_project = str_replace(base_path() . '/', '', $fileInfo->getRealPath());
+        self::getDefinedNamespaces();
+        foreach (self::getDefinedNamespaces() as $namespace => $namespace_path) {
+            if (Str::startsWith($path_in_project, $namespace_path)) {
+                $path_in_project = str_replace($namespace_path, $namespace, $path_in_project);
+                $path_in_project = str_replace('/', '\\', $path_in_project);
+                $path_in_project = str_replace('.php', '', $path_in_project);
+                return $path_in_project;
+            }
+        }
+
+        return $path_in_project;
+    }
+
+    /**
+     * @param string $trait
+     * @param bool $include_abstract_classes
+     * @return \Illuminate\Support\Collection|SplFileInfo[]
+     */
+    public static function getFilesThatExtend(string $full_class_name, bool $include_abstract_classes = false)
+    {
+        $acceptedFiles = collect();
+        foreach (self::getAppFiles() as $fileInfo) {
+            try {
+                /** ignore directories */
+                if ($fileInfo->isDir()) {
+                    continue;
+                }
+
+                $classReflector = new \ReflectionClass(self::getExpectedNamespaceOfFile($fileInfo));
+                continue;
+            } catch (\Throwable $throwable) {
+                continue;
+            }
+
+            /**
+             * Dont include abstract classes if they not explicitly asked to be included
+             */
+            if (!$include_abstract_classes) {
+                if ($classReflector->isAbstract()) {
+                    continue;
+                }
+            }
+
+            if ($classReflector->isSubclassOf($full_class_name)) {
+                $acceptedFiles->push($fileInfo);
+            }
+        }
+
+        return  $acceptedFiles;
+    }
+
+    /**
+     * @param string $trait
+     * @param bool $include_abstract_classes
+     * @return \Illuminate\Support\Collection|SplFileInfo[]
+     */
+    public static function getFilesThatUseTrait(string $trait, bool $include_abstract_classes = false)
+    {
+        $acceptedFiles = collect();
+        foreach (self::getAppFiles() as $fileInfo) {
+            try {
+                /** ignore directories */
+                if ($fileInfo->isDir()) {
+                    continue;
+                }
+
+                $classReflector = new \ReflectionClass(self::getExpectedNamespaceOfFile($fileInfo));
+            } catch (\Throwable $throwable) {
+                continue;
+            }
+
+            /**
+             * Dont include abstract classes if they not explicitly asked to be included
+             */
+            if (!$include_abstract_classes) {
+                if ($classReflector->isAbstract()) {
+                    continue;
+                }
+            }
+
+            /** ignore traits and interfaces */
+            if ($classReflector->isTrait() || $classReflector->isInterface()) {
+                continue;
+            }
+
+            foreach ($classReflector->getTraits() as $modelTrait) {
+                if ($modelTrait->getName() === $trait) {
+                    $acceptedFiles->push($fileInfo);
+                }
+            }
+        }
+
+        return  $acceptedFiles;
     }
 }

@@ -8,10 +8,14 @@ use Akceli\Generators\AkceliGenerator;
 use Akceli\GeneratorService;
 use Akceli\Console;
 use Akceli\RemoteGeneratorService;
+use Akceli\Schema\ColumnInterface;
+use Akceli\Schema\Columns\Column;
+use Akceli\Schema\Columns\SchemaColumnAdapter;
 use Akceli\Schema\SchemaFactory;
 use Akceli\TemplateData;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
@@ -127,7 +131,7 @@ class AkceliGenerateCommand extends Command
         /**
          * Setup Model Data if Required
          */
-        if (true || $templateSet['requires_table_name'] ?? true) {
+        if ($templateSet['requires_table_name'] ?? false) {
             $table_name = $this->argument('arg1');
 
             if (is_null($table_name)) {
@@ -144,16 +148,61 @@ class AkceliGenerateCommand extends Command
             $template_data['columns'] = $columns;
             $template_data['primaryKey'] =  ($columns->firstWhere('Key', '==', 'PRI')) ? $columns->firstWhere('Key', '==', 'PRI')->Field : null;
             $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
+        } elseif ($templateSet->requiresModel ?? false) {
+            $model_name = $this->argument('arg1');
+
+            if (is_null($model_name)) {
+                $model_name = $this->ask('What Model is being used in the template?');
+            }
+            $model_name = Str::studly(Str::singular($model_name));
+            $fullyQualifiedModelName = 'App\\Models\\' . $model_name;
+
+            /** @var Model $model */
+            $model = new $fullyQualifiedModelName();
+            $schemaColumns = collect();
+            $columns = collect();
+            foreach ($model->schema() as $column_name => $column) {
+                $column->setColumnName($column_name);
+                $columns->push(new SchemaColumnAdapter($column));
+                $schemaColumns->push($column);
+            }
+
+            $databaseColumns = SchemaFactory::resolve($model->getTable())->getColumns();
+
+            $template_data['table_name'] = $model->getTable();
+            $template_data['columns'] = $columns; // For backwards compatable teplates for the time being
+            $template_data['databaseColumns'] = $databaseColumns; // these are the same as the old columns
+            $template_data['schemaColumns'] = $schemaColumns;
+            $template_data['newColumns'] = $schemaColumns->filter(function(Column $column) use ($databaseColumns) {
+                foreach ($databaseColumns as $databaseColumn) {
+                    if ($databaseColumn->getField() === $column->column_name) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+            $template_data['removedColumns'] = $databaseColumns->filter(function(ColumnInterface $databaseColumn) use ($schemaColumns) {
+                foreach ($schemaColumns as $schemaColumn) {
+                    if ($databaseColumn->getField() === $schemaColumn->column_name) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+            $template_data['primaryKey'] =  null; // Not sure if i want to use this anymore considering how this is all playing out, just have diffrent model templates to start from
+//            $template_data['primaryKey'] =  ($columns->firstWhere('Key', '==', 'PRI')) ? $columns->firstWhere('Key', '==', 'PRI')->Field : null;
+            $template_data = array_merge($template_data, TemplateData::buildModelAliases($model_name));
         } else {
             $columns = collect([]);
         }
-
-
+        
         /**
          * Process Data Prompts
          */
         if ($isRemoteTemplate) {
-//            dd($templateSet, $templateSet['prompts']);
+            $template_data = RemoteGeneratorService::processPrompts($templateSet['prompts'], $template_data);
         } elseif ($templateSet['data'] ?? false) {
             $template_data = Console\DataPrompter\DataPrompter::prompt($templateSet, $template_data, $this->arguments());
         }

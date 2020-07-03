@@ -3,12 +3,25 @@
 namespace Akceli\Generators;
 
 
+use Akceli\Console;
 use Akceli\GeneratorService;
 
-abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
+class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
 {
+    public bool $requiresModel = false;
+    
+    public function requiresTable(): bool
+    {
+        return false;
+    }
+
     public function requires_table_name() {
         return $this->requiresTable();
+    }
+    
+    public function dataPrompter(): array
+    {
+        return [];
     }
 
     public function data()
@@ -39,6 +52,11 @@ abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
     public function fileModifiers(array $data): array
     {
         return [];
+    }
+
+    public function completionMessage(array $data)
+    {
+        Console::info('Success');
     }
 
     public function completion_message()

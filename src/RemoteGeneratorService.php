@@ -111,4 +111,19 @@ class RemoteGeneratorService
             $fileModifier->saveChanges();
         }
     }
+
+    public static function processPrompts(array $prompts = [], array $data)
+    {
+        foreach ($prompts as $prompt) {
+            if ($prompt['prompt_type'] === 'ask') {
+                $data[$prompt['variable']] = Console::ask($prompt['prompt_message'], $prompt['default']);
+            } elseif ($prompt['prompt_type'] === 'choice') {
+                $data[$prompt['variable']] = Console::choice($prompt['prompt_message'], $prompt['prompt_options'], $prompt['default']);
+            } elseif ($prompt['prompt_type'] === 'custom_code') {
+                $data[$prompt['variable']] = eval(str_replace('Console::', '\Akceli\\Console::', $prompt['prompt_message']));
+            }
+        }
+
+        return $data;
+    }
 }

@@ -3,6 +3,7 @@
 namespace Akceli;
 
 use Akceli\Schema\ColumnInterface;
+use Akceli\Schema\Columns\Column;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,11 @@ use Illuminate\Support\Str;
  * @property string $table_name
  * @property string $primaryKey
  * @property array $extraData
+ * @property Collection|ColumnInterface[] $databaseColumns
  * @property Collection|ColumnInterface[] $columns
+ * @property Collection|Column[] $schemaColumns
+ * @property Collection|Column[] $newColumns
+ * @property Collection|ColumnInterface[] $removedColumns
  */
 class TemplateData
 {
@@ -44,6 +49,10 @@ class TemplateData
     public function __construct(array $data, Collection $columns)
     {
         $this->columns = $columns;
+        $this->schemaColumns = $data['schemaColumns'] ?? collect();
+        $this->newColumns = $data['newColumns'] ?? collect();
+        $this->removedColumns = $data['removedColumns'] ?? collect();
+        $this->databaseColumns = $data['databaseColumns'] ?? collect();
         foreach ($data as $key => $value) {
             $parser = new Parser();
             $parser->addData($this->toArray());
