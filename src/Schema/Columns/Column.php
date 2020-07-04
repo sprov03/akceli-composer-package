@@ -69,7 +69,20 @@ class Column
             'id',
             [],
             'integer',
-            'integer',
+            'int',
+            [],
+            [],
+            []
+        );
+    }
+
+    public static function uuid()
+    {
+        return new static(
+            'uuid',
+            [],
+            'string',
+            'string',
             [],
             [],
             []
@@ -89,14 +102,255 @@ class Column
         );
     }
 
+    public static function tinyInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'tinyInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:127', 'min:-128'],
+            [],
+            []
+        );
+    }
+
+    public static function smallInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'smallInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:32767', 'min:-32768'],
+            [],
+            []
+        );
+    }
+
+    public static function mediumInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'mediumInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:8388607', 'min:-8388608'],
+            [],
+            []
+        );
+    }
+
+    public static function integer(bool $auto_increment = false)
+    {
+        return new static(
+            'integer',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:2147483647', 'min:-2147483648'],
+            [],
+            []
+        );
+    }
+
+    public static function bigInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'bigInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer'],
+            [],
+            []
+        );
+    }
+
+    public static function unsignedTinyInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'unsignedTinyInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:255', 'min:0'],
+            [],
+            []
+        );
+    }
+
+    public static function unsignedSmallInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'unsignedSmallInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:65535', 'min:0'],
+            [],
+            []
+        );
+    }
+
+    public static function unsignedMediumInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'unsignedMediumInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:16777215', 'min:0'],
+            [],
+            []
+        );
+    }
+
+    public static function unsignedInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'unsignedInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer', 'max:4294967295', 'min:0'],
+            [],
+            []
+        );
+    }
+
+    public static function unsignedBigInteger(bool $auto_increment = false)
+    {
+        return new static(
+            'unsignedBigInteger',
+            [$auto_increment],
+            'integer',
+            'int',
+            ['integer'],
+            [],
+            []
+        );
+    }
+
+    public static function boolean()
+    {
+        return new static(
+            'boolean',
+            [],
+            'boolean',
+            'bool',
+            ['boolean'],
+            [],
+            []
+        );
+    }
+
+    /**
+     * 256 bytes
+     *
+     * @return static
+     */
+    public static function tinyText()
+    {
+        return new static(
+            'tinyText',
+            [],
+            'string',
+            'string',
+            ['max:256'],
+            [],
+            []
+        );
+    }
+
+    /**
+     * ~64kb
+     *
+     * @return static
+     */
+    public static function text()
+    {
+        return new static(
+            'text',
+            [],
+            'string',
+            'string',
+            ['max:65535'],
+            [],
+            []
+        );
+    }
+
+    /**
+     * ~16GB
+     *
+     * @return static
+     */
+    public static function mediumText()
+    {
+        return new static(
+            'mediumText',
+            [],
+            'string',
+            'string',
+            ['max:16777215'],
+            [],
+            []
+        );
+    }
+
+    /**
+     * ~4GB
+     * 
+     * @return static
+     */
+    public static function longText()
+    {
+        return new static(
+            'longText',
+            [],
+            'string',
+            'string',
+            ['max:4294967295'],
+            [],
+            []
+        );
+    }
+
+    public static function date()
+    {
+        return new static(
+            'date',
+            [],
+            'date',
+            'Carbon',
+            ['date'],
+            [],
+            []
+        );
+    }
+
     public static function timestamp($precision = 0)
     {
         return new static(
             'timestamp',
             [$precision],
             'datetime',
-            'datetime',
+            'Carbon',
             ['date'],
+            [],
+            []
+        );
+    }
+
+    public static function enum($options = [])
+    {
+        return new static(
+            'enum',
+            [$options],
+            'string',
+            'string',
+            ['in:' . implode(',', $options)],
             [],
             []
         );

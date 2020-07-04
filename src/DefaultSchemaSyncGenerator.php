@@ -39,8 +39,8 @@ class DefaultSchemaSyncGenerator extends AkceliGenerator
         /** for each model run the schema-migration command. */
         foreach ($modelsFiles as $index => $modelsFile) {
             $modelName = $modelsFile->getBasename('.php');
-            Console::info('Analyzing: ' . $modelName);
-            Artisan::call('akceli:generate schema-migration ' . $modelName . ' \'' . $data['migration_name'] . '_' . $index .  '\' -n');
+            Artisan::call('akceli:generate schema-migration ' . $modelName . ' \'' . $data['migration_name'] . '_' . $index .  '\' --no-interaction');
+//            Artisan::call('akceli:generate schema-migration ' . $modelName . ' \'' . $data['migration_name'] . '_' . $index .  '\'');
         }
 
         /** prompt for the option to migrate when complete, default to no */

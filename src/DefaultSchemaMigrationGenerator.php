@@ -5,6 +5,8 @@ namespace Akceli;
 use Akceli\Akceli;
 use Akceli\Console;
 use Akceli\Generators\AkceliGenerator;
+use Akceli\Schema\ColumnInterface;
+use Akceli\Schema\Columns\Column;
 use Illuminate\Support\Str;
 
 class DefaultSchemaMigrationGenerator extends AkceliGenerator
@@ -39,9 +41,11 @@ class DefaultSchemaMigrationGenerator extends AkceliGenerator
     public function templates(array $data): array
     {
         if (count($data['newColumns'])) {
-            /**
-             * only generate a new migration if there are new columns
-             */
+            return [
+                Akceli::fileTemplate('schema-migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
+            ];
+        }
+        if (count($data['removedColumns'])) {
             return [
                 Akceli::fileTemplate('schema-migration', 'database/migrations/[[migration_timestamp]]_[[migration_name]].php')
             ];
@@ -53,7 +57,22 @@ class DefaultSchemaMigrationGenerator extends AkceliGenerator
 
     public function fileModifiers(array $data): array
     {
-        return [];
+        $modelModifier = AkceliFileModifier::phpFile(app_path(config('akceli.model_directory') . '/' . $data['ModelName'] . '.php'));
+        
+        /** @var Column $column */
+        foreach($data['newColumns']->reverse() as $column) {
+//        foreach($data['schemaColumns']->reverse() as $column) {
+            $modelModifier->addClassPropertyDocToFile($column->data_type,  $column->column_name, 'Database Fields');
+        }
+        /** @var ColumnInterface $column */
+        foreach($data['removedColumns']->reverse() as $column) {
+            // Todo: add this method
+            // $modelModifier->removeClassPropertyDocFromFile($column->data_type,  $column->column_name);
+        }
+        
+        return [
+            $modelModifier,
+        ];
     }
 
     public function completionMessage(array $data)

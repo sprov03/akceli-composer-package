@@ -93,7 +93,7 @@ class AkceliPhpFileModifier extends AkceliFileModifier
             ->regexReplace("\n{\n", "\n{\n    use {$className};\n");
     }
 
-    public function addClassPropertyDocToFile($doc_type, $variable)
+    public function addClassPropertyDocToFile($doc_type, $variable, $location = 'Relationships')
     {
         if ($this->classHasClassDoc($variable)) {
             Console::warn("The {$variable} variable exists on {$this->fileInfo->getRealPath()}");
@@ -102,11 +102,11 @@ class AkceliPhpFileModifier extends AkceliFileModifier
         }
 
         $file_contents = $this->content;
-        $relationships = '/' . preg_quote(' * Relationships', '/') . '/';
+        $relationships = '/' . preg_quote(' * ' . $location, '/') . '/';
 
         $file_contents = preg_replace(
             $relationships,
-            " * Relationships\n * @property {$doc_type} \${$variable}",
+            " * {$location}\n * @property {$doc_type} \${$variable}",
             $file_contents
         );
 

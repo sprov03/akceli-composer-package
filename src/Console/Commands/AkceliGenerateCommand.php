@@ -62,7 +62,7 @@ class AkceliGenerateCommand extends Command
         if (isset($config['project_key'])) {
             // Merging the remote and local template sets
             $client = new \GuzzleHttp\Client();
-            $res = $client->request('GET', 'http://local.akceli.io/api/generator-sets/' . $config['project_key']);
+            $res = $client->request('GET', 'http://local.akceli.io/api/generator-sets/' . config('akceli.project_key'));
             $generators = collect(json_decode($res->getBody()->getContents(), true)['data']);
             $remoteTemplateSets = $generators->pluck('name')->toArray();
 
