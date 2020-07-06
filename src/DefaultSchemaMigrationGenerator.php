@@ -7,6 +7,7 @@ use Akceli\Console;
 use Akceli\Generators\AkceliGenerator;
 use Akceli\Schema\ColumnInterface;
 use Akceli\Schema\Columns\Column;
+use Akceli\Schema\Relationships\AkceliRelationship;
 use Illuminate\Support\Str;
 
 class DefaultSchemaMigrationGenerator extends AkceliGenerator
@@ -69,7 +70,11 @@ class DefaultSchemaMigrationGenerator extends AkceliGenerator
             // Todo: add this method
             // $modelModifier->removeClassPropertyDocFromFile($column->data_type,  $column->column_name);
         }
-        
+        /** @var AkceliRelationship $relationship */
+        foreach($data['schemaRelationships']->reverse() as $relationship) {
+            $relationship->addToModel($modelModifier);
+        }
+
         return [
             $modelModifier,
         ];

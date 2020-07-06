@@ -11,8 +11,11 @@ use Akceli\RemoteGeneratorService;
 use Akceli\Schema\ColumnInterface;
 use Akceli\Schema\Columns\Column;
 use Akceli\Schema\Columns\SchemaColumnAdapter;
+use Akceli\Schema\Relationships\AkceliRelationship;
+use Akceli\Schema\Relationships\Relationship;
 use Akceli\Schema\SchemaFactory;
 use Akceli\TemplateData;
+use App\Models\BaseModelTrait;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
@@ -157,22 +160,34 @@ class AkceliGenerateCommand extends Command
             $model_name = Str::studly(Str::singular($model_name));
             $fullyQualifiedModelName = 'App\\Models\\' . $model_name;
 
-            /** @var Model $model */
+            /** @var BaseModelTrait $model */
             $model = new $fullyQualifiedModelName();
             $schemaColumns = collect();
             $columns = collect();
-            foreach ($model->schema() as $column_name => $column) {
-                $column->setColumnName($column_name);
-                $columns->push(new SchemaColumnAdapter($column));
-                $schemaColumns->push($column);
+            $schemaRelationships = collect();
+            foreach ($model->getHydratedSchema() as $schemaItem) {
+                foreach ($schemaItem->getColumns() as $column) {
+                    $columns->push(new SchemaColumnAdapter($column));
+                    $schemaColumns->push($column);
+                }
+
+                if ($schemaItem instanceof AkceliRelationship) {
+                    $schemaRelationships->push($schemaItem);
+                }
             }
 
-            $databaseColumns = SchemaFactory::resolve($model->getTable())->getColumns();
+            try {
+                $databaseColumns = SchemaFactory::resolve($model->getTable())->getColumns();
+            } catch (\Throwable $throwable) {
+                // if we are not able to resolve the columns we will assume that there are none, this generally is because the table was not found
+                $databaseColumns = collect();
+            }
 
             $template_data['table_name'] = $model->getTable();
             $template_data['columns'] = $columns; // For backwards compatable teplates for the time being
             $template_data['databaseColumns'] = $databaseColumns; // these are the same as the old columns
             $template_data['schemaColumns'] = $schemaColumns;
+            $template_data['schemaRelationships'] = $schemaRelationships;
             $template_data['newColumns'] = $schemaColumns->filter(function(Column $column) use ($databaseColumns) {
                 foreach ($databaseColumns as $databaseColumn) {
                     if ($databaseColumn->getField() === $column->column_name) {

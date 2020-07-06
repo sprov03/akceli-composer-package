@@ -3,6 +3,7 @@
 namespace Akceli\Schema\Columns;
 
 use Akceli\Schema\SchemaInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
@@ -19,6 +20,8 @@ class Column
     public string $column_type;
     public string $column_name;
     public array $column_args = [];
+    /** @var array|MigrationMethod[]  $migration_methods */
+    public array $migration_methods = [];
     public string $cast_to = 'string';
     public string $data_type = 'string';
     public array $validators = [];
@@ -26,16 +29,14 @@ class Column
     public array $update_validators = [];
     
     public function __construct(
-        string $column_type,
-        array $column_args = [],
+        array $migration_methods = [],
         string $cast_to = 'string',
         string $data_type = 'string',
         array $validators = [],
         array $create_validators = [],
         array $update_validators = []
     ) {
-        $this->column_type = $column_type;
-        $this->column_args = $column_args;
+        $this->migration_methods = $migration_methods;
         $this->cast_to = $cast_to;
         $this->data_type = $data_type;
         $this->validators = $validators;
@@ -44,8 +45,7 @@ class Column
     }
 
     public static function new(
-       string $column_type,
-       array $column_args = [],
+       array $migration_methods = [],
        string $cast_to = 'string',
        string $data_type = 'string',
        array $validators = [],
@@ -53,8 +53,7 @@ class Column
        array $update_validators = []
     ) {
         return new static(
-            $column_type,
-            $column_args,
+            $migration_methods,
             $cast_to,
             $data_type,
             $validators,
@@ -66,8 +65,7 @@ class Column
     public static function id()
     {
         return new static(
-            'id',
-            [],
+            [new MigrationMethod('id')],
             'integer',
             'int',
             [],
@@ -79,8 +77,7 @@ class Column
     public static function uuid()
     {
         return new static(
-            'uuid',
-            [],
+            [new MigrationMethod('uuid')],
             'string',
             'string',
             [],
@@ -89,11 +86,10 @@ class Column
         );
     }
 
-    public static function string($length = 255)
+    public static function string(int $length = 255)
     {
         return new static(
-            'string',
-            [$length],
+            [new MigrationMethod('string', [$length])],
             'string',
             'string',
             ['max:' . $length],
@@ -102,11 +98,22 @@ class Column
         );
     }
 
+    public static function foreign(Model $relatedModel)
+    {
+        return new static(
+            [new MigrationMethod('foreign', [])],
+            'integer',
+            'int',
+            [],
+            [],
+            []
+        );
+    }
+
     public static function tinyInteger(bool $auto_increment = false)
     {
         return new static(
-            'tinyInteger',
-            [$auto_increment],
+            [new MigrationMethod('tinyInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:127', 'min:-128'],
@@ -118,8 +125,7 @@ class Column
     public static function smallInteger(bool $auto_increment = false)
     {
         return new static(
-            'smallInteger',
-            [$auto_increment],
+            [new MigrationMethod('smallInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:32767', 'min:-32768'],
@@ -131,8 +137,7 @@ class Column
     public static function mediumInteger(bool $auto_increment = false)
     {
         return new static(
-            'mediumInteger',
-            [$auto_increment],
+            [new MigrationMethod('mediumInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:8388607', 'min:-8388608'],
@@ -144,8 +149,7 @@ class Column
     public static function integer(bool $auto_increment = false)
     {
         return new static(
-            'integer',
-            [$auto_increment],
+            [new MigrationMethod('integer', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:2147483647', 'min:-2147483648'],
@@ -157,8 +161,7 @@ class Column
     public static function bigInteger(bool $auto_increment = false)
     {
         return new static(
-            'bigInteger',
-            [$auto_increment],
+            [new MigrationMethod('bigInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer'],
@@ -170,8 +173,7 @@ class Column
     public static function unsignedTinyInteger(bool $auto_increment = false)
     {
         return new static(
-            'unsignedTinyInteger',
-            [$auto_increment],
+            [new MigrationMethod('unsignedTinyInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:255', 'min:0'],
@@ -183,8 +185,7 @@ class Column
     public static function unsignedSmallInteger(bool $auto_increment = false)
     {
         return new static(
-            'unsignedSmallInteger',
-            [$auto_increment],
+            [new MigrationMethod('unsignedSmallInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:65535', 'min:0'],
@@ -196,8 +197,7 @@ class Column
     public static function unsignedMediumInteger(bool $auto_increment = false)
     {
         return new static(
-            'unsignedMediumInteger',
-            [$auto_increment],
+            [new MigrationMethod('unsignedMediumInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:16777215', 'min:0'],
@@ -209,8 +209,7 @@ class Column
     public static function unsignedInteger(bool $auto_increment = false)
     {
         return new static(
-            'unsignedInteger',
-            [$auto_increment],
+            [new MigrationMethod('unsignedInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer', 'max:4294967295', 'min:0'],
@@ -222,8 +221,7 @@ class Column
     public static function unsignedBigInteger(bool $auto_increment = false)
     {
         return new static(
-            'unsignedBigInteger',
-            [$auto_increment],
+            [new MigrationMethod('unsignedBigInteger', [$auto_increment])],
             'integer',
             'int',
             ['integer'],
@@ -235,8 +233,7 @@ class Column
     public static function boolean()
     {
         return new static(
-            'boolean',
-            [],
+            [new MigrationMethod('boolean', [])],
             'boolean',
             'bool',
             ['boolean'],
@@ -253,8 +250,7 @@ class Column
     public static function tinyText()
     {
         return new static(
-            'tinyText',
-            [],
+            [new MigrationMethod('tinyText', [])],
             'string',
             'string',
             ['max:256'],
@@ -271,8 +267,7 @@ class Column
     public static function text()
     {
         return new static(
-            'text',
-            [],
+            [new MigrationMethod('text', [])],
             'string',
             'string',
             ['max:65535'],
@@ -282,15 +277,14 @@ class Column
     }
 
     /**
-     * ~16GB
+     * ~16MB
      *
      * @return static
      */
     public static function mediumText()
     {
         return new static(
-            'mediumText',
-            [],
+            [new MigrationMethod('mediumText', [])],
             'string',
             'string',
             ['max:16777215'],
@@ -307,8 +301,7 @@ class Column
     public static function longText()
     {
         return new static(
-            'longText',
-            [],
+            [new MigrationMethod('longText', [])],
             'string',
             'string',
             ['max:4294967295'],
@@ -320,8 +313,7 @@ class Column
     public static function date()
     {
         return new static(
-            'date',
-            [],
+            [new MigrationMethod('date', [])],
             'date',
             'Carbon',
             ['date'],
@@ -333,8 +325,7 @@ class Column
     public static function timestamp($precision = 0)
     {
         return new static(
-            'timestamp',
-            [$precision],
+            [new MigrationMethod('timestamp', [$precision])],
             'datetime',
             'Carbon',
             ['date'],
@@ -346,8 +337,7 @@ class Column
     public static function enum($options = [])
     {
         return new static(
-            'enum',
-            [$options],
+            [new MigrationMethod('enum', [$options])],
             'string',
             'string',
             ['in:' . implode(',', $options)],
@@ -364,42 +354,70 @@ class Column
     public function nullable()
     {
         $this->is_nullable = true;
+        $this->appendValidators(['nullable']);
+        array_push($this->migration_methods, new MigrationMethod('nullable'));
         return $this;
     }
 
     public function unique()
     {
         $this->is_unique = true;
+        array_push($this->migration_methods, new MigrationMethod('unique'));
         return $this;
     }
 
     public function default($default)
     {
         $this->default = $default;
+        array_push($this->migration_methods, new MigrationMethod('default', [$default]));
         return $this;
     }
 
-    public function setColumnName(string $column_name)
+    public function setName(string $column_name)
     {
+        // Dont double set the column name, this could lead to weird issues when hydrating
+        if (isset($this->column_name)) {
+            return $this;
+        }
+
         $this->column_name = $column_name;
+        if (isset($this->migration_methods[0])) {
+            $this->migration_methods[0]->setColumnName($column_name);
+        }
+
+        return $this;
+    }
+
+    public function pushMigrationMethod(MigrationMethod $migrationMethod)
+    {
+        array_push($this->migration_methods, $migrationMethod);
+
         return $this;
     }
 
     public function appendValidators(array $validators)
     {
-        array_push($this->validators, $validators);
+        array_merge($this->validators, $validators);
         return $this;
     }
 
     public function appendCreateValidators(array $create_validators)
     {
-        array_push($this->create_validators, $create_validators);
+        array_merge($this->create_validators, $create_validators);
         return $this;
     }
 
     public function appendUpdateValidators(array $update_validators)
     {
-        array_push($this->update_validators, $update_validators);
+        array_merge($this->update_validators, $update_validators);
         return $this;
+    }
+
+    /**
+     * @return Column[]
+     */
+    public function getColumns(): array
+    {
+        return [$this];
     }
 }
