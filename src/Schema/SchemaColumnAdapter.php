@@ -2,6 +2,7 @@
 
 namespace Akceli\Schema\Columns;
 
+use Akceli\Schema\ColumnInterface;
 use Akceli\Schema\SchemaInterface;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -10,7 +11,7 @@ use Illuminate\Database\Schema\Blueprint;
  * @package Akceli\Schema\Columns
  * @mixin Blueprint
  */
-class SchemaColumnAdapter
+class SchemaColumnAdapter implements ColumnInterface
 {
     private Column $schemColumn;
     public function __construct(Column $column)
@@ -64,6 +65,11 @@ class SchemaColumnAdapter
     public function hasValidationRules(): bool
     {
         return false;
+    }
+
+    public function getValidationRulesAsString(): string
+    {
+        return '';
     }
 
     /**

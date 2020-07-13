@@ -4,6 +4,7 @@ namespace Akceli;
 
 use Akceli\Schema\ColumnInterface;
 use Akceli\Schema\Columns\Column;
+use Akceli\Schema\SchemaItemInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -26,6 +27,7 @@ use Illuminate\Support\Str;
  * @property array $extraData
  * @property Collection|ColumnInterface[] $databaseColumns
  * @property Collection|ColumnInterface[] $columns
+ * @property Collection|SchemaItemInterface[] $schemaItems
  * @property Collection|Column[] $schemaColumns
  * @property Collection|Column[] $newColumns
  * @property Collection|ColumnInterface[] $removedColumns
@@ -50,6 +52,7 @@ class TemplateData
     {
         $this->columns = $columns;
         $this->schemaColumns = $data['schemaColumns'] ?? collect();
+        $this->schemaItems = $data['schemaItems'] ?? collect();
         $this->newColumns = $data['newColumns'] ?? collect();
         $this->removedColumns = $data['removedColumns'] ?? collect();
         $this->databaseColumns = $data['databaseColumns'] ?? collect();

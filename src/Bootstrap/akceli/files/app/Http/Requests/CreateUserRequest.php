@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -26,15 +27,7 @@ class CreateUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'max:255'],
-            'email' => ['required', 'max:255', 'unique:users,email'],
-            'email_verified_at' => ['nullable', 'date'],
-            'password' => ['required', 'max:255'],
-            'remember_token' => ['nullable', 'max:100'],
-            'created_at' => ['nullable', 'date'],
-            'updated_at' => ['nullable', 'date'],
-        ];
+        return User::createValidationRules();
     }
 
     /**

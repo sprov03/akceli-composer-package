@@ -28,7 +28,7 @@ class BelongsToRelationship extends AkceliRelationship
 
     public function setName(string $name): AkceliRelationship
     {
-        $this->pushColumn(self::getPrimaryColumn($this->relatedModel)->setName(Str::snake($name) . '_id'));
+        $this->pushColumn(self::getPrimaryRelatedColumnType($this->relatedModel)->setName(Str::snake($name) . '_id'));
 
         $this->pushColumn(
             Column::foreign($this->relatedModel)
@@ -60,5 +60,18 @@ class BelongsToRelationship extends AkceliRelationship
             }
         Relationship
         );
+    }
+
+    /**
+     * @return Model
+     */
+    public function getRelatedModel(): Model
+    {
+        return $this->relatedModel;
+    }
+
+    public function getCastTo(): string
+    {
+        return get_class($this->getRelatedModel());
     }
 }

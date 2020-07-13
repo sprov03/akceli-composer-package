@@ -4,6 +4,7 @@ namespace Akceli;
 
 use Akceli\Console;
 use Akceli\FileModifiers\AkceliPhpFileModifier;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use SplFileInfo;
 
 class AkceliFileModifier
@@ -31,7 +32,12 @@ class AkceliFileModifier
                 $file = self::getBasePath($file);
             }
 
+            $file_path = $file;
             $file = new SplFileInfo($file);
+
+            if (empty($file->getRealPath())) {
+                throw new \Illuminate\Contracts\Filesystem\FileNotFoundException('File Not Found: ' .  $file_path);
+            }
         }
 
         if (!$file instanceof SplFileInfo) {

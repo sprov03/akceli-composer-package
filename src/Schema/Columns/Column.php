@@ -3,6 +3,7 @@
 namespace Akceli\Schema\Columns;
 
 use Akceli\Schema\SchemaInterface;
+use Akceli\Schema\SchemaItemInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -11,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
  * @package Akceli\Schema\Columns
  * @mixin Blueprint
  */
-class Column
+class Column implements SchemaItemInterface
 {
     public bool $is_nullable = false;
     public bool $is_unique = false;
@@ -101,7 +102,7 @@ class Column
     public static function foreign(Model $relatedModel)
     {
         return new static(
-            [new MigrationMethod('foreign', [])],
+            [new MigrationMethod('foreign')],
             'integer',
             'int',
             [],
@@ -233,7 +234,7 @@ class Column
     public static function boolean()
     {
         return new static(
-            [new MigrationMethod('boolean', [])],
+            [new MigrationMethod('boolean')],
             'boolean',
             'bool',
             ['boolean'],
@@ -250,7 +251,7 @@ class Column
     public static function tinyText()
     {
         return new static(
-            [new MigrationMethod('tinyText', [])],
+            [new MigrationMethod('tinyText')],
             'string',
             'string',
             ['max:256'],
@@ -267,7 +268,7 @@ class Column
     public static function text()
     {
         return new static(
-            [new MigrationMethod('text', [])],
+            [new MigrationMethod('text')],
             'string',
             'string',
             ['max:65535'],
@@ -284,7 +285,7 @@ class Column
     public static function mediumText()
     {
         return new static(
-            [new MigrationMethod('mediumText', [])],
+            [new MigrationMethod('mediumText')],
             'string',
             'string',
             ['max:16777215'],
@@ -301,7 +302,7 @@ class Column
     public static function longText()
     {
         return new static(
-            [new MigrationMethod('longText', [])],
+            [new MigrationMethod('longText')],
             'string',
             'string',
             ['max:4294967295'],
@@ -313,7 +314,7 @@ class Column
     public static function date()
     {
         return new static(
-            [new MigrationMethod('date', [])],
+            [new MigrationMethod('date')],
             'date',
             'Carbon',
             ['date'],
@@ -397,19 +398,22 @@ class Column
 
     public function appendValidators(array $validators)
     {
-        array_merge($this->validators, $validators);
+        $this->validators = array_merge($this->validators, $validators);
+
         return $this;
     }
 
     public function appendCreateValidators(array $create_validators)
     {
-        array_merge($this->create_validators, $create_validators);
+        $this->create_validators = array_merge($this->create_validators, $create_validators);
+
         return $this;
     }
 
     public function appendUpdateValidators(array $update_validators)
     {
-        array_merge($this->update_validators, $update_validators);
+        $this->update_validators = array_merge($this->update_validators, $update_validators);
+
         return $this;
     }
 
@@ -419,5 +423,15 @@ class Column
     public function getColumns(): array
     {
         return [$this];
+    }
+
+    public function getCastTo(): string
+    {
+        return $this->cast_to;
+    }
+
+    public function getIsNullable(): bool
+    {
+        return $this->is_nullable;
     }
 }

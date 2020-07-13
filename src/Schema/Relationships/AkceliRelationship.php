@@ -6,10 +6,11 @@ use Akceli\AkceliFileModifier;
 use Akceli\Bootstrap\FileModifier;
 use Akceli\FileModifiers\AkceliPhpFileModifier;
 use Akceli\Schema\Columns\Column;
+use Akceli\Schema\SchemaItemInterface;
 use App\Models\BaseModelTrait;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class AkceliRelationship
+abstract class AkceliRelationship implements SchemaItemInterface
 {
     public string $name;
     public bool $is_nullable = false;
@@ -25,6 +26,24 @@ abstract class AkceliRelationship
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getCastTo(): string;
+
+    public function getIsNullable(): bool
+    {
+        return $this->is_nullable;
     }
 
     /**
@@ -72,6 +91,25 @@ abstract class AkceliRelationship
             $primaryColumn = $model->schema()[$model->getKeyName()];
         } catch (\Throwable $throwable) {
             throw new \Exception('The related model dose not have a schema column for: ' . $model->getKeyName());
+        }
+
+        return $primaryColumn;
+    }
+
+    protected static function getPrimaryRelatedColumnType(Model $model): Column
+    {
+        $primaryColumn = self::getPrimaryColumn($model);
+
+        /**
+         * Primary Column Relationship Mapper
+         */
+        if ($coumnType = $primaryColumn->migration_methods[0]->name ?? false) {
+            if ($coumnType === 'id') $primaryColumn = Column::unsignedBigInteger();
+            if ($coumnType === 'bigIncrements') $primaryColumn = Column::unsignedBigInteger();
+            if ($coumnType === 'mediumIncrements') $primaryColumn = Column::unsignedMediumInteger();
+            if ($coumnType === 'increments') $primaryColumn = Column::unsignedInteger();
+            if ($coumnType === 'smallIncrements') $primaryColumn = Column::unsignedSmallInteger();
+            if ($coumnType === 'tinyIncrements') $primaryColumn = Column::unsignedTinyInteger();
         }
 
         return $primaryColumn;
