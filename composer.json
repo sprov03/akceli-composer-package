@@ -1,6 +1,6 @@
 {
-    "name": "akceli/laravel-code-generator",
-    "description": "Generator Temperated Code form database tables. This Package provides data to templates that you create to generate code to scaffold projects rapidly so you can spend most of your time doing the fun stuff.",
+    "name": "akceli/schema",
+    "description": "Define a Schema for your Data Models and Leverage that Schema to do cool things.",
     "license": "MIT",
     "authors": [
         {
@@ -10,11 +10,14 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "league/plates": "^3.3"
+        "illuminate/support": "^7.25",
+        "illuminate/database": "^7.25",
+        "akceli/console-ui": "dev-master",
+        "akceli/file-modifier": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Akceli\\": "src/"
+            "Akceli\\Schema\\": "src/"
         }
     },
     "extra": {
@@ -23,8 +26,18 @@
         },
         "laravel": {
             "providers": [
-                "Akceli\\AkceliServiceProvider"
+                "Akceli\\Schema\\ServiceProvider"
             ]
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../akceli-console-ui"
+        },
+        {
+            "type": "path",
+            "url": "../akceli-file-modifier"
+        }
+    ]
 }
