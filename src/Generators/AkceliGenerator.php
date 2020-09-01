@@ -7,6 +7,25 @@ use Akceli\GeneratorService;
 
 abstract class AkceliGenerator implements AkceliGeneratorInterface, \ArrayAccess
 {
+
+    /**
+     * Can be used to add or overwrite data at any time
+     */
+    public function addData(array $data)
+    {
+        return GeneratorService::$paser->addData($data);
+    }
+
+    /**
+     * Can be used to update and use data at the same time.
+     */
+    public function set(string $key, $value)
+    {
+        GeneratorService::$paser->addData([$key, $value]);
+
+        return $value;
+    }
+
     public function requires_table_name() {
         return $this->requiresTable();
     }
