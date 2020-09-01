@@ -13,6 +13,7 @@ class GeneratorService
     private static $data = [];
     private static $file_templates = [];
     private static $inline_templates = [];
+    public static Parser $paser;
 
     /**
      * @var TemplateData
@@ -54,6 +55,7 @@ class GeneratorService
         Console::info("Creating Templates:");
         $templateParser = new Parser(base_path('akceli/templates'), 'akceli.php');
         $templateParser->addData($this->templateData->toArray());
+        self::$paser = $templateParser;
 
         $this->processFileTemplates($templateParser, $force);
         $this->processInlineTemplates($templateParser);
@@ -62,6 +64,10 @@ class GeneratorService
     private function processFileTemplates(Parser $parser, bool $force)
     {
         foreach (self::$file_templates as $template) {
+            if ($extraData = $inlineTemplate['extra_data'] ?? false) {
+                GeneratorService::$paser->addData($extraData);
+            }
+
             $template_path = $parser->render($template['path']);
             if(file_exists($template_path) && ! $force) {
                 Console::warn("File {$template_path} (Already Exists)");
@@ -77,6 +83,10 @@ class GeneratorService
     private function processInlineTemplates(Parser $parser)
     {
         foreach (self::$inline_templates as $inlineTemplate) {
+            if ($extraData = $inlineTemplate['extra_data'] ?? false) {
+                GeneratorService::$paser->addData($extraData);
+            }
+
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
             $rendered_template = trim($rendered_template);
 

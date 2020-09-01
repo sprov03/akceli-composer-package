@@ -6,26 +6,29 @@ use Illuminate\Support\Str;
 
 class Akceli
 {
-    public static function inlineTemplate(string $template, string $destination_path, string $identifier) {
+    public static function inlineTemplate(string $template, string $destination_path, string $identifier, array $extra_data = []) {
         return [
             'name' => $template,
             'path' => $destination_path,
             'identifier' => $identifier,
+            'extra_data' => $extra_data
         ];
     }
 
-    public static function insertInline(string $destination_path, string $identifier, string $content) {
+    public static function insertInline(string $destination_path, string $identifier, string $content, array $extra_data = []) {
         return [
             'path' => $destination_path,
             'identifier' => $identifier,
             'content' => $content,
+            'extra_data' => $extra_data
         ];
     }
 
-    public static function fileTemplate(string $template, string $destination_path) {
+    public static function fileTemplate(string $template, string $destination_path, array $extra_data = []) {
         return [
             'name' => $template,
             'path' => $destination_path,
+            'extra_data' => $extra_data
         ];
     }
 
