@@ -5,6 +5,7 @@ namespace Akceli\Schema\Columns;
 use Akceli\Schema\ColumnInterface;
 use Akceli\Schema\SchemaInterface;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 
 /**
  * Class Column
@@ -25,6 +26,11 @@ class SchemaColumnAdapter implements ColumnInterface
     public function getField(): string
     {
         return $this->schemColumn->column_name;
+    }
+
+    public function endsWith($needle): bool
+    {
+        return Str::endsWith($this->getField(), $needle);
     }
 
     /**

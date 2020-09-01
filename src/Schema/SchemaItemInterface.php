@@ -22,5 +22,10 @@ interface SchemaItemInterface
     /**
      * @return string
      */
+    public function getDataType(): string;
+
+    /**
+     * @return string
+     */
     public function getIsNullable(): bool ;
 }

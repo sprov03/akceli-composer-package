@@ -7,6 +7,7 @@ use Akceli\Console;
 use Akceli\Modifiers\Builders\BuilderInterface;
 use Akceli\Parser;
 use Akceli\Schema\SchemaInterface;
+use Illuminate\Support\Str;
 use SplFileInfo;
 
 class ClassModifier

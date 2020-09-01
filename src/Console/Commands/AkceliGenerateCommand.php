@@ -172,7 +172,7 @@ class AkceliGenerateCommand extends Command
                     $schemaColumns->push($column);
                 }
 
-                $schemaItem->push($schemaItem);
+                $schemaItems->push($schemaItem);
 
                 if ($schemaItem instanceof AkceliRelationship) {
                     $schemaRelationships->push($schemaItem);

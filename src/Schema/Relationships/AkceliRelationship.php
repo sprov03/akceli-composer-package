@@ -41,6 +41,11 @@ abstract class AkceliRelationship implements SchemaItemInterface
      */
     abstract public function getCastTo(): string;
 
+    /**
+     * @return string
+     */
+    abstract public function getDataType(): string;
+
     public function getIsNullable(): bool
     {
         return $this->is_nullable;

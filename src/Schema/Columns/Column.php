@@ -2,6 +2,7 @@
 
 namespace Akceli\Schema\Columns;
 
+use Akceli\Schema\Items;
 use Akceli\Schema\SchemaInterface;
 use Akceli\Schema\SchemaItemInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -374,7 +375,7 @@ class Column implements SchemaItemInterface
         return $this;
     }
 
-    public function setName(string $column_name)
+    public function setName(string $column_name): SchemaItemInterface
     {
         // Dont double set the column name, this could lead to weird issues when hydrating
         if (isset($this->column_name)) {
@@ -387,6 +388,11 @@ class Column implements SchemaItemInterface
         }
 
         return $this;
+    }
+    
+    public function getName(): string
+    {
+        return $this->column_name;
     }
 
     public function pushMigrationMethod(MigrationMethod $migrationMethod)
@@ -428,6 +434,11 @@ class Column implements SchemaItemInterface
     public function getCastTo(): string
     {
         return $this->cast_to;
+    }
+
+    public function getDataType(): string
+    {
+        return $this->data_type;
     }
 
     public function getIsNullable(): bool

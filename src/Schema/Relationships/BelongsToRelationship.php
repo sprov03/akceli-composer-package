@@ -74,4 +74,9 @@ class BelongsToRelationship extends AkceliRelationship
     {
         return get_class($this->getRelatedModel());
     }
+
+    public function getDataType(): string
+    {
+        return get_class($this->getRelatedModel());
+    }
 }
