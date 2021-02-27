@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 
 class Akceli
 {
+
     public static function inlineTemplate(string $template, string $destination_path, string $identifier, array $extra_data = []) {
         return [
             'name' => $template,
