@@ -19,7 +19,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "dev"
+            "dev-master": "akceli-dev"
         },
         "laravel": {
             "providers": [
