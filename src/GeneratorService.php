@@ -90,7 +90,8 @@ class GeneratorService
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
             $rendered_template = trim($rendered_template);
 
-            $file_contents = file_get_contents(base_path($inlineTemplate['path']));
+            $file_contents = file_get_contents(base_path($parser->render($inlineTemplate['path'])));
+
             if (! Str::contains($file_contents, $inlineTemplate['identifier'])) {
                 Console::error("File {$inlineTemplate['path']} is missing the identifier: " . "{$inlineTemplate['identifier']}");
 
