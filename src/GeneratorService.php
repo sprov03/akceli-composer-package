@@ -102,15 +102,10 @@ class GeneratorService
                 continue;
             }
 
-            $escapedIdentifyer = preg_quote($inlineTemplate['identifier']);
-            if ($escapedIdentifyer[0] === '/') {
-                $escapedIdentifyer = '\\' . $escapedIdentifyer;
-            }
-            if (substr($escapedIdentifyer, -1) === '/') {
-                $escapedIdentifyer = substr_replace($escapedIdentifyer, '\\/', -1);
-            }
+            $escapedIdentifyer = preg_quote($inlineTemplate['identifier'], '/');
 
             $regex = '/([ \t]*)?(' . $escapedIdentifyer . ')/s';
+
             preg_match_all($regex, $file_contents, $matches, PREG_SET_ORDER, 0);
             $indent = $matches[0][1];
 
