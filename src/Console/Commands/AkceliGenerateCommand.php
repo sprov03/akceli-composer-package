@@ -47,6 +47,10 @@ class AkceliGenerateCommand extends Command
 
         $config = config('akceli');
         $config['generators'] = $config['template-groups'] ?? $config['generators'];
+        
+        if (isset($config['mysql_connection'])) {
+            config()->set('database.default', $config['mysql_connection']);
+        }
 
         FileService::setRootDirectory(app_path(config('akceli.model_directory', null)));
         $template_set = $this->argument('template-set');

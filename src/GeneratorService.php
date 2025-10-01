@@ -88,7 +88,6 @@ class GeneratorService
             }
 
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
-            $rendered_template = trim($rendered_template);
 
             $file_contents = file_get_contents(base_path($parser->render($inlineTemplate['path'])));
 
@@ -103,15 +102,10 @@ class GeneratorService
                 continue;
             }
 
-            $escapedIdentifyer = preg_quote($inlineTemplate['identifier']);
-            if ($escapedIdentifyer[0] === '/') {
-                $escapedIdentifyer = '\\' . $escapedIdentifyer;
-            }
-            if (substr($escapedIdentifyer, -1) === '/') {
-                $escapedIdentifyer = substr_replace($escapedIdentifyer, '\\/', -1);
-            }
+            $escapedIdentifyer = preg_quote($inlineTemplate['identifier'], '/');
 
             $regex = '/([ \t]*)?(' . $escapedIdentifyer . ')/s';
+
             preg_match_all($regex, $file_contents, $matches, PREG_SET_ORDER, 0);
             $indent = $matches[0][1];
 
