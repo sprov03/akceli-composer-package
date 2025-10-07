@@ -64,7 +64,7 @@ class GeneratorService
     private function processFileTemplates(Parser $parser, bool $force)
     {
         foreach (self::$file_templates as $template) {
-            if ($extraData = $inlineTemplate['extra_data'] ?? false) {
+            if ($extraData = $template['extra_data'] ?? false) {
                 GeneratorService::$paser->addData($extraData);
             }
 
