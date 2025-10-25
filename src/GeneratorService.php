@@ -66,6 +66,8 @@ class GeneratorService
         foreach (self::$file_templates as $template) {
             if ($extraData = $template['extra_data'] ?? false) {
                 GeneratorService::$paser->addData($extraData);
+                // Note Extra data here can pollute the namespace but its worth it
+                $this->templateData->addExtraData($extraData);
             }
 
             $template_path = $parser->render($template['path']);
@@ -85,6 +87,8 @@ class GeneratorService
         foreach (self::$inline_templates as $inlineTemplate) {
             if ($extraData = $inlineTemplate['extra_data'] ?? false) {
                 GeneratorService::$paser->addData($extraData);
+                // Note Extra data here can pollute the namespace but its worth it
+                $this->templateData->addExtraData($extraData);
             }
 
             $rendered_template = $parser->render($inlineTemplate['content'] ?? $inlineTemplate['name'] ?? '');
