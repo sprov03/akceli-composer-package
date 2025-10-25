@@ -51,6 +51,10 @@ class TemplateData
         }
     }
 
+    public function addExtraData(array $extraData) {
+        $this->extraData = array_merge($this->extraData, $extraData);
+    }
+
     public static function buildModelAliases(string $model_name)
     {
         return [

@@ -32,7 +32,7 @@ class Akceli
         ];
     }
 
-    public static function columnSetting(string $default = null, string $integer = null, string $string = null, string $enum = null, string $timestamp = null, string $boolean = null, array $ingore_patterns = []) {
+    public static function columnSetting(?string $default, ?string $integer, ?string $string, ?string $enum, ?string $timestamp, ?string $boolean, array $ingore_patterns = []) {
         return [
             'default' => $default,
             'integer' => $integer,
