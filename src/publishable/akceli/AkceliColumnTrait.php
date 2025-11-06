@@ -18,6 +18,13 @@ trait AkceliColumnTrait
         return !$this->isIn($column_names);
     }
 
+    public function getValidationRulesAsArray()
+    {
+        // Max Validation Rule For Date is added so we generate all of the proper validation rules
+        $validationString = str_replace("date", "date|after:1970-01-01 00:00:00|before:2038-01-19 03:14:07", $this->getValidationRulesAsString());
+        return "['" . str_replace('|', "', '", $validationString) . "']";
+    }
+
     public function getSpacedField() {
         return str_replace('-', ' ', Str::kebab($this->getField()));
     }
@@ -34,5 +41,16 @@ trait AkceliColumnTrait
 
     public function getClientLabel()
     {
-        return ucwords($this->getSpacedField()) . ':';
-    }}
+        return ucwords(str_replace('_', ' ', $this->getField()));
+    }
+
+    public function isRelation()
+    {
+        return $this->endsWith('_id');
+    }
+
+    public function toRelation()
+    {
+        return Str::camel(str_replace('_id', '', $this->getField()));
+    }
+}
