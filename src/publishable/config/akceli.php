@@ -95,7 +95,7 @@ return [
      * This is for documenting what values you want to be show based on a given data type.
      */
     'column-settings' => [
-        /**
+        /*
          * Usage: <?=$column->getColumnSetting('php_class_doc_type', 'string')?>
          *
          * Outputs based on column analysis:
@@ -107,7 +107,7 @@ return [
          */
         'php_class_doc_type' => Akceli::columnSetting('string', 'integer', 'string', 'string', 'Carbon', 'boolean'),
 
-        /**
+        /*
          * Usage: <?=$column->getColumnSetting('casts', 'string')?>
          *
          * Outputs based on column analysis:
@@ -117,7 +117,42 @@ return [
          *    Timestamp: 'datetime'
          *    Boolean: 'boolean'
          */
-        'casts' => Akceli::columnSetting(null, null, null, null, 'datetime', 'boolean'),
+        'casts' => Akceli::columnSetting('string', 'integer', 'string', 'Enum::class', 'datetime', 'boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('pagination_sort_rules', 'string')?>
+         */
+        'pagination_sort_rules' => Akceli::columnSetting('SORT_STRING', 'SORT_INTEGER', 'SORT_STRING', 'SORT_INTEGER', 'SORT_DATE', 'SORT_BOOLEAN'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('pagination_validation_rules', 'string')?>
+         */
+        'pagination_validation_rules' => Akceli::columnSetting('STRING_RULES', 'INTEGER_RULES', 'STRING_RULES', 'ENUM_RULES', 'DATE_RULES', 'BOOLEAN_RULES'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('php_method_doc_type', 'string')?>
+         */
+        'php_method_doc_type' => Akceli::columnSetting('string', 'int', 'string', 'string', 'Carbon', 'bool'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('nova_field_type', 'Text')?>
+         */
+        'nova_field_type' => Akceli::columnSetting('Text', 'Number', 'Text', 'Text', 'DateTime', 'Boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_example', 'string')?>
+         */
+        'apid_example' => Akceli::columnSetting('examples string', '123', 'example string', 'example string', '2016-07-01T15:11:09.553Z', 'true'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_type', 'string')?>
+         */
+        'apid_type' => Akceli::columnSetting('string', 'number', 'string', 'string', 'string', 'boolean'),
+
+        /*
+         * Usage: <?=$column->getColumnSetting('apid_default_description', 'string')?>
+         */
+        'apid_default_description' => Akceli::columnSetting('Is a String', 'Is a Number', 'Is A String', 'Is an Enum', 'ISO Date/time string', 'Is a Boolean'),
     ],
 
     /**
